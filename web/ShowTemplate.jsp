@@ -47,10 +47,10 @@
         <link rel="stylesheet" type="text/css" href="CSS/myCSS.css" />
         <link rel="stylesheet" type="text/css" href="CSS/showTemplateCSS.css" />
         <link rel="stylesheet" type="text/css" href="CSS/perfect-scrollbar.css" />
+        <link rel="stylesheet" href="CSS/jQuery/jQueryUI.css">
+        <link rel="stylesheet" href="CSS/jQuery/jQueryUI_theme.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 
         <script src="JavaScript/jquery.mousewheel.js"></script>
         <script src="JavaScript/perfect-scrollbar.js"></script>
@@ -120,8 +120,8 @@
                         </div>
                     </div>
                     <div id="middle-middleC">
+                        <h1>Seasons:</h1>
                         <div id="tab">
-                            <h1>Seasons:</h1>
                             <ul id="tabs">
                                 <% for (Season s : seas) {%>
                                 <li><a href="Show.jsp?id=<%= s.getId()%>"><%= s.getNumberSeason()%></a></li> 

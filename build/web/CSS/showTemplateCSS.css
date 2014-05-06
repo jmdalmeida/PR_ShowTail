@@ -112,10 +112,8 @@
 
 #middleLayer #middle-middleC #episodes
 {
-    width: 940px;;
+    width: 950px;
     position: relative;
-    margin-left: 10px;
-    margin-right: 10px;
     color: white;
 }
 
@@ -238,6 +236,11 @@
     color: white;
     margin-left: 10px;
 }
+
+#middleLayer #middle-middleC h1 {
+    color: #ffffff;
+}
+
 /*
 #middleLayer #tabs
 {

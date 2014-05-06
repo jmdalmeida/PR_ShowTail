@@ -84,6 +84,7 @@
 
 
 #save, #remove {
+    padding:0px;
     display: none;
     margin-left: 25px;
     float: left;
