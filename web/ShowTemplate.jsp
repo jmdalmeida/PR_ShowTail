@@ -110,8 +110,12 @@
                                     <li id="one">Status: <%= status%></li>
                                     <li id="one">
                                         <form action="#" onsubmit="return false;">
-                                            <input id="followButton" type="submit" value="+ Follow" 
-                                                   style="width: 100%; height: 100%; background-color: #339900; color: #ffffff;"/>
+                                            <input id="followButton" type="submit" value="+ Follow" />
+                                            <a id="imdbButton" href="http://www.imdb.com/find?q=<%= title %>&s=all" ></a>
+                                            <div id="trailer">
+                                                <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= title %>">Trailer</a>
+                                                <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= title %>"></a>
+                                            </div>
                                         </form>
                                     </li>
                                     <li id="one">Rate this show: </li>
