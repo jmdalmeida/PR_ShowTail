@@ -111,10 +111,10 @@
                                     <li id="one">
                                         <form action="#" onsubmit="return false;">
                                             <input id="followButton" type="submit" value="+ Follow" />
-                                            <a id="imdbButton" href="http://www.imdb.com/find?q=<%= title %>&s=all" ></a>
+                                            <a id="imdbButton" href="http://www.imdb.com/find?q=<%= title %>&s=all" target="_blank" ></a>
                                             <div id="trailer">
-                                                <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= title %>">Trailer</a>
-                                                <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= title %>"></a>
+                                                <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= title %>" target="_blank" >Trailer</a>
+                                                <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= title %>" target="_blank"></a>
                                             </div>
                                         </form>
                                     </li>
