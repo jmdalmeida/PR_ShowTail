@@ -93,15 +93,56 @@
     margin-top: 5px;
     line-height: 32px;
     font-size: 16px;
-    
+
 }
 
 #middleLayer #header-middleC #rating #rates #one
 {
     font-size: 14px;
     width: 349px;
-    padding: 1px;
+    height: 34px;
+    padding: 2px;
     margin-right: 5px;
+    float:left;
+    display: inline-block;
+}
+
+
+#followButton {
+    width: 165px; height: 28px; background-color: #339900; color: #ffffff;
+    margin-left: 0px; margin-top: 3px;
+    float: left;
+}
+
+#imdbButton {
+    float: left;
+    background: transparent url(../images/imdb_button.png) no-repeat;
+    width: 100px; height: 32px;
+    margin-left: 5px; margin-top: 5px;
+}
+
+#trailer {
+    margin-right: 8px;
+}
+
+#trailerImg {
+    float: right;
+    background: transparent url(../images/trailer-icon.png) no-repeat;
+    width: 42px; height: 32px;
+    position: relative;
+    left: -38px; top: -30px;
+
+}
+
+#trailerText {
+    float: right;
+    text-decoration: none;
+    text-align:center;  
+    font-family: Arial;
+    font-size: 17px;
+    font-weight:normal;
+    font-style:normal;
+    color:#ffffff;
 }
 
 #middleLayer #header-middleC #rating #rates #running
@@ -260,7 +301,7 @@
 }
 
 #middleLayer #tabs li {
-	display: inline;
+        display: inline;
 }
 
 #middleLayer #tabs li a {
