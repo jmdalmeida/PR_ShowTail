@@ -43,8 +43,6 @@ public class LoginController extends HttpServlet {
                 boolean remember = request.getParameter("chkRemember") != null;
                 String hashedPassword = encryptPassword(password);
 
-                System.out.printf("A fazer login com os dados: ('%s', '%s', '%s')\n", username, password, remember);
-
                 if (attemptLogin(username, hashedPassword)) {
                     String token = encryptPassword(username + "PR" + hashedPassword);
                     session.setAttribute("username", username);
@@ -69,16 +67,21 @@ public class LoginController extends HttpServlet {
                 String emailR = request.getParameter("email");
                 String dataNascimentoR = request.getParameter("dataNascimento");
                 String hashedPasswordR = encryptPassword(passwordR);
-                attemptUserCreation(usernameR, nameR, emailR, dataNascimentoR, hashedPasswordR);
-                String tokenR = encryptPassword(usernameR + "PR" + hashedPasswordR);
-                session.setAttribute("username", usernameR);
-                Cookie c1 = new Cookie("username", usernameR);
-                Cookie c2 = new Cookie("token", tokenR);
-                c2.setMaxAge(-1);
-                c1.setMaxAge(-1);
-                response.addCookie(c1);
-                response.addCookie(c2);
-                response.sendRedirect("profile.jsp");
+                if (attemptUserCreation(usernameR, nameR, emailR, dataNascimentoR, hashedPasswordR)) {
+                    String tokenR = encryptPassword(usernameR + "PR" + hashedPasswordR);
+                    session.setAttribute("username", usernameR);
+                    Cookie c1 = new Cookie("username", usernameR);
+                    Cookie c2 = new Cookie("token", tokenR);
+                    c2.setMaxAge(-1);
+                    c1.setMaxAge(-1);
+                    response.addCookie(c1);
+                    response.addCookie(c2);
+                    response.sendRedirect("profile.jsp");
+                } else {
+                    //Tratar o caso de erro na criação do user aqui
+                    
+                    response.sendRedirect("index.jsp");
+                }
                 break;
             case "UpdateUser":
                 username = (String) session.getAttribute("username");
@@ -114,7 +117,8 @@ public class LoginController extends HttpServlet {
         return success;
     }
 
-    private void attemptUserCreation(String username, String name, String email, String dataNascimento, String encryptedPassword) {
+    private boolean attemptUserCreation(String username, String name, String email, String dataNascimento, String encryptedPassword) {
+        boolean success = true;
         int i = (int) (Math.random() * 11);
         Date dataReg = new Date(System.currentTimeMillis());
         String imagePath = "UserAvatars/" + i + ".jpg";
@@ -123,8 +127,9 @@ public class LoginController extends HttpServlet {
             Object[] o = {name, username, encryptedPassword, email, account, dataNascimento, dataReg, imagePath};
             ConnectionFactory.getInstance().update("INSERT INTO user (Name, Username, Password, Email, Account_Type, Date_of_Birth, Date_of_Registration ,Image_Path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", o);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            success = false;
         }
+        return success;
     }
 
     private void attemptUserUpdate(String name, String email, String username) {
