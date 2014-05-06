@@ -16,7 +16,7 @@ public class JDBCConnections {
     private PreparedStatement stmt = null;
 
     public JDBCConnections(String host, String database, String user,
-            String password) {
+                           String password) {
         this.host = host;
         this.database = database;
         this.user = user;
@@ -36,8 +36,8 @@ public class JDBCConnections {
     private boolean setupConnection() {
         try {
             conn = (Connection) DriverManager.getConnection("jdbc:mysql://"
-                    + host + "/" + database + "?user=" + user + "&password="
-                    + password);
+                                                            + host + "/" + database + "?user=" + user + "&password="
+                                                            + password);
             return true;
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
@@ -56,11 +56,14 @@ public class JDBCConnections {
     }
 
     public void commit() throws SQLException {
-        conn.commit();
+            conn.commit();
     }
 
-    public void rollback() throws SQLException {
-        conn.rollback();
+    public void rollback() {
+        try {
+            conn.rollback();
+        } catch (SQLException ex) {
+        }
     }
 
     public long insertAndReturnId(String sql, Object[] params) throws SQLException {

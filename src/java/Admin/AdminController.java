@@ -38,38 +38,28 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        boolean success = true;
         ConnectionFactory.getInstance().init();
         ConnectionFactory.getInstance().setAutoCommit(false);
-        switch (action) {
-            case "GatherShow":
-                String moviedbID = request.getParameter("moviedbID");
-                try {
-                    if (insertNewTvShow(moviedbID)) {
-                        ConnectionFactory.getInstance().commit();
-                    } else {
-                        ConnectionFactory.getInstance().rollback();
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-                break;
-            case "GatherPopularShows":
-                insertPopularShows();
-                break;
-            case "GatherGenres":
-                try {
-                    if (insertGenres()) {
-                        ConnectionFactory.getInstance().commit();
-                    } else {
-                        ConnectionFactory.getInstance().rollback();
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-                break;
-            default:
-                break;
+
+        if ("GatherShow".equals(action)) {
+            String moviedbID = request.getParameter("moviedbID");
+            success = insertNewTvShow(moviedbID);
+        } else if ("GatherPopularShows".equals(action)) {
+            insertPopularShows();
+        } else if ("GatherGenres".equals(action)) {
+            success = insertGenres();
         }
+        if (success) {
+            try {
+                ConnectionFactory.getInstance().commit();
+            } catch (SQLException ex) {
+                ConnectionFactory.getInstance().rollback();
+            }
+        } else {
+            ConnectionFactory.getInstance().rollback();
+        }
+
         ConnectionFactory.getInstance().setAutoCommit(true);
         ConnectionFactory.getInstance().close();
         response.sendRedirect("AdminProfile.jsp");
@@ -111,9 +101,11 @@ public class AdminController extends HttpServlet {
             tmp = (String) json.get("episode_run_time").toString();
             String episodeTimes = tmp.substring(1, tmp.length() - 1);
             String imagePath = "https://image.tmdb.org/t/p/original" + json.get("poster_path");
+            String premierDate = (String) json.get("first_air_date");
 
-            String sql = "INSERT INTO tv_show(Title, Overview, MovieDB_ID, Channel, Status, Episode_Running_Time, Image_Path) VALUES (?,?,?,?,?,?,?);";
-            Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath};
+            String sql = "INSERT INTO tv_show(Title, Overview, MovieDB_ID, Channel, Status, Episode_Running_Time, Image_Path, First_Air_Date) "
+                         + "VALUES (?,?,?,?,?,?,?,?);";
+            Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath, premierDate};
             generatedID = ConnectionFactory.getInstance().insertAndReturnId(sql, objs);
 
             associateGenresWithShow(generatedID, (JSONArray) json.get("genres"));
@@ -122,11 +114,13 @@ public class AdminController extends HttpServlet {
             Iterator<JSONObject> it = seasons.iterator();
             while (it.hasNext()) {
                 JSONObject o = it.next();
-                long season_number = (long) o.get("season_number");
-                insertNewSeason(moviedbID, season_number, generatedID);
+                long season_number = o.get("season_number") != null ? (long) o.get("season_number") : -1;
+                if (season_number > 0) {
+                    insertNewSeason(moviedbID, season_number, generatedID);
+                }
             }
 
-        } catch (ParseException | SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             success = false;
         }
@@ -232,9 +226,10 @@ public class AdminController extends HttpServlet {
             Iterator<JSONObject> it = results.iterator();
             while (it.hasNext()) {
                 JSONObject o = it.next();
+                System.out.println("Attempting to insert: " + o.get("name"));
                 if (insertNewTvShow("" + o.get("id"))) {
-                    System.out.println("Attempting to insert: " + o.get("name"));
                     ConnectionFactory.getInstance().commit();
+                    System.out.println("Inserted " + o.get("name") + " successfully");
                 } else {
                     System.err.println("Failed to insert show: " + o.get("name"));
                     ConnectionFactory.getInstance().rollback();
@@ -260,4 +255,3 @@ public class AdminController extends HttpServlet {
     }
 
 }
-

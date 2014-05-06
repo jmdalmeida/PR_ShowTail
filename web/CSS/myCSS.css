@@ -30,6 +30,7 @@ input[type="submit"] {
     border: 1px solid #32829D;
     border-radius: 5px;
     background-color: #ffffff;
+    padding: 5px;
 }
 
 #loginButton {

@@ -1,34 +1,34 @@
 <%@page import="JDBC.ConnectionFactory"%>
 <%@page import="Shows.Season"%>
 <%@page import="java.util.ArrayList"%>
-<%@include file="WEB-INF/JSP/validation.jsp" %>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@include file="WEB-INF/JSP/validation.jsp" %>
 <%
     String title = "";
     String status = "";
     String premiered = "";
     String picture = "";
     String overview = "";
-    int season_number = 0;
     int id_show = 0;
     int number_episodes = 0;
-    int number_ep = 0;
-    int idSeason = 0;
-    ArrayList<Season> seas = new ArrayList<Season>();
+    double rating = 0.0;
+    ArrayList<Season> seas = new ArrayList<>();
     ConnectionFactory.getInstance().init();
     try {
         int id = Integer.parseInt(request.getParameter("id"));
         Object[] o = {id};
-        ResultSet hi = ConnectionFactory.getInstance().select("select * from tv_show where ID_Show = ?;", o);
-        while (hi.next()) {
+        ResultSet hi = ConnectionFactory.getInstance().select("select * from tv_show t, SearchView sv where t.ID_Show = ? and t.ID_Show = sv.ID_Show;", o);
+        if (hi.next()) {
             title = hi.getString("Title");
             id_show = Integer.parseInt(hi.getString("ID_Show"));
             status = hi.getString("Status");
             picture = hi.getString("Image_Path");
             overview = hi.getString("Overview");
             premiered = hi.getString("First_Air_Date");
+            rating = hi.getDouble("Rating");
+            number_episodes = hi.getInt("Episodes");
         }
         Object[] o2 = {id_show};
         ResultSet hi2 = ConnectionFactory.getInstance().select("select * from season where ID_Show = ?;", o2);
@@ -38,11 +38,9 @@
     } catch (SQLException e) {
         e.printStackTrace();
     }
-    int[] episode_number = new int[number_ep];
     ConnectionFactory.getInstance().close();
 %>
 <!DOCTYPE html>
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -51,6 +49,9 @@
         <link rel="stylesheet" type="text/css" href="CSS/perfect-scrollbar.css" />
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
         <script src="JavaScript/jquery.mousewheel.js"></script>
         <script src="JavaScript/perfect-scrollbar.js"></script>
         <script>function showHide(shID) {
@@ -68,11 +69,12 @@
                     wheelPropagation: false
                 });
                 $("#middle-middleC").tabs({
+                    collapsible: true,
+                    selected: -1,
                     beforeLoad: function(event, ui) {
                         ui.jqXHR.error(function() {
                             ui.panel.html(
-                                    "Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                                    "If this wouldn't be a demo.");
+                                    "Couldn't load this tab. We'll try to fix this as soon as possible. ");
                         });
                     }
                 });
@@ -81,8 +83,8 @@
         <title>Show Template</title>
     </head>
     <body>
+        <%@ include file="WEB-INF/JSP/header.jsp" %>
         <div id="wrapper">
-            <%@ include file="WEB-INF/JSP/header.jsp" %>
             <div id="content">
                 <%-- SEARCH --%>
                 <%@include file="WEB-INF/JSP/searchBar.jsp" %>
@@ -95,29 +97,34 @@
                         </div>
                         <div id="rating">
                             <div id="OverviewBox">
-                                <h1>Summary</h1>
+                                <h2>Overview:</h2>
                                 <ul id="summaries">
                                     <li id="summariesLi"><%= overview%></li>
                                 </ul>
                             </div>
                             <div id="ratingBox">
-                                <h1>Ratings</h1>
                                 <ul id="rates">
-                                    <li><span>-.-/10</span></li>
-                                    <li id="one"><strong>Premiered: <%= premiered%></strong></li>
-                                    <li id="one"><strong>Episodes: <%= number_episodes%></strong></li>
-                                    <li id="one"><strong>Status: <%= status%></strong></li>
+                                    <li id="one">Rating: <%=rating%>/10</li>
+                                    <li id="one">Premiered: <%= premiered%></li>
+                                    <li id="one">Episodes: <%= number_episodes%></li>
+                                    <li id="one">Status: <%= status%></li>
+                                    <li id="one">
+                                        <form action="#" onsubmit="return false;">
+                                            <input id="followButton" type="submit" value="+ Follow" 
+                                                   style="width: 100%; height: 100%; background-color: #339900; color: #ffffff;"/>
+                                        </form>
+                                    </li>
+                                    <li id="one">Rate this show: </li>
                                 </ul>
                             </div>
-                            <a href="#" id="Follow_Unfollow">Follow</a>
                         </div>
                     </div>
                     <div id="middle-middleC">
-                        <div id = tab>
+                        <div id="tab">
                             <h1>Seasons:</h1>
                             <ul id="tabs">
                                 <% for (Season s : seas) {%>
-                                <li><a id="batman" href="Show.jsp?id=<%= s.getId()%>"><%= s.getNumberSeason()%></a></li> 
+                                <li><a href="Show.jsp?id=<%= s.getId()%>"><%= s.getNumberSeason()%></a></li> 
                                     <% }%>
                             </ul>
                         </div>
@@ -127,7 +134,6 @@
                         <h1> Comments: </h1>
                         <div id="comments-box">
                             <div id="userF">
-
                             </div>
                             <div id="postComment">
                                 <textarea id="textArea">
@@ -137,7 +143,7 @@
                     </div>
                 </div>
             </div>
-            <%@ include file="WEB-INF/JSP/footer.jsp" %>
         </div>
+        <%@ include file="WEB-INF/JSP/footer.jsp" %>
     </body>
 </html>

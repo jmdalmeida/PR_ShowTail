@@ -6,12 +6,13 @@
 #middleLayer #header-middleC
 {
     height: 300px;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
+
 #middleLayer #header-middleC h1 
 {
-    margin-top: 30px;
-    margin-left: 10px;
+    margin-top: 10px;
+    margin-left: 5px;
     color: white;
 }
 
@@ -39,7 +40,7 @@
     height: 280px;
     margin-right: 10px;
     background: #48525f;
-    text-align: center;
+    text-align: left;
     color: white;
     margin-top: 10px;
     border-radius: 5px;
@@ -48,44 +49,36 @@
 #middleLayer #header-middleC #rating #OverviewBox
 {
     float: left;
-    margin-left: 30px;
-    margin-top: 30px; 
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 5px;
 }
 
 #middleLayer #header-middleC #rating #summaries
 {
-    margin-top: 10px;
+    margin-top: 0px;
     display:inline-block;
     list-style: none;
     padding: 0;
+    left: 5px;
 }
 
 #middleLayer #header-middleC #rating #summaries li
 {
-    width: 330px;
+    width: 700px;
     background: #272727;
-    border-radius: 10px;
-    height: 148px;
-    margin: 5px 0 0 0;
+    border-radius: 5px;
+    height: 90px;
+    margin: 5px 0 10px 0;
     overflow: hidden;
     position: relative;
-}
-
-#middleLayer #header-middleC #rating #ratingBox
-{
-    float: right;
-    margin-right: 30px;
-    margin-top: 30px;
-}
-
-#middleLayer #header-middleC #rating h1
-{
-    margin-top: 10px;
+    text-align: justify;
+    padding: 5px;
 }
 
 #middleLayer #header-middleC #rating #rates
 {
-    margin-top: 10px;
+    margin-left: 10px;
     display:inline-block;
     list-style: none;
     padding: 0;
@@ -93,23 +86,22 @@
 
 #middleLayer #header-middleC #rating #rates li
 {
+    display: inline-block;
     width: 300px;
     background: #272727;
-    border-radius: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
     line-height: 32px;
-    margin: 5px 0 0 0;
     font-size: 16px;
     
-}
-
-#middleLayer #header-middleC #rating #rates span
-{
-    font-size: 28px;
 }
 
 #middleLayer #header-middleC #rating #rates #one
 {
     font-size: 14px;
+    width: 349px;
+    padding: 1px;
+    margin-right: 5px;
 }
 
 #middleLayer #header-middleC #rating #rates #running
@@ -246,7 +238,7 @@
     color: white;
     margin-left: 10px;
 }
-
+/*
 #middleLayer #tabs
 {
     height: 30px;
@@ -281,25 +273,4 @@
     height: 100%;
     background:#5d7fd8;
     color:#ffffff;
-}
-
-#Follow_Unfollow
-{ 
-    position: relative;
-    bottom: 0%;
-    font-family: arial;
-    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79FFB4), color-stop(1, #32812B) );
-    display: inline-block;
-    color: #ffffff;
-    font-family: Arial;
-    font-size: 15px;
-    font-weight: bold;
-    font-style: normal;
-    height: 35px;
-    margin-top: 7px;
-    line-height: 35px;
-    width: 80px;
-    text-decoration: none;
-    text-align: center;
-    text-shadow: 1px 1px 0px #528ecc;
-}
+}*/
