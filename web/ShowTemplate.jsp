@@ -14,7 +14,7 @@
     int id_show = 0;
     int number_episodes = 0;
     double rating = 0.0;
-    ArrayList<Season> seas = new ArrayList<>();
+    ArrayList<Season> seas = new ArrayList<Season>();
     ConnectionFactory.getInstance().init();
     try {
         int id = Integer.parseInt(request.getParameter("id"));
