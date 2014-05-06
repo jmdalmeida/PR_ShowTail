@@ -1,3 +1,4 @@
+<%@page import="JDBC.ConnectionFactory"%>
 <%@page import="java.sql.ResultSet"%>
 <%
     boolean loggedin = false;
@@ -16,9 +17,9 @@
     }
     System.out.println("Username: " + username + "; Token: " + token);
     if (username != "" && token != "") {
-        Login.LoginController.jdbc.init();
+        ConnectionFactory.getInstance().init();
         Object[] o = {username}; 
-        ResultSet rs = Login.LoginController.jdbc.select("SELECT Password FROM user WHERE Username = ?", o);
+        ResultSet rs = ConnectionFactory.getInstance().select("SELECT Password FROM user WHERE Username = ?", o);
         String pw = "";
         while (rs.next()) {
             pw = rs.getString("Password");
@@ -36,6 +37,6 @@
             }
         }
 
-        Login.LoginController.jdbc.close();
+        ConnectionFactory.getInstance().close();
     }
 %>
