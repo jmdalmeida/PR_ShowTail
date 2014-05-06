@@ -1,7 +1,7 @@
 <%@page import="JDBC.ConnectionFactory"%>
 <%@page import="java.sql.ResultSet"%>
 <%
-    boolean loggedin = true;
+    boolean loggedin = false;
     String username = "";
     String token = "";
 
