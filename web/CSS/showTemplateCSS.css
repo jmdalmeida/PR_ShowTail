@@ -1,0 +1,305 @@
+#middleLayer
+{
+    width: 100%;
+}
+
+#middleLayer #header-middleC
+{
+    height: 300px;
+    margin-bottom: 60px;
+}
+#middleLayer #header-middleC h1 
+{
+    margin-top: 30px;
+    margin-left: 10px;
+    color: white;
+}
+
+#middleLayer #header-middleC #banner
+{
+    position: absolute;
+    width: 185px;
+    height: 280px;
+    background: #989696;
+    margin-left: 10px;
+    margin-top: 10px;
+    float: left;
+}
+
+#middleLayer #header-middleC #banner img 
+{
+    width: 100%;
+    height: 100%;
+}
+
+#middleLayer #header-middleC #rating
+{
+    float: right;
+    width: 730px;
+    height: 280px;
+    margin-right: 10px;
+    background: #48525f;
+    text-align: center;
+    color: white;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+#middleLayer #header-middleC #rating #OverviewBox
+{
+    float: left;
+    margin-left: 30px;
+    margin-top: 30px; 
+}
+
+#middleLayer #header-middleC #rating #summaries
+{
+    margin-top: 10px;
+    display:inline-block;
+    list-style: none;
+    padding: 0;
+}
+
+#middleLayer #header-middleC #rating #summaries li
+{
+    width: 330px;
+    background: #272727;
+    border-radius: 10px;
+    height: 148px;
+    margin: 5px 0 0 0;
+    overflow: hidden;
+    position: relative;
+}
+
+#middleLayer #header-middleC #rating #ratingBox
+{
+    float: right;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+#middleLayer #header-middleC #rating h1
+{
+    margin-top: 10px;
+}
+
+#middleLayer #header-middleC #rating #rates
+{
+    margin-top: 10px;
+    display:inline-block;
+    list-style: none;
+    padding: 0;
+}
+
+#middleLayer #header-middleC #rating #rates li
+{
+    width: 300px;
+    background: #272727;
+    border-radius: 10px;
+    line-height: 32px;
+    margin: 5px 0 0 0;
+    font-size: 16px;
+    
+}
+
+#middleLayer #header-middleC #rating #rates span
+{
+    font-size: 28px;
+}
+
+#middleLayer #header-middleC #rating #rates #one
+{
+    font-size: 14px;
+}
+
+#middleLayer #header-middleC #rating #rates #running
+{
+    font-size: 14px;
+    color: #00cc00;
+}
+
+#middleLayer #middle-middleC #episodes
+{
+    width: 940px;;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+}
+
+#middleLayer #middle-middleC #episodes #oddepisode
+{
+    overflow: hidden;
+    background-color: #48525f;
+    border-radius: 10px;
+    margin: 5px 0 0 0;
+}
+
+#middleLayer #middle-middleC #episodes #oddepisode #name
+{
+    float: left;
+    width: 100px;
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+#middleLayer #middle-middleC #episodes #oddepisode #separator
+{
+    margin-left: 1%;
+    border-left: 1px solid #ddd;
+    width: 2%;
+    height: 50px;
+    float: left;
+}
+
+#middleLayer #middle-middleC #episodes #oddepisode #summary
+{
+    float: left;
+    width: 750px;
+    margin-top: 10px;
+}
+
+#middleLayer #middle-middleC #episodes #oddepisode #open {
+    display: none; 
+}
+
+#middleLayer #middle-middleC #episodes #oddepisode #texts-hide, #texts-show
+{
+    text-decoration: none;
+    color: #afdeff;
+    padding-left: 8px;
+}
+
+#middleLayer #middle-middleC #episodes #evenepisode
+{
+    overflow: hidden;
+    background-color: #414244;
+    border-radius: 10px;
+    margin: 5px 0 0 0;
+}
+
+#middleLayer #middle-middleC #episodes #evenepisode #name
+{
+    float: left;
+    width: 100px;
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+#middleLayer #middle-middleC #episodes #evenepisode #separator
+{
+    margin-left: 1%;
+    border-left: 1px solid #ddd;
+    width: 2%;
+    height: 50px;
+    float: left;
+}
+
+#middleLayer #middle-middleC #episodes #evenepisode #summary
+{
+    float: left;
+    width: 750px;
+    margin-top: 10px
+}
+
+#middleLayer #middle-middleC #episodes #evenepisode #open {
+    display: none; 
+}
+
+#middleLayer #middle-middleC #episodes #evenepisode #texts-hide, #texts-show
+{
+    text-decoration: none;
+    color: #afdeff;
+    padding-left: 8px;
+}
+
+#middleLayer #comments
+{
+    margin-top: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+#middleLayer #comments h1
+{
+    color: white;
+}
+
+#middleLayer #comments #postComment
+{
+    margin-top: 10px;
+    height: 100px;
+    width: 70%;
+    float: left;
+}
+
+#middleLayer #comments #postComment textarea
+{
+    height: 100px;
+    width: 100%;
+    border: 5px solid #414244;
+    border-radius: 3px;
+}
+
+#middleLayer #tab h1
+{
+    color: white;
+    margin-left: 10px;
+}
+
+#middleLayer #tabs
+{
+    height: 30px;
+    background: #272727;
+    margin-left: 10px;
+    margin-right: 10px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 22px;
+    border-radius: 10px;
+}
+
+#middleLayer #tabs ul {
+    list-style: none;
+    margin-left: 10px;
+}
+
+#middleLayer #tabs li {
+	display: inline;
+}
+
+#middleLayer #tabs li a {
+    font-size: 24px;
+    text-decoration: none;
+    color: #fff;
+    padding: 5px 20px;
+}
+
+#middleLayer #tabs li a:hover 
+{
+    width: 100%;
+    height: 100%;
+    background:#5d7fd8;
+    color:#ffffff;
+}
+
+#Follow_Unfollow
+{ 
+    position: relative;
+    bottom: 0%;
+    font-family: arial;
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79FFB4), color-stop(1, #32812B) );
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal;
+    height: 35px;
+    margin-top: 7px;
+    line-height: 35px;
+    width: 80px;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0px #528ecc;
+}

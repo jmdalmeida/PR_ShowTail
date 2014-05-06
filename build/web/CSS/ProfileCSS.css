@@ -1,0 +1,212 @@
+#username {
+    margin-left: 20px;
+}
+
+#UserData
+{ 
+    padding:10px 0 0 10px;
+    margin-top: 60px;
+    font-family:arial;
+    background-color:#c5c8d7;
+    border-radius: 4px;
+    height: 255px;
+}
+
+#profile
+{
+    width: 190px;
+    height: 190px;
+    float: left;   
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    margin: 3px;
+}
+
+#informations 
+{
+    padding: 15px;
+    font-family:arial;
+    float: left;
+    width: 200px;
+    height: 255px;
+    
+}
+
+#informations p, #informationsDates p {
+    font-size: medium;
+}
+
+#informationsDates {
+    display:none;
+    padding: 15px;
+    font-family:arial;
+    float: left;
+}
+
+#edit {
+    float: right;
+    position: relative;
+    top: 150px;
+    left: -20px;
+    font-family:arial;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+    background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+    background-color:#79bbff;
+    border:1px solid #84bbf3;
+    display:inline-block;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:15px;
+    font-weight:bold;
+    font-style:normal;
+    height:35px;
+    line-height:35px;
+    width:80px;
+    text-decoration:none;
+    text-align:center;
+    text-shadow:1px 1px 0px #528ecc;
+}
+#edit:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+    background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
+    background-color:#378de5;
+}
+
+#datas {
+    font-family:Arial;
+    font-size:15px;
+    font-weight:bold;
+    font-style:normal;
+    text-decoration:none;
+    
+}
+
+
+#save, #remove {
+    display: none;
+    margin-left: 25px;
+    float: left;
+    font-family:arial;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+    background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+    background-color:#79bbff;
+    border:1px solid #84bbf3;
+    border-radius: 5px;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:15px;
+    font-weight:bold;
+    font-style:normal;
+    height: 30px;
+    line-height:35px;
+    width:120px;
+    text-decoration:none;
+    text-align:center;
+    text-shadow:1px 1px 0px #528ecc;
+}
+
+#save:hover, #remove:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+    background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
+    background-color:#378de5;
+}
+
+#ConfirmEdit {
+    display: none;
+    background: #333;
+    padding: 10px;
+    border: 2px solid #ddd;
+    float: left;
+    font-size: 1.2em;
+    position: fixed;
+    top: 30%;
+    left: 37%;
+    z-index: 99999;
+    box-shadow: 0px 0px 20px #999;
+    /* CSS3 */
+    -moz-box-shadow: 0px 0px 20px #999;
+    /* Firefox */
+    -webkit-box-shadow: 0px 0px 20px #999;
+    /* Safari, Chrome */
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px;
+    /* Firefox */
+    -webkit-border-radius: 3px;
+    /* Safari, Chrome */;
+    width: 350px;
+    height: 100px;
+}
+
+#ConfirmEdit button:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+    background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+    background-color:#dfdfdf;
+}
+
+#deleteConfirm {
+    float:left;
+    position: relative;
+    left: 150px;
+    top: -30px;
+}
+
+#editConfirmForm {
+    width: 200px;
+    display: inline-block;
+}
+
+#editConfirmForm span {
+    color: #fff;
+    font-size: 15px;
+    line-height: 18px;
+}
+
+#nomeEdit, #emailEdit {
+    display: none;
+    height: 12px;
+    margin-bottom: 9px; 
+}
+
+#SeriesFollowing {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px; 
+    border-radius: 4px;
+    background: #9999ff;
+}
+#SeriesFollowing h1 {
+    text-align: center;
+    margin-top: 15px;
+}
+
+#result
+{
+    margin-left: 10px;
+}
+
+#result li {
+    float:left;
+    margin: 15px;
+    padding: 10px;
+    width: 185px;
+    height: 300px;
+    margin-top: 50px;
+    border-radius: 5px;
+    overflow: hidden;
+    list-style: none;
+    text-align: center;
+}
+
+#result li:hover {
+    border-radius: 7px;
+    background: #5d7fd8;
+}
+
+#result li img {
+    width: 185px;
+    height: 273px;
+}
