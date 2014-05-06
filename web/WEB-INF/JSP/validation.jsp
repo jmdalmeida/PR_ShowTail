@@ -1,6 +1,6 @@
 <%@page import="java.sql.ResultSet"%>
 <%
-    boolean loggedin = false;
+    boolean loggedin = true;
     String username = "";
     String token = "";
 
