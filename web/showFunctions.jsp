@@ -4,13 +4,14 @@
     if(funct == null)
         response.sendRedirect("ShowTemplate.jsp");
     
-    String id_show = request.getParameter("id_show");
-    String id_user = request.getParameter("id_user");
+    int id_show = Integer.parseInt(request.getParameter("id_show"));
+    int id_user = Integer.parseInt(request.getParameter("id_user"));
     
     ConnectionFactory.getInstance().init();
     boolean success = true;
     if("Follow".equals(funct)){
-        Object[] objs = {id_show, id_user};
+        Object[] objs = {id_user, id_show};
+        System.out.println("Attempting to insert Follower(Show: " + id_show + "; User: " + id_user);
         long id = ConnectionFactory.getInstance().insertAndReturnId("INSERT INTO Following(ID_User, ID_Show) VALUES(?,?);", objs);
         if(id == -1)
             success = false;
