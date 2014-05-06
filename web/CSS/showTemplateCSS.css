@@ -93,7 +93,7 @@
     margin-top: 5px;
     line-height: 32px;
     font-size: 16px;
-    
+
 }
 
 #middleLayer #header-middleC #rating #rates #one
@@ -109,8 +109,8 @@
 
 
 #followButton {
-    width: 130px; height: 100%; background-color: #339900; color: #ffffff;
-    margin-left: 10px; margin-top: 3px;
+    width: 165px; height: 28px; background-color: #339900; color: #ffffff;
+    margin-left: 0px; margin-top: 3px;
     float: left;
 }
 
@@ -118,7 +118,7 @@
     float: left;
     background: transparent url(../images/imdb_button.png) no-repeat;
     width: 100px; height: 32px;
-    margin-left: 15px; margin-top: 5px;
+    margin-left: 5px; margin-top: 5px;
 }
 
 #trailer {
@@ -131,7 +131,7 @@
     width: 42px; height: 32px;
     position: relative;
     left: -38px; top: -30px;
-    
+
 }
 
 #trailerText {
@@ -301,7 +301,7 @@
 }
 
 #middleLayer #tabs li {
-	display: inline;
+        display: inline;
 }
 
 #middleLayer #tabs li a {

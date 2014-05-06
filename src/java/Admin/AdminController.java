@@ -29,11 +29,6 @@ public class AdminController extends HttpServlet {
 
     private JSONParser parser;
 
-    @Override
-    public void init() throws ServletException {
-        parser = new JSONParser();
-    }
-
     protected void addStuff(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -42,6 +37,7 @@ public class AdminController extends HttpServlet {
         ConnectionFactory.getInstance().init();
         ConnectionFactory.getInstance().setAutoCommit(false);
 
+        parser = new JSONParser();
         if ("GatherShow".equals(action)) {
             String moviedbID = request.getParameter("moviedbID");
             success = insertNewTvShow(moviedbID);
@@ -59,6 +55,7 @@ public class AdminController extends HttpServlet {
         } else {
             ConnectionFactory.getInstance().rollback();
         }
+        parser = null;
 
         ConnectionFactory.getInstance().setAutoCommit(true);
         ConnectionFactory.getInstance().close();

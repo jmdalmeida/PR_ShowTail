@@ -66,7 +66,8 @@
             $(document).ready(function($) {
                 $('#summariesLi').perfectScrollbar({
                     wheelSpeed: 20,
-                    wheelPropagation: false
+                    wheelPropagation: false,
+                    suppressScrollX: true
                 });
                 $("#middle-middleC").tabs({
                     collapsible: true,
@@ -77,6 +78,13 @@
                                     "Couldn't load this tab. We'll try to fix this as soon as possible. ");
                         });
                     }
+                });
+                $("#followButton").click(function() {
+                    $.post("showFunctions.jsp",
+                        {funct: "Follow", id_show: <%=id_show%>, id_user: 1},
+                        function(data, status) {
+                            alert("Data: " + data + "\nStatus: " + status);
+                        });
                 });
             });
         </script>
@@ -109,14 +117,12 @@
                                     <li id="one">Episodes: <%= number_episodes%></li>
                                     <li id="one">Status: <%= status%></li>
                                     <li id="one">
-                                        <form action="#" onsubmit="return false;">
-                                            <input id="followButton" type="submit" value="+ Follow" />
-                                            <a id="imdbButton" href="http://www.imdb.com/find?q=<%= title %>&s=all" target="_blank" ></a>
-                                            <div id="trailer">
-                                                <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= title %>" target="_blank" >Trailer</a>
-                                                <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= title %>" target="_blank"></a>
-                                            </div>
-                                        </form>
+                                        <input id="followButton" type="submit" value="+ Follow" />
+                                        <a id="imdbButton" href="http://www.imdb.com/find?q=<%= title%>&s=all" target="_blank" ></a>
+                                        <div id="trailer">
+                                            <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= title%>" target="_blank" >Trailer</a>
+                                            <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= title%>" target="_blank"></a>
+                                        </div>
                                     </li>
                                     <li id="one">Rate this show: </li>
                                 </ul>

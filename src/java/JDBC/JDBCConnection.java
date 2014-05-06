@@ -9,13 +9,13 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JDBCConnections {
+public class JDBCConnection {
 
     private final String host, database, user, password;
     private Connection conn = null;
     private PreparedStatement stmt = null;
 
-    public JDBCConnections(String host, String database, String user,
+    public JDBCConnection(String host, String database, String user,
                            String password) {
         this.host = host;
         this.database = database;
