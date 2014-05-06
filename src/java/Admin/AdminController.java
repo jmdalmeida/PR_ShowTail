@@ -1,16 +1,14 @@
 package Admin;
 
-import JDBC.JDBCConnections;
+import JDBC.ConnectionFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,13 +26,11 @@ import org.json.simple.parser.ParseException;
 public class AdminController extends HttpServlet {
 
     private static final String api_key = "c862d60174012383b25a24fbf9d62b33";
-    private static JDBCConnections jdbc;
 
     private JSONParser parser;
 
     @Override
     public void init() throws ServletException {
-        jdbc = new JDBCConnections("localhost", "db_pr", "Filipe", "a12345");
         parser = new JSONParser();
     }
 
@@ -42,16 +38,16 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
-        jdbc.init();
-        jdbc.setAutoCommit(false);
+        ConnectionFactory.getInstance().init();
+        ConnectionFactory.getInstance().setAutoCommit(false);
         switch (action) {
             case "GatherShow":
                 String moviedbID = request.getParameter("moviedbID");
                 try {
                     if (insertNewTvShow(moviedbID)) {
-                        jdbc.commit();
+                        ConnectionFactory.getInstance().commit();
                     } else {
-                        jdbc.rollback();
+                        ConnectionFactory.getInstance().rollback();
                     }
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -63,9 +59,9 @@ public class AdminController extends HttpServlet {
             case "GatherGenres":
                 try {
                     if (insertGenres()) {
-                        jdbc.commit();
+                        ConnectionFactory.getInstance().commit();
                     } else {
-                        jdbc.rollback();
+                        ConnectionFactory.getInstance().rollback();
                     }
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -74,8 +70,8 @@ public class AdminController extends HttpServlet {
             default:
                 break;
         }
-        jdbc.setAutoCommit(true);
-        jdbc.close();
+        ConnectionFactory.getInstance().setAutoCommit(true);
+        ConnectionFactory.getInstance().close();
         response.sendRedirect("AdminProfile.jsp");
     }
 
@@ -118,7 +114,7 @@ public class AdminController extends HttpServlet {
 
             String sql = "INSERT INTO tv_show(Title, Overview, MovieDB_ID, Channel, Status, Episode_Running_Time, Image_Path) VALUES (?,?,?,?,?,?,?);";
             Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath};
-            generatedID = jdbc.insertAndReturnId(sql, objs);
+            generatedID = ConnectionFactory.getInstance().insertAndReturnId(sql, objs);
 
             associateGenresWithShow(generatedID, (JSONArray) json.get("genres"));
 
@@ -151,7 +147,7 @@ public class AdminController extends HttpServlet {
 
         String sql = "INSERT INTO Season(ID_Show, Season_Number, Number_Episodes, Air_Date, Image_Path) VALUES (?,?,?,?,?);";
         Object[] objs = {tvshowID, season_number, number_episodes, air_date, img_path};
-        generatedID = jdbc.insertAndReturnId(sql, objs);
+        generatedID = ConnectionFactory.getInstance().insertAndReturnId(sql, objs);
 
         Iterator<JSONObject> it = episodes.iterator();
         while (it.hasNext()) {
@@ -169,7 +165,7 @@ public class AdminController extends HttpServlet {
 
         String sql = "INSERT INTO Episode(ID_Show, ID_Season, Title, Overview, Episode_Number, Air_Date, Image_Path) VALUES (?,?,?,?,?,?,?);";
         Object[] objs = {tvshowID, seasonID, title, overview, episode_number, air_date, img_path};
-        jdbc.update(sql, objs);
+        ConnectionFactory.getInstance().update(sql, objs);
     }
 
     private String makeRequest(String targetURL) {
@@ -217,7 +213,7 @@ public class AdminController extends HttpServlet {
                 String sql = "INSERT INTO Genre(Genre) VALUES(?);";
                 Object[] objs = {name};
 
-                jdbc.update(sql, objs);
+                ConnectionFactory.getInstance().update(sql, objs);
             }
         } catch (ParseException | SQLException ex) {
             ex.printStackTrace();
@@ -238,10 +234,10 @@ public class AdminController extends HttpServlet {
                 JSONObject o = it.next();
                 if (insertNewTvShow("" + o.get("id"))) {
                     System.out.println("Attempting to insert: " + o.get("name"));
-                    jdbc.commit();
+                    ConnectionFactory.getInstance().commit();
                 } else {
                     System.err.println("Failed to insert show: " + o.get("name"));
-                    jdbc.rollback();
+                    ConnectionFactory.getInstance().rollback();
                 }
             }
         } catch (ParseException | SQLException ex) {
@@ -254,11 +250,11 @@ public class AdminController extends HttpServlet {
         while (it.hasNext()) {
             JSONObject obj = it.next();
             Object[] objs = {((String) obj.get("name"))};
-            ResultSet rs = jdbc.select("SELECT ID_Genre FROM Genre WHERE Genre LIKE ?;", objs);
+            ResultSet rs = ConnectionFactory.getInstance().select("SELECT ID_Genre FROM Genre WHERE Genre LIKE ?;", objs);
             if (rs.next()) {
                 int id_genre = rs.getInt("ID_Genre");
                 Object[] objs2 = {id_genre, id};
-                jdbc.update("INSERT INTO Associated_Genre(ID_Genre, ID_Show) VALUES(?,?);", objs2);
+                ConnectionFactory.getInstance().update("INSERT INTO Associated_Genre(ID_Genre, ID_Show) VALUES(?,?);", objs2);
             }
         }
     }

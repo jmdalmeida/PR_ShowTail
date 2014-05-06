@@ -1,22 +1,21 @@
+<%@page import="JDBC.ConnectionFactory"%>
 <%@page import="Login.LoginController"%>
 <%@page import="Search.*" %>
-<%@page import="JDBC.JDBCConnections"%>
 <%@page import="java.util.ArrayList"%>
 <%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    JDBCConnections jdbc = LoginController.jdbc;
     ResultSet rs = null;
     String query = request.getParameter("q");
     String pageNumber = request.getParameter("page");
     String genre = request.getParameter("genre");
     String order = request.getParameter("order");
 
-    jdbc.init();
+    ConnectionFactory.getInstance().init();
 
     //LOAD GENRES
     ArrayList<Genre> genres = new ArrayList<Genre>();
-    rs = jdbc.select("SELECT DISTINCT ID_Genre, Genre FROM SearchGenresView ORDER BY Genre ASC;", null);
+    rs = ConnectionFactory.getInstance().select("SELECT DISTINCT ID_Genre, Genre FROM SearchGenresView ORDER BY Genre ASC;", null);
     while (rs.next()) {
         genres.add(new Genre(rs.getInt("ID_Genre"), rs.getString("Genre")));
     }
@@ -25,32 +24,32 @@
     ArrayList<Show> shows = new ArrayList<Show>();
     if (query != null && query != "") {
         Object[] objs = {new String("%" + query + "%")};
-        rs = jdbc.select("SELECT * FROM SearchView WHERE Title LIKE ? ORDER BY Followers DESC;", objs);
+        rs = ConnectionFactory.getInstance().select("SELECT * FROM SearchView WHERE Title LIKE ? ORDER BY Followers DESC;", objs);
     } else if (order != null && order != "") {
         if(order.equals("All")) {
-            rs = jdbc.select("SELECT * FROM SearchView ORDER BY Title ASC;", null);
+            rs = ConnectionFactory.getInstance().select("SELECT * FROM SearchView ORDER BY Title ASC;", null);
         }
         else if(order.equals("MostFollowed")) {
-            rs = jdbc.select("SELECT * FROM SearchView ORDER BY Followers DESC;", null);
+            rs = ConnectionFactory.getInstance().select("SELECT * FROM SearchView ORDER BY Followers DESC;", null);
         }
         else if(order.equals("Recommended")) {
-            rs = jdbc.select("SELECT * FROM SearchView ORDER BY Rating DESC", null);
+            rs = ConnectionFactory.getInstance().select("SELECT * FROM SearchView ORDER BY Rating DESC", null);
         }
         else {
-            rs = jdbc.select("SELECT * FROM SearchView ORDER BY Followers DESC;", null);
+            rs = ConnectionFactory.getInstance().select("SELECT * FROM SearchView ORDER BY Followers DESC;", null);
         }
     } else if (genre != null && genre != "") {
         Object[] objs = {Integer.parseInt(genre)};
-        rs = jdbc.select("SELECT * FROM SearchView sv, SearchGenresView sgv WHERE sv.ID_Show = sgv.ID_Show AND sgv.ID_Genre = ?", objs);
+        rs = ConnectionFactory.getInstance().select("SELECT * FROM SearchView sv, SearchGenresView sgv WHERE sv.ID_Show = sgv.ID_Show AND sgv.ID_Genre = ?", objs);
     } else {
-        rs = jdbc.select("SELECT * FROM SearchView ORDER BY Followers DESC;", null);
+        rs = ConnectionFactory.getInstance().select("SELECT * FROM SearchView ORDER BY Followers DESC;", null);
     }
     if (rs != null) {
         while (rs.next()) {
             shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"), rs.getString("Image_Path"), "", ""));
         }
     }
-    jdbc.close();
+    ConnectionFactory.getInstance().close();
 %>
 <!DOCTYPE html>
 <html>
