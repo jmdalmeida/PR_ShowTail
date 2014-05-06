@@ -20,7 +20,7 @@
                 <li><a href="TV-Shows.jsp">TV-Shows</a></li>
                     <% if(loggedin == false){ %>
                     <li>
-                    <a id="Reg" href="#signUp-box">SignUp</a>
+                    <a id="Reg" href="#signUp-box">Sign Up</a>
                     </li>
                     <% } %>
             </ul>
