@@ -28,7 +28,6 @@ public class SearchController extends HttpServlet {
         boolean success = true;
 
         String searchFor = request.getParameter("SearchFor");
-        System.out.println("Search for: " + searchFor);
 
         ArrayList<Genre> genres = new ArrayList<Genre>();
         ArrayList<Show> shows = new ArrayList<Show>();
