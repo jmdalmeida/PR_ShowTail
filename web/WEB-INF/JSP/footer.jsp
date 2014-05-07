@@ -1,4 +1,3 @@
-
 <div id="footer">
     <div id="footerwrap">
         <ul>

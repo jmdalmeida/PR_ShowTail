@@ -25,7 +25,7 @@
         }
 
         if (pw != "") {
-            String chkToken = Controllers.LoginController.encryptPassword(username + "PR" + pw);
+            String chkToken = Controllers.AccountController.encryptPassword(username + "PR" + pw);
             if (chkToken.equals(token)) {
                 loggedin = true;
                 session.setAttribute("username", username);

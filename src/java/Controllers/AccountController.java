@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = {"/LoginController"})
-public class LoginController extends HttpServlet {
+@WebServlet(urlPatterns = {"/AccountController"})
+public class AccountController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -137,7 +137,7 @@ public class LoginController extends HttpServlet {
             Object[] o = {name, email, username};
             ConnectionFactory.getInstance().update("UPDATE user SET Name=?, Email=? where Username=?;", o);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -146,7 +146,7 @@ public class LoginController extends HttpServlet {
             Object[] o = {username};
             ConnectionFactory.getInstance().update("DELETE FROM user WHERE Username=?;", o);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -27,7 +27,7 @@
         </div>
         <% if(loggedin == false){ %>
         <div id="header_login">
-            <form name="LoginForm" method="POST" action="LoginController">
+            <form name="LoginForm" method="POST" action="AccountController">
                 <input type="hidden" name="action" value="login" />
                 <table>
                     <tr>
@@ -56,7 +56,7 @@
 </div>
 <div id="signUp-box">
     <a href="" id="close"><img src="images/buttonClose.png" id="btn_close" title="Close Window" alt="Close" /></a>
-    <form name="SignUpForm" method="POST" id="signInForm" action="LoginController">
+    <form name="SignUpForm" method="POST" id="signInForm" action="AccountController">
         <input type="hidden" name="action" value="signUp" />
         <fieldset id="textbox">
             <label id="NameL">

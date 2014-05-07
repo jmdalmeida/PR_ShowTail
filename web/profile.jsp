@@ -96,7 +96,7 @@
                     <h1 id="username"><%= username%> Profile</h1><hr><br>
                     <img src= "<%= picture%>" id="profile"/>
                     <div id="informations">
-                        <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="LoginController">
+                        <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="AccountController">
                             <input type="hidden" name="action" value="UpdateUser" />
                             <h1>Nome</h1>
                             <p id="nome"><%= name%></p>
@@ -109,7 +109,7 @@
                             <a href="#" id="datas" >Outros dados...</a>
                             <input type="submit" id="save" value="Save and Exit" >
                         </form>
-                        <form id="deleteConfirm" method="POST" action="LoginController" onsubmit="return deleteUser()">
+                        <form id="deleteConfirm" method="POST" action="AccountController" onsubmit="return deleteUser()">
                             <input type="hidden" name="action" value="DeleteUser" />
                             <input type="submit" id="remove" value="Delete Acc" >
                         </form>
@@ -141,7 +141,7 @@
                 </div>
                 <div id="ConfirmEdit">
                     <a href="" id="close"><img src="images/buttonClose.png" id="btn_close" title="Close Window" alt="Close" /></a>
-                    <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="LoginController">
+                    <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="AccountController">
                         <input type="hidden" name="action" value="UpdateUser" />
                         <span>Are you sure do you want to delete this account?</span><br><br>
                         <input id="Yes" type="submit" value="Yes" />
