@@ -1,5 +1,5 @@
 
-package Shows;
+package Utils;
 
 public class Season {
     private final int id;

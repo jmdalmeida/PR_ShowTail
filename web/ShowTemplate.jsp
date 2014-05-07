@@ -1,6 +1,6 @@
-<%@page import="Search.Show"%>
+<%@page import="Utils.Show"%>
 <%@page import="JDBC.ConnectionFactory"%>
-<%@page import="Shows.Season"%>
+<%@page import="Utils.Season"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>

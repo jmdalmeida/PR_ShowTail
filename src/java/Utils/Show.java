@@ -1,4 +1,4 @@
-package Search;
+package Utils;
 
 public class Show {
     private final int id, followers, episodesNumber;

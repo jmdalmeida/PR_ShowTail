@@ -1,4 +1,4 @@
-package Admin;
+package Controllers;
 
 import JDBC.ConnectionFactory;
 import java.io.BufferedReader;

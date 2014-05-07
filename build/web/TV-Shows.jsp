@@ -1,6 +1,6 @@
 <%@page import="JDBC.ConnectionFactory"%>
-<%@page import="Login.LoginController"%>
-<%@page import="Search.*" %>
+<%@page import="Controllers.LoginController"%>
+<%@page import="Utils.*" %>
 <%@page import="java.util.ArrayList"%>
 <%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

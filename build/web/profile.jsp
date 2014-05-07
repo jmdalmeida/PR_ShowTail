@@ -3,7 +3,7 @@
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="user" class="User.UserData" scope="session"/> 
+<jsp:useBean id="user" class="Utils.UserData" scope="session"/> 
 <%
     String name = "";
     String email = "";

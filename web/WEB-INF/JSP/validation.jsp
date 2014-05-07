@@ -15,7 +15,6 @@
             }
         }
     }
-    System.out.println("Username: " + username + "; Token: " + token);
     if (username != "" && token != "") {
         ConnectionFactory.getInstance().init();
         Object[] o = {username};
@@ -26,7 +25,7 @@
         }
 
         if (pw != "") {
-            String chkToken = Login.LoginController.encryptPassword(username + "PR" + pw);
+            String chkToken = Controllers.LoginController.encryptPassword(username + "PR" + pw);
             if (chkToken.equals(token)) {
                 loggedin = true;
                 session.setAttribute("username", username);

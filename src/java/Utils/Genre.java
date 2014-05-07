@@ -1,4 +1,4 @@
-package Search;
+package Utils;
 
 public class Genre {
     private final int id;
