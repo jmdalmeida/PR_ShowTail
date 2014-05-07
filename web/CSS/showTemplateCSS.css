@@ -40,7 +40,7 @@
     height: 280px;
     margin-right: 10px;
     background: #48525f;
-    text-align: left;
+    text-align: center;
     color: white;
     margin-top: 10px;
     border-radius: 5px;
@@ -118,15 +118,27 @@
     display: inline-block;
 }
 
-#middleLayer #header-middleC #rating #rates #two a
-{
-    float: left;
-    margin-top: 8px;
-    margin-left: 1px;
-    width: 17px;
-    height: 17px;
-    background: transparent url('../images/star.png') no-repeat;
-    background-position: 0px 0px;
+.rating {
+    direction: ltr;
+    display: inline-flex;
+    position: relative;
+}
+
+.star {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.star > span {
+  display: inline-block;
+  position: relative;
+  width: 11px;
+  font-size: 22px;
+}
+.star > span:hover:before,
+.star > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+   color: gold;
 }
 
 #followButton {

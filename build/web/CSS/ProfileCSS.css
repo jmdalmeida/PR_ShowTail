@@ -7,9 +7,10 @@
     padding:10px 0 0 10px;
     margin-top: 60px;
     font-family:arial;
-    background-color:#c5c8d7;
+    background-color: #5c5c5c;
     border-radius: 4px;
     height: 255px;
+    color: #ffffff;
 }
 
 #profile
@@ -17,7 +18,7 @@
     width: 190px;
     height: 190px;
     float: left;   
-    border: 2px solid #ffffff;
+    border: 1px solid #ffffff;
     border-radius: 5px;
     margin: 3px;
 }
@@ -74,11 +75,13 @@
 }
 
 #datas {
+    
     font-family:Arial;
     font-size:15px;
     font-weight:bold;
     font-style:normal;
     text-decoration:none;
+    color: #fff;
     
 }
 

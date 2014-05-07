@@ -51,6 +51,19 @@
                 }
             }
         </script>
+        <script>
+        function mediaRater(rate){
+		if(rate < 1)
+			rate = 1;
+		else if(rate > 10)
+			rate = 10;
+                on = parseInt($("div#rates input#raterDefault").val())+1;
+                for(var i = 1; i <= on; i++)
+                        $("a#rater"+i).addClass('full');
+                for(var i = on; i <= 10; i++)
+                        $("a#rater"+i).removeClass('full');
+        }
+        </script>
         <script type="text/javascript">
             $(document).ready(function($) {
                 $('#summariesLi').perfectScrollbar({
@@ -113,8 +126,15 @@
                                             <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= show.getTitle()%>" target="_blank"></a>
                                         </div>
                                     </li>
-                                    <li id="two"><%for(int i = 0; i<10; i++) { %>
-                                        <a href="" id="rater<%= i %>"></a> <%}%></li>
+                                    <li id="two"> 
+                                        <div class="rating">
+                                            <span>Rate Show:  &nbsp;</span>
+                                            <div class="star">
+                                            <%for(int i = 10; i>0; i--) { %>
+                                            <span>☆</span> <%}%>
+                                            </div>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
