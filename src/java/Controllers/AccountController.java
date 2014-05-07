@@ -30,9 +30,8 @@ public class AccountController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
+        Pages toPage = null;
 
         ConnectionFactory.getInstance().init();
         String action = request.getParameter("action");
@@ -58,7 +57,7 @@ public class AccountController extends HttpServlet {
                     request.getSession().setAttribute("failedlogin", "Invalid username/password.");
                     System.out.println("Login falhou.");
                 }
-                response.sendRedirect("index.jsp");
+                toPage = Pages.INDEX;
                 break;
             case "signUp":
                 String nameR = request.getParameter("name");
@@ -76,11 +75,12 @@ public class AccountController extends HttpServlet {
                     c1.setMaxAge(-1);
                     response.addCookie(c1);
                     response.addCookie(c2);
-                    response.sendRedirect("profile.jsp");
+                    
+                    toPage = Pages.PROFILE;
                 } else {
                     //Tratar o caso de erro na criação do user aqui
                     
-                    response.sendRedirect("index.jsp");
+                    toPage = Pages.INDEX;
                 }
                 break;
             case "UpdateUser":
@@ -88,18 +88,22 @@ public class AccountController extends HttpServlet {
                 String nameU = request.getParameter("nomeEdit");
                 String emailU = request.getParameter("emailEdit");
                 attemptUserUpdate(nameU, emailU, username);
-                response.sendRedirect("profile.jsp");
+                toPage = Pages.PROFILE;
                 break;
             case "DeleteUser":
                 username = (String) session.getAttribute("username");
                 attemptDeleteUser(username);
-                response.sendRedirect("index.jsp");
+                toPage = Pages.INDEX;
+                break;
+            case "Validation":
+                
                 break;
             default:
                 break;
         }
-        out.close();
         ConnectionFactory.getInstance().close();
+        
+        
     }
 
     private boolean attemptLogin(final String username, final String hashedPassword) {
@@ -170,5 +174,9 @@ public class AccountController extends HttpServlet {
         String result = formatter.toString();
         formatter.close();
         return result;
+    }
+    
+    private enum Pages {
+        INDEX, PROFILE, SEARCH, SHOW;
     }
 }

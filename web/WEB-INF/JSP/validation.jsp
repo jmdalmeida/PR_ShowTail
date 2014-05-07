@@ -16,6 +16,9 @@
         }
     }
     if (username != "" && token != "") {
+        
+        
+        /*
         ConnectionFactory.getInstance().init();
         Object[] o = {username};
         ResultSet rs = ConnectionFactory.getInstance().select("SELECT Password FROM user WHERE Username = ?", o);
@@ -35,5 +38,6 @@
         }
 
         ConnectionFactory.getInstance().close();
+                */
     }
 %>
