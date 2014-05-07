@@ -5,7 +5,6 @@
     if ("/".equals(actualPage)) {
         actualPage += "index.jsp";
     }
-    System.out.println("Actual page: " + actualPage);
     boolean loggedin = false;
     String username = "";
     String token = "";

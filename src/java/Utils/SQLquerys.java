@@ -21,6 +21,8 @@ public class SQLquerys {
         querys.put(TVShows_order_recommended, "SELECT * FROM SearchView ORDER BY Rating DESC;");
         querys.put(TVShows_search_by_genre, "SELECT * FROM SearchView sv, SearchGenresView sgv WHERE sv.ID_Show = sgv.ID_Show AND sgv.ID_Genre = ?;");
         querys.put(Validation_password, "SELECT Password FROM user WHERE Username = ?;");
+        querys.put(ShowTemplate_show_info, "SELECT * FROM tv_show t, SearchView sv WHERE t.ID_Show = ? AND t.ID_Show = sv.ID_Show;");
+        querys.put(ShowTemplate_show_seasons, "SELECT * FROM season WHERE ID_Show = ?;");
     }
     
     public static String getQuery(SQLcmd key){

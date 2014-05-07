@@ -6,28 +6,20 @@
 <%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="WEB-INF/JSP/validation.jsp" %>
-<%
-    Show show = null;
-    ArrayList<Season> seas = new ArrayList<Season>();
-    ConnectionFactory.getInstance().init();
-    try {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Object[] o = {id};
-        ResultSet hi = ConnectionFactory.getInstance().select("select * from tv_show t, SearchView sv where t.ID_Show = ? and t.ID_Show = sv.ID_Show;", o);
-        if (hi.next()) {
-            show = new Show(Integer.parseInt(hi.getString("ID_Show")), 0, hi.getInt("Episodes"), hi.getString("Title"),
-                            hi.getString("Image_Path"), hi.getString("Overview"), hi.getString("Status"), hi.getString("First_Air_Date"), hi.getDouble("Rating"));
-
-            Object[] o2 = {show.getId()};
-            ResultSet hi2 = ConnectionFactory.getInstance().select("select * from season where ID_Show = ?;", o2);
-            while (hi2.next()) {
-                seas.add(new Season(Integer.parseInt(hi2.getString("ID_Season")), Integer.parseInt(hi2.getString("Season_Number"))));
-            }
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
+<%    String param_id = request.getParameter("id");
+    if (param_id == null || param_id == "") {
+        response.sendRedirect("index.jsp");
     }
-    ConnectionFactory.getInstance().close();
+    if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) {
+%>
+<jsp:forward page="ShowController" >
+    <jsp:param name="LoadWhat" value="Show" />
+    <jsp:param name="ShowID" value="<%=param_id%>" />
+</jsp:forward>
+<%
+    }
+    Show show = (Show) session.getAttribute("obj_show");
+    ArrayList<Season> seasons = (ArrayList<Season>) session.getAttribute("seasons_array");
 %>
 <!DOCTYPE html>
 <html>
@@ -52,17 +44,17 @@
             }
         </script>
         <script>
-        function mediaRater(rate){
-		if(rate < 1)
-			rate = 1;
-		else if(rate > 10)
-			rate = 10;
-                on = parseInt($("div#rates input#raterDefault").val())+1;
-                for(var i = 1; i <= on; i++)
-                        $("a#rater"+i).addClass('full');
-                for(var i = on; i <= 10; i++)
-                        $("a#rater"+i).removeClass('full');
-        }
+            function mediaRater(rate) {
+                if (rate < 1)
+                    rate = 1;
+                else if (rate > 10)
+                    rate = 10;
+                on = parseInt($("div#rates input#raterDefault").val()) + 1;
+                for (var i = 1; i <= on; i++)
+                    $("a#rater" + i).addClass('full');
+                for (var i = on; i <= 10; i++)
+                    $("a#rater" + i).removeClass('full');
+            }
         </script>
         <script type="text/javascript">
             $(document).ready(function($) {
@@ -83,7 +75,7 @@
                 });
                 $("#followButton").click(function() {
                     $.post("showFunctions.jsp",
-                    {funct: "Follow", id_show: <%=show.getId()%>, id_user: 1},
+                            {funct: "Follow", id_show: <%=show.getId()%>, id_user: 1},
                     function(data, status) {
                         alert("Data: " + data + "\nStatus: " + status);
                     });
@@ -130,8 +122,8 @@
                                         <div class="rating">
                                             <span>Rate Show:  &nbsp;</span>
                                             <div class="star">
-                                            <%for(int i = 10; i>0; i--) { %>
-                                            <span>☆</span> <%}%>
+                                                <%for (int i = 10; i > 0; i--) { %>
+                                                <span>☆</span> <%}%>
                                             </div>
                                         </div>
                                     </li>
@@ -143,7 +135,7 @@
                         <h1>Seasons:</h1>
                         <div id="tab">
                             <ul id="tabs">
-                                <% for (Season s : seas) {%>
+                                <% for (Season s : seasons) {%>
                                 <li><a href="Show.jsp?id=<%= s.getId()%>"><%= s.getNumberSeason()%></a></li> 
                                     <% }%>
                             </ul>
@@ -167,3 +159,10 @@
         <%@ include file="WEB-INF/JSP/footer.jsp" %>
     </body>
 </html>
+
+<%
+   show = null;
+   seasons.clear();
+   session.removeAttribute("obj_show");
+   session.removeAttribute("seasons_array");
+%>

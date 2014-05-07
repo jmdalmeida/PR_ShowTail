@@ -23,24 +23,21 @@ public class SearchController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-
         RequestDispatcher rd = null;
         ResultSet rs = null;
         boolean success = true;
+        
+        ConnectionFactory.getInstance().init();
 
         String searchFor = request.getParameter("SearchFor");
-
         ArrayList<Genre> genres = new ArrayList<Genre>();
         ArrayList<Show> shows = new ArrayList<Show>();
-
-        ConnectionFactory.getInstance().init();
         try {
             //Load genres
             rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_genres), null);
             while (rs.next()) {
                 genres.add(new Genre(rs.getInt("ID_Genre"), rs.getString("genre")));
             }
-            
             //Load shows
             if("Query".equals(searchFor)){
                 String query = request.getParameter("Query");

@@ -7,5 +7,6 @@ package Utils;
 
 public enum SQLcmd {
     TVShows_genres, TVShows_search, TVShows_order_all, TVShows_order_followed, TVShows_order_recommended, TVShows_search_by_genre,
-    Validation_password;
+    Validation_password,
+    ShowTemplate_show_info, ShowTemplate_show_seasons;
 }
