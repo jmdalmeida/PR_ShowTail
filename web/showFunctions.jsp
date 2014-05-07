@@ -1,16 +1,20 @@
 <%@page import="JDBC.ConnectionFactory"%>
 <%
     String funct = request.getParameter("funct");
-    if(funct == null)
+    if (funct == null) {
         response.sendRedirect("ShowTemplate.jsp");
-    
-    int id_show = Integer.parseInt(request.getParameter("id_show"));
-    int id_user = Integer.parseInt(request.getParameter("id_user"));
-    
-    ConnectionFactory.getInstance().init();
-    if("Follow".equals(funct)){
-        Object[] objs = {id_user, id_show};
-        ConnectionFactory.getInstance().update("INSERT INTO Following(ID_User, ID_Show) VALUES(?,?);", objs);
     }
-    ConnectionFactory.getInstance().close();
+
+    int param_id_user = Integer.parseInt(request.getParameter("id_user"));
+    int param_id_show = Integer.parseInt(request.getParameter("id_show"));
+
+    if ("Follow".equals(funct)) {
+%>
+<jsp:forward page="ShowController" >
+    <jsp:param name="Process" value="Follow" />
+    <jsp:param name="ID_User" value="<%=param_id_user%>" />
+    <jsp:param name="ID_Show" value="<%=param_id_show%>" />
+</jsp:forward>
+<%
+    }
 %>

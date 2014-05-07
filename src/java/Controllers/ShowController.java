@@ -11,7 +11,6 @@ import Utils.SQLquerys;
 import Utils.Season;
 import Utils.Show;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,10 +31,10 @@ public class ShowController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         RequestDispatcher rd = null;
-        String loadWhat = (String) request.getParameter("LoadWhat");
+        String process = (String) request.getParameter("Process");
         boolean success = false;
         ConnectionFactory.getInstance().init();
-        if ("Show".equals(loadWhat)) {
+        if ("Show".equals(process)) {
             Show show = null;
             ArrayList<Season> seasons = new ArrayList<Season>();
             ConnectionFactory.getInstance().init();
@@ -61,7 +60,16 @@ public class ShowController extends HttpServlet {
                     rd = request.getRequestDispatcher("/ShowTemplate.jsp");
                 }
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                success = false;
+            }
+        } else if("Follow".equals(process)){
+            int id_user = Integer.parseInt(request.getParameter("ID_User"));
+            int id_show = Integer.parseInt(request.getParameter("ID_Show"));
+            Object[] objs = {id_user, id_show};
+            try {
+                ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_follow), objs);
+                rd = request.getRequestDispatcher("/ShowTemplate.jsp");
+            } catch (SQLException ex) {
                 success = false;
             }
         }

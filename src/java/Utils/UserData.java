@@ -1,51 +1,30 @@
 package Utils;
 
 public class UserData {
-    String username;
-    String email;
-    String name;
-    String pass;
-    String dataNascimento;
-    String dataInscricao;
-    String pathImagem;
-    String tipoConta;
-    
-    public void setUsername( String value ) {
-        username = value;
-    }
-    
-    public void setName(String value) {
-        name = value;
-    }
-    
-    public void setPassword(String value) {
-        pass = value;
-    }
-    
-    public void setEmail( String value ) {
-        email = value;
+
+    private final int id;
+    private final String username, email , name, pass, dataNascimento, dataInscricao, pathImagem, tipoConta;
+
+    public UserData(int id, String username, String email, String name, String pass, String dataNascimento, String dataInscricao, String pathImagem, String tipoConta) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.name = name;
+        this.pass = pass;
+        this.dataNascimento = dataNascimento;
+        this.dataInscricao = dataInscricao;
+        this.pathImagem = pathImagem;
+        this.tipoConta = tipoConta;
     }
 
-    public void setDataNascimento(String value) {
-       dataNascimento = value;
-    }
-
-    public void setDataInscricao(String value) {
-        dataInscricao = value;
-    }
-
-    public void setPathImagem(String value) {
-        pathImagem = value;
-    }
-
-    public void setTipoConta(String value) {
-        tipoConta = value;
+    public int getId() {
+        return id;
     }
     
     public String getUsername() {
         return username;
     }
-    
+
     public String getEmail() {
         return email;
     }
@@ -73,6 +52,5 @@ public class UserData {
     public String getPathImagem() {
         return pathImagem;
     }
-    
-    
+
 }

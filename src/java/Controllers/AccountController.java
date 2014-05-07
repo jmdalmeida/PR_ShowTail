@@ -3,8 +3,8 @@ package Controllers;
 import JDBC.ConnectionFactory;
 import Utils.SQLcmd;
 import Utils.SQLquerys;
+import Utils.UserData;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,6 +40,7 @@ public class AccountController extends HttpServlet {
         ConnectionFactory.getInstance().init();
         String action = request.getParameter("action");
         String fromPage = "";
+        UserData user = (UserData) session.getAttribute("user");
         switch (action) {
             case "login":
                 String username = request.getParameter("username");
@@ -49,7 +50,7 @@ public class AccountController extends HttpServlet {
 
                 if (attemptLogin(username, hashedPassword)) {
                     String token = encryptPassword(username + "PR" + hashedPassword);
-                    session.setAttribute("username", username);
+                    session.setAttribute("user", getUserObject(username));
 
                     Cookie c1 = new Cookie("username", username);
                     Cookie c2 = new Cookie("token", token);
@@ -73,7 +74,7 @@ public class AccountController extends HttpServlet {
                 String hashedPasswordR = encryptPassword(passwordR);
                 if (attemptUserCreation(usernameR, nameR, emailR, dataNascimentoR, hashedPasswordR)) {
                     String tokenR = encryptPassword(usernameR + "PR" + hashedPasswordR);
-                    session.setAttribute("username", usernameR);
+                    session.setAttribute("user", getUserObject(usernameR));
                     Cookie c1 = new Cookie("username", usernameR);
                     Cookie c2 = new Cookie("token", tokenR);
                     c2.setMaxAge(-1);
@@ -89,27 +90,27 @@ public class AccountController extends HttpServlet {
                 }
                 break;
             case "UpdateUser":
-                username = (String) session.getAttribute("username");
+                username = user.getUsername();
                 String nameU = request.getParameter("nomeEdit");
                 String emailU = request.getParameter("emailEdit");
                 attemptUserUpdate(nameU, emailU, username);
                 toPage = Pages.PROFILE;
                 break;
             case "DeleteUser":
-                username = (String) session.getAttribute("username");
+                username = user.getUsername();
                 attemptDeleteUser(username);
                 toPage = Pages.INDEX;
                 break;
             case "Validation":
-                username = (String) request.getParameter("username");
+                username = user.getUsername();
                 String token = (String) request.getParameter("token");
                 fromPage = (String) request.getParameter("fromPage");
                 boolean valid = validateUser(username, token);
                 if (valid) {
                     session.setAttribute("valid_user", true);
-                    session.setAttribute("username", username);
+                    session.setAttribute("user", getUserObject(username));
                 } else {
-                    session.removeAttribute("username");
+                    session.removeAttribute("user");
                     session.setAttribute("valid_user", false);
                 }
                 toPage = Pages.FROMPAGE;
@@ -206,6 +207,22 @@ public class AccountController extends HttpServlet {
             validate = false;
         }
         return validate;
+    }
+
+    private UserData getUserObject(String username) {
+        UserData ud = null;
+        try {
+            Object[] objs = {username};
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_UserData), objs);
+            if (rs.next()) {
+                ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
+                        rs.getString("Name"), "", "", "", "", rs.getString("Tipo_Conta"));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ud;
     }
 
     public static String encryptPassword(String password) {

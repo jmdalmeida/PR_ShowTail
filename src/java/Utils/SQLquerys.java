@@ -23,6 +23,8 @@ public class SQLquerys {
         querys.put(Validation_password, "SELECT Password FROM user WHERE Username = ?;");
         querys.put(ShowTemplate_show_info, "SELECT * FROM tv_show t, SearchView sv WHERE t.ID_Show = ? AND t.ID_Show = sv.ID_Show;");
         querys.put(ShowTemplate_show_seasons, "SELECT * FROM season WHERE ID_Show = ?;");
+        querys.put(ShowTemplate_show_follow, "INSERT INTO Following(ID_User, ID_Show) VALUES(?,?);");
+        querys.put(Account_UserData, "SELECT * FROM User WHERE Username LIKE ?;");
     }
     
     public static String getQuery(SQLcmd key){

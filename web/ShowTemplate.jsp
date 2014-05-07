@@ -13,7 +13,7 @@
     if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) {
 %>
 <jsp:forward page="ShowController" >
-    <jsp:param name="LoadWhat" value="Show" />
+    <jsp:param name="Process" value="Show" />
     <jsp:param name="ShowID" value="<%=param_id%>" />
 </jsp:forward>
 <%
@@ -77,7 +77,7 @@
                     $.post("showFunctions.jsp",
                             {funct: "Follow", id_show: <%=show.getId()%>, id_user: 1},
                     function(data, status) {
-                        alert("Data: " + data + "\nStatus: " + status);
+                        
                     });
                 });
             });
@@ -111,6 +111,7 @@
                                     <li id="one">Episodes: <%= show.getEpisodesNumber()%></li>
                                     <li id="one">Status: <%= show.getStatus()%></li>
                                     <li id="one">
+                                        
                                         <input id="followButton" type="submit" value="+ Follow" />
                                         <a id="imdbButton" href="http://www.imdb.com/find?q=<%= show.getTitle()%>&s=all" target="_blank" ></a>
                                         <div id="trailer">
