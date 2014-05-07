@@ -96,7 +96,7 @@ public class AccountController extends HttpServlet {
                 toPage = Pages.INDEX;
                 break;
             case "Validation":
-                
+                 
                 break;
             default:
                 break;
