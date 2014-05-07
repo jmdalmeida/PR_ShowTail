@@ -36,11 +36,11 @@ public class AccountController extends HttpServlet {
         HttpSession session = request.getSession();
         Pages toPage = Pages.INDEX;
         RequestDispatcher rd = null;
+        UserData user = null;
 
         ConnectionFactory.getInstance().init();
         String action = request.getParameter("action");
         String fromPage = "";
-        UserData user = (UserData) session.getAttribute("user");
         switch (action) {
             case "login":
                 String username = request.getParameter("username");
@@ -90,6 +90,7 @@ public class AccountController extends HttpServlet {
                 }
                 break;
             case "UpdateUser":
+                user = (UserData) session.getAttribute("user");
                 username = user.getUsername();
                 String nameU = request.getParameter("nomeEdit");
                 String emailU = request.getParameter("emailEdit");
@@ -97,11 +98,13 @@ public class AccountController extends HttpServlet {
                 toPage = Pages.PROFILE;
                 break;
             case "DeleteUser":
+                user = (UserData) session.getAttribute("user");
                 username = user.getUsername();
                 attemptDeleteUser(username);
                 toPage = Pages.INDEX;
                 break;
             case "Validation":
+                user = (UserData) session.getAttribute("user");
                 username = user.getUsername();
                 String token = (String) request.getParameter("token");
                 fromPage = (String) request.getParameter("fromPage");
@@ -216,9 +219,9 @@ public class AccountController extends HttpServlet {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_UserData), objs);
             if (rs.next()) {
                 ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
-                        rs.getString("Name"), "", "", "", "", rs.getString("Tipo_Conta"));
+                        rs.getString("Name"), "", "", "", "", rs.getString("Account_Type"));
             }
-
+            System.out.println("Created user obj: " + ud);
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }

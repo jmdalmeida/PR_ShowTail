@@ -1,3 +1,4 @@
+<%@page import="Utils.UserData"%>
 <%@page import="Utils.Show"%>
 <%@page import="JDBC.ConnectionFactory"%>
 <%@page import="Utils.Season"%>
@@ -18,6 +19,7 @@
 </jsp:forward>
 <%
     }
+    int id_user = ((UserData)session.getAttribute("user")).getId();
     Show show = (Show) session.getAttribute("obj_show");
     ArrayList<Season> seasons = (ArrayList<Season>) session.getAttribute("seasons_array");
 %>
@@ -75,7 +77,7 @@
                 });
                 $("#followButton").click(function() {
                     $.post("showFunctions.jsp",
-                            {funct: "Follow", id_show: <%=show.getId()%>, id_user: 1},
+                            {funct: "Follow", id_show: <%=show.getId()%>, id_user: <%=id_user%>},
                     function(data, status) {
                         
                     });
