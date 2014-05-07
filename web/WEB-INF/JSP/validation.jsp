@@ -1,6 +1,11 @@
 <%@page import="JDBC.ConnectionFactory"%>
 <%@page import="java.sql.ResultSet"%>
 <%
+    String actualPage = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/")+1, request.getRequestURI().length());
+    if ("/".equals(actualPage)) {
+        actualPage += "index.jsp";
+    }
+    System.out.println("Actual page: " + actualPage);
     boolean loggedin = false;
     String username = "";
     String token = "";
@@ -16,28 +21,18 @@
         }
     }
     if (username != "" && token != "") {
-        
-        
-        /*
-        ConnectionFactory.getInstance().init();
-        Object[] o = {username};
-        ResultSet rs = ConnectionFactory.getInstance().select("SELECT Password FROM user WHERE Username = ?", o);
-        String pw = "";
-        while (rs.next()) {
-            pw = rs.getString("Password");
+        if (session.getAttribute("valid_user") != null) {
+            loggedin = (boolean) session.getAttribute("valid_user");
+            session.removeAttribute("valid_user");
+        } else {
+%>
+<jsp:forward page="AccountController" >
+    <jsp:param name="action" value="Validation" />
+    <jsp:param name="username" value="<%=username%>" />
+    <jsp:param name="token" value="<%=token%>" />
+    <jsp:param name="fromPage" value="<%=actualPage%>" />
+</jsp:forward>
+<%
         }
-
-        if (pw != "") {
-            String chkToken = Controllers.AccountController.encryptPassword(username + "PR" + pw);
-            if (chkToken.equals(token)) {
-                loggedin = true;
-                session.setAttribute("username", username);
-            } else {
-                session.invalidate();
-            }
-        }
-
-        ConnectionFactory.getInstance().close();
-                */
     }
 %>

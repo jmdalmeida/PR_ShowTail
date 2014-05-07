@@ -117,7 +117,7 @@ public class AdminController extends HttpServlet {
                 }
             }
 
-        } catch (Exception ex) {
+        } catch (ParseException | NumberFormatException | SQLException ex) {
             ex.printStackTrace();
             success = false;
         }

@@ -7,6 +7,7 @@ import Utils.SQLquerys;
 import Utils.Show;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -43,7 +44,7 @@ public class SearchController extends HttpServlet {
             //Load shows
             if("Query".equals(searchFor)){
                 String query = request.getParameter("Query");
-                Object[] objs = {new String("%" + query + "%")};
+                Object[] objs = {("%" + query + "%")};
                 rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_search), objs);
             } else if ("Order".equals(searchFor)) {
                 String orderBy = request.getParameter("OrderBy");
@@ -71,7 +72,7 @@ public class SearchController extends HttpServlet {
             session.setAttribute("genres_array", genres);
             session.setAttribute("shows_array", shows);
 
-        } catch (Exception ex) {
+        } catch (SQLException | NumberFormatException ex) {
             ex.printStackTrace();
             success = false;
         }

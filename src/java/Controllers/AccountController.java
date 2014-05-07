@@ -1,6 +1,8 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
+import Utils.SQLcmd;
+import Utils.SQLquerys;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
@@ -10,6 +12,7 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -31,10 +34,12 @@ public class AccountController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Pages toPage = null;
+        Pages toPage = Pages.INDEX;
+        RequestDispatcher rd = null;
 
         ConnectionFactory.getInstance().init();
         String action = request.getParameter("action");
+        String fromPage = "";
         switch (action) {
             case "login":
                 String username = request.getParameter("username");
@@ -75,11 +80,11 @@ public class AccountController extends HttpServlet {
                     c1.setMaxAge(-1);
                     response.addCookie(c1);
                     response.addCookie(c2);
-                    
+
                     toPage = Pages.PROFILE;
                 } else {
                     //Tratar o caso de erro na criação do user aqui
-                    
+
                     toPage = Pages.INDEX;
                 }
                 break;
@@ -96,14 +101,41 @@ public class AccountController extends HttpServlet {
                 toPage = Pages.INDEX;
                 break;
             case "Validation":
-                 
+                username = (String) request.getParameter("username");
+                String token = (String) request.getParameter("token");
+                fromPage = (String) request.getParameter("fromPage");
+                boolean valid = validateUser(username, token);
+                if (valid) {
+                    session.setAttribute("valid_user", true);
+                    session.setAttribute("username", username);
+                } else {
+                    session.removeAttribute("username");
+                    session.setAttribute("valid_user", false);
+                }
+                toPage = Pages.FROMPAGE;
                 break;
             default:
                 break;
         }
         ConnectionFactory.getInstance().close();
-        
-        
+
+        switch (toPage) {
+            case INDEX:
+                rd = request.getRequestDispatcher("/index.jsp");
+                break;
+            case PROFILE:
+                rd = request.getRequestDispatcher("/profile.jsp");
+                break;
+            case FROMPAGE:
+                rd = request.getRequestDispatcher("/" + fromPage);
+                break;
+            default:
+                rd = request.getRequestDispatcher("/index.jsp");
+                break;
+        }
+        if (rd != null) {
+            rd.forward(request, response);
+        }
     }
 
     private boolean attemptLogin(final String username, final String hashedPassword) {
@@ -154,6 +186,28 @@ public class AccountController extends HttpServlet {
         }
     }
 
+    private boolean validateUser(String username, String token) {
+        boolean validate = false;
+        Object[] o = {username};
+        ResultSet rs;
+        try {
+            rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Validation_password), o);
+
+            String pw = "";
+            while (rs.next()) {
+                pw = rs.getString("Password");
+            }
+
+            if (!"".equals(pw)) {
+                String chkToken = Controllers.AccountController.encryptPassword(username + "PR" + pw);
+                validate = chkToken.equals(token);
+            }
+        } catch (SQLException ex) {
+            validate = false;
+        }
+        return validate;
+    }
+
     public static String encryptPassword(String password) {
         String sha1 = "";
         try {
@@ -175,8 +229,9 @@ public class AccountController extends HttpServlet {
         formatter.close();
         return result;
     }
-    
+
     private enum Pages {
-        INDEX, PROFILE, SEARCH, SHOW;
+
+        INDEX, PROFILE, SEARCH, SHOW, FROMPAGE;
     }
 }
