@@ -71,6 +71,7 @@
                     $("#nome").show("fast");
                     $("#emailU").show("fast");
                     $("#edit").show("fast");
+                    $("#remove").hide("fast");
 
                 });
 

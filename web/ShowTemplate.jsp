@@ -113,7 +113,8 @@
                                             <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= show.getTitle()%>" target="_blank"></a>
                                         </div>
                                     </li>
-                                    <li id="one">Rate this show: </li>
+                                    <li id="two"><%for(int i = 0; i<10; i++) { %>
+                                        <a href="" id="rater<%= i %>"></a> <%}%></li>
                                 </ul>
                             </div>
                         </div>
