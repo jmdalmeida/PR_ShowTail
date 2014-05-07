@@ -46,7 +46,8 @@
     }
     if (rs != null) {
         while (rs.next()) {
-            shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"), rs.getString("Image_Path"), "", ""));
+            shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), 
+                    rs.getString("Title"), rs.getString("Image_Path"), "", "", "", 0.0));
         }
     }
     ConnectionFactory.getInstance().close();

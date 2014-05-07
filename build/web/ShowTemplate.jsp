@@ -1,3 +1,4 @@
+<%@page import="Search.Show"%>
 <%@page import="JDBC.ConnectionFactory"%>
 <%@page import="Shows.Season"%>
 <%@page import="java.util.ArrayList"%>
@@ -6,14 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="WEB-INF/JSP/validation.jsp" %>
 <%
-    String title = "";
-    String status = "";
-    String premiered = "";
-    String picture = "";
-    String overview = "";
-    int id_show = 0;
-    int number_episodes = 0;
-    double rating = 0.0;
+    Show show = null;
     ArrayList<Season> seas = new ArrayList<Season>();
     ConnectionFactory.getInstance().init();
     try {
@@ -21,19 +15,14 @@
         Object[] o = {id};
         ResultSet hi = ConnectionFactory.getInstance().select("select * from tv_show t, SearchView sv where t.ID_Show = ? and t.ID_Show = sv.ID_Show;", o);
         if (hi.next()) {
-            title = hi.getString("Title");
-            id_show = Integer.parseInt(hi.getString("ID_Show"));
-            status = hi.getString("Status");
-            picture = hi.getString("Image_Path");
-            overview = hi.getString("Overview");
-            premiered = hi.getString("First_Air_Date");
-            rating = hi.getDouble("Rating");
-            number_episodes = hi.getInt("Episodes");
-        }
-        Object[] o2 = {id_show};
-        ResultSet hi2 = ConnectionFactory.getInstance().select("select * from season where ID_Show = ?;", o2);
-        while (hi2.next()) {
-            seas.add(new Season(Integer.parseInt(hi2.getString("ID_Season")), Integer.parseInt(hi2.getString("Season_Number"))));
+            show = new Show(Integer.parseInt(hi.getString("ID_Show")), 0, hi.getInt("Episodes"), hi.getString("Title"),
+                            hi.getString("Image_Path"), hi.getString("Overview"), hi.getString("Status"), hi.getString("First_Air_Date"), hi.getDouble("Rating"));
+
+            Object[] o2 = {show.getId()};
+            ResultSet hi2 = ConnectionFactory.getInstance().select("select * from season where ID_Show = ?;", o2);
+            while (hi2.next()) {
+                seas.add(new Season(Integer.parseInt(hi2.getString("ID_Season")), Integer.parseInt(hi2.getString("Season_Number"))));
+            }
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -81,10 +70,10 @@
                 });
                 $("#followButton").click(function() {
                     $.post("showFunctions.jsp",
-                        {funct: "Follow", id_show: <%=id_show%>, id_user: 1},
-                        function(data, status) {
-                            alert("Data: " + data + "\nStatus: " + status);
-                        });
+                    {funct: "Follow", id_show: <%=show.getId()%>, id_user: 1},
+                    function(data, status) {
+                        alert("Data: " + data + "\nStatus: " + status);
+                    });
                 });
             });
         </script>
@@ -99,29 +88,29 @@
                 <%-- MiddleLayer --%>
                 <div id="middleLayer">
                     <div id="header-middleC">
-                        <h1> <%= title%> </h1>
+                        <h1> <%= show.getTitle()%> </h1>
                         <div id="banner">
-                            <img src="<%= picture%>" />   
+                            <img src="<%= show.getImgPath()%>" />   
                         </div>
                         <div id="rating">
                             <div id="OverviewBox">
                                 <h2>Overview:</h2>
                                 <ul id="summaries">
-                                    <li id="summariesLi"><%= overview%></li>
+                                    <li id="summariesLi"><%= show.getOverview()%></li>
                                 </ul>
                             </div>
                             <div id="ratingBox">
                                 <ul id="rates">
-                                    <li id="one">Rating: <%=rating%>/10</li>
-                                    <li id="one">Premiered: <%= premiered%></li>
-                                    <li id="one">Episodes: <%= number_episodes%></li>
-                                    <li id="one">Status: <%= status%></li>
+                                    <li id="one">Rating: <%=show.getRating()%>/10</li>
+                                    <li id="one">Premiered: <%= show.getPremierDate()%></li>
+                                    <li id="one">Episodes: <%= show.getEpisodesNumber()%></li>
+                                    <li id="one">Status: <%= show.getStatus()%></li>
                                     <li id="one">
                                         <input id="followButton" type="submit" value="+ Follow" />
-                                        <a id="imdbButton" href="http://www.imdb.com/find?q=<%= title%>&s=all" target="_blank" ></a>
+                                        <a id="imdbButton" href="http://www.imdb.com/find?q=<%= show.getTitle()%>&s=all" target="_blank" ></a>
                                         <div id="trailer">
-                                            <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= title%>" target="_blank" >Trailer</a>
-                                            <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= title%>" target="_blank"></a>
+                                            <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= show.getTitle()%>" target="_blank" >Trailer</a>
+                                            <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= show.getTitle()%>" target="_blank"></a>
                                         </div>
                                     </li>
                                     <li id="one">Rate this show: </li>
