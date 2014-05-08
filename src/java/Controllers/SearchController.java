@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,10 +28,14 @@ public class SearchController extends HttpServlet {
         RequestDispatcher rd = null;
         ResultSet rs = null;
         boolean success = true;
+        int count = 0;
         
         ConnectionFactory.getInstance().init();
 
         String searchFor = request.getParameter("SearchFor");
+        int page = Integer.parseInt(request.getParameter("Page"));
+        int limitPerPage = 9;
+        String limit = " LIMIT " + page*limitPerPage + ", " + limitPerPage + ";";
         ArrayList<Genre> genres = new ArrayList<Genre>();
         ArrayList<Show> shows = new ArrayList<Show>();
         try {
@@ -42,24 +48,30 @@ public class SearchController extends HttpServlet {
             if("Query".equals(searchFor)){
                 String query = request.getParameter("Query");
                 Object[] objs = {("%" + query + "%")};
-                rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_search), objs);
+                rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_search) + limit, objs);
             } else if ("Order".equals(searchFor)) {
                 String orderBy = request.getParameter("OrderBy");
                 if("All".equals(orderBy)){
-                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
+                    count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
+                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all) + limit, null);
                 } else if("MostFollowed".equals(orderBy)){
-                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_followed), null);
+                    count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_order_followed), null);
+                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_followed) + limit, null);
                 } else if("Recommended".equals(orderBy)){
-                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_recommended), null);
+                    count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_order_recommended), null);
+                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_recommended) + limit, null);
                 } else {
-                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
+                    count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
+                    rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all) + limit, null);
                 }
             } else if("Genre".equals(searchFor)){
                 String genre = (String)request.getParameter("Genre");
                 Object[] objs = {Integer.parseInt(genre)};
-                rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_search_by_genre), objs);
+                count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_search_by_genre), objs);
+                rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_search_by_genre) + limit, objs);
             } else {
-                rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
+                count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
+                rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all) + limit, null);
             }
 
             while (rs.next()) {
@@ -68,6 +80,7 @@ public class SearchController extends HttpServlet {
             }
             session.setAttribute("genres_array", genres);
             session.setAttribute("shows_array", shows);
+            session.setAttribute("number_pages", count);
 
         } catch (SQLException | NumberFormatException ex) {
             ex.printStackTrace();
@@ -76,6 +89,19 @@ public class SearchController extends HttpServlet {
         ConnectionFactory.getInstance().close();
         rd = success ? request.getRequestDispatcher("/TV-Shows.jsp") : request.getRequestDispatcher("/index.jsp");
         rd.forward(request, response);
+    }
+    
+    private int getCount(String sql, Object[] objs) {
+       int x = 0;
+        try {
+            ResultSet rs = ConnectionFactory.getInstance().select(sql, objs);
+            while(rs.next()) {
+                x++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return x;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

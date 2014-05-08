@@ -5,17 +5,22 @@
 <%@include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
+    String query = "";
+    String pageNumber = "";
+    String genre = "";
+    String order = "";
     if (session.getAttribute("genres_array") == null || session.getAttribute("shows_array") == null) {
-        String query = request.getParameter("q");
-        String pageNumber = request.getParameter("page");
-        String genre = request.getParameter("genre");
-        String order = request.getParameter("order");
+        query = request.getParameter("q");
+        pageNumber = request.getParameter("page") != null ? request.getParameter("page") : "0";
+        genre = request.getParameter("genre");
+        order = request.getParameter("order");
 
         if (query != null && query != "") {
 %>
 <jsp:forward page="SearchController" >
     <jsp:param name="SearchFor" value="Query" />
     <jsp:param name="Query" value="<%=query%>" />
+    <jsp:param name="Page" value="<%=pageNumber%>" />
 </jsp:forward>
 <%
 } else if (order != null && order != "") {
@@ -23,6 +28,7 @@
 <jsp:forward page="SearchController" >
     <jsp:param name="SearchFor" value="Order" />
     <jsp:param name="OrderBy" value="<%=order%>" />
+    <jsp:param name="Page" value="<%=pageNumber%>" />
 </jsp:forward>
 <%
 } else if (genre != null && genre != "") {
@@ -30,6 +36,7 @@
 <jsp:forward page="SearchController" >
     <jsp:param name="SearchFor" value="Genre" />
     <jsp:param name="Genre" value="<%=genre%>" />
+    <jsp:param name="Page" value="<%=pageNumber%>" />
 </jsp:forward>
 <%
 } else {
@@ -37,12 +44,15 @@
 <jsp:forward page="SearchController" >
     <jsp:param name="SearchFor" value="Order" />
     <jsp:param name="OrderBy" value="All" />
+    <jsp:param name="Page" value="<%=pageNumber%>" />
 </jsp:forward>
 <%
         }
     }
     ArrayList<Genre> genres = (ArrayList<Genre>) session.getAttribute("genres_array");
     ArrayList<Show> shows = (ArrayList<Show>) session.getAttribute("shows_array");
+    int count = (Integer)session.getAttribute("number_pages");
+    double numPages = Math.ceil(count/9);
 %>
 <!DOCTYPE html>
 <html>
@@ -52,6 +62,8 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search TV-Show</title>
+        <script>
+        </script>
     </head>
     <body>
         <div id="wrapper">
@@ -100,6 +112,11 @@
                                 </div>
                             </div>
                             <% }%>
+                        </div>
+                        <div id="number_page">
+                           <% for(int i = 0; i < (int) (numPages); i++) { %>
+                           <a href="TV-Shows.jsp?q=<%=query%>&order=<%=order%>&genre=<%=genre%>&page=<%=i%>"> <%=i+1%> </a>
+                           <% } %>
                         </div>
                     </div>
                 </div>  
