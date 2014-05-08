@@ -19,7 +19,12 @@
 </jsp:forward>
 <%
     }
-    int id_user = ((UserData)session.getAttribute("user")).getId();
+    int id_user = 0;
+    boolean following = false;
+    if (loggedin) {
+        id_user = ((UserData)session.getAttribute("user")).getId();
+        following = (boolean)session.getAttribute("following");
+    }
     Show show = (Show) session.getAttribute("obj_show");
     ArrayList<Season> seasons = (ArrayList<Season>) session.getAttribute("seasons_array");
 %>
@@ -75,14 +80,44 @@
                         });
                     }
                 });
-                $("#followButton").click(function() {
+
+                buttonState(<%=following%>);
+            });
+
+            function buttonState(following) {
+                var elem = document.getElementById("followButton");
+                if (following === true) {
+                    elem.value = "- Unfollow";
+                    elem.style.backgroundColor = "#FF0000";
+                } else {
+                    elem.value = "+ Follow";
+                    elem.style.backgroundColor = "#339900";
+                }
+            <% if (loggedin) { %>
+                elem.onclick = function() {
+                    buttonAction(following);
+                };
+            <% } else { %>
+                elem.disabled = "disabled";
+                elem.style.backgroundColor = "#CCCCCC";
+            <% }%>
+            }
+
+            function buttonAction(following) {
+                if (following !== true) {
                     $.post("showFunctions.jsp",
                             {funct: "Follow", id_show: <%=show.getId()%>, id_user: <%=id_user%>},
                     function(data, status) {
-                        
+                        buttonState(true);
                     });
-                });
-            });
+                } else {
+                    $.post("showFunctions.jsp",
+                            {funct: "Unfollow", id_show: <%=show.getId()%>, id_user: <%=id_user%>},
+                    function(data, status) {
+                        buttonState(false);
+                    });
+                }
+            }
         </script>
         <title>Show Template</title>
     </head>
@@ -113,8 +148,7 @@
                                     <li id="one">Episodes: <%= show.getEpisodesNumber()%></li>
                                     <li id="one">Status: <%= show.getStatus()%></li>
                                     <li id="one">
-                                        
-                                        <input id="followButton" type="submit" value="+ Follow" />
+                                        <input id="followButton" type="submit"/>
                                         <a id="imdbButton" href="http://www.imdb.com/find?q=<%= show.getTitle()%>&s=all" target="_blank" ></a>
                                         <div id="trailer">
                                             <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= show.getTitle()%>" target="_blank" >Trailer</a>
@@ -164,8 +198,8 @@
 </html>
 
 <%
-   show = null;
-   seasons.clear();
-   session.removeAttribute("obj_show");
-   session.removeAttribute("seasons_array");
+    show = null;
+    seasons.clear();
+    session.removeAttribute("obj_show");
+    session.removeAttribute("seasons_array");
 %>

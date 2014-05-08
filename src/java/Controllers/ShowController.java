@@ -10,6 +10,7 @@ import Utils.SQLcmd;
 import Utils.SQLquerys;
 import Utils.Season;
 import Utils.Show;
+import Utils.UserData;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,17 +58,32 @@ public class ShowController extends HttpServlet {
                     session.setAttribute("obj_show", show);
                     session.setAttribute("seasons_array", seasons);
 
+                    if ((UserData) session.getAttribute("user") != null) {
+                        int id_user = ((UserData) session.getAttribute("user")).getId();
+                        session.setAttribute("following", checkFollowsShow(id_user, show.getId()));
+                    }
+
                     rd = request.getRequestDispatcher("/ShowTemplate.jsp");
                 }
             } catch (SQLException ex) {
                 success = false;
             }
-        } else if("Follow".equals(process)){
+        } else if ("Follow".equals(process)) {
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
             int id_show = Integer.parseInt(request.getParameter("ID_Show"));
             Object[] objs = {id_user, id_show};
             try {
                 ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_follow), objs);
+                rd = request.getRequestDispatcher("/ShowTemplate.jsp");
+            } catch (SQLException ex) {
+                success = false;
+            }
+        } else if ("Unfollow".equals(process)) {
+            int id_user = Integer.parseInt(request.getParameter("ID_User"));
+            int id_show = Integer.parseInt(request.getParameter("ID_Show"));
+            Object[] objs = {id_user, id_show};
+            try {
+                ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_unfollow), objs);
                 rd = request.getRequestDispatcher("/ShowTemplate.jsp");
             } catch (SQLException ex) {
                 success = false;
@@ -119,5 +135,19 @@ public class ShowController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean checkFollowsShow(int id_user, int id_show) {
+        boolean follows = false;
+        try {
+            Object[] objs = {id_user, id_show};
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_check_follows), objs);
+            if(rs.next()){
+                follows = "YES".equals(rs.getString("Follows"));
+            }
+        } catch (SQLException ex) {
+            follows = false;
+        }
+        return follows;
+    }
 
 }

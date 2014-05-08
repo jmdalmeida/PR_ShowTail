@@ -41,9 +41,10 @@ public class AccountController extends HttpServlet {
         ConnectionFactory.getInstance().init();
         String action = request.getParameter("action");
         String fromPage = "";
+        String username = "";
         switch (action) {
             case "login":
-                String username = request.getParameter("username");
+                username = request.getParameter("username");
                 String password = request.getParameter("password");
                 boolean remember = request.getParameter("chkRemember") != null;
                 String hashedPassword = encryptPassword(password);
@@ -58,10 +59,8 @@ public class AccountController extends HttpServlet {
                     c1.setMaxAge(remember ? 12 * 31 * 24 * 60 * 60 : -1);
                     response.addCookie(c1);
                     response.addCookie(c2);
-                    System.out.println("Login bem sucedido.");
                 } else {
                     request.getSession().setAttribute("failedlogin", "Invalid username/password.");
-                    System.out.println("Login falhou.");
                 }
                 toPage = Pages.INDEX;
                 break;
@@ -105,10 +104,11 @@ public class AccountController extends HttpServlet {
                 break;
             case "Validation":
                 user = (UserData) session.getAttribute("user");
+                boolean valid;
                 username = user.getUsername();
                 String token = (String) request.getParameter("token");
                 fromPage = (String) request.getParameter("fromPage");
-                boolean valid = validateUser(username, token);
+                valid = validateUser(username, token);
                 if (valid) {
                     session.setAttribute("valid_user", true);
                     session.setAttribute("user", getUserObject(username));
@@ -221,7 +221,6 @@ public class AccountController extends HttpServlet {
                 ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
                         rs.getString("Name"), "", "", "", "", rs.getString("Account_Type"));
             }
-            System.out.println("Created user obj: " + ud);
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }

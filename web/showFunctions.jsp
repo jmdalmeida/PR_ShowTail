@@ -16,5 +16,13 @@
     <jsp:param name="ID_Show" value="<%=param_id_show%>" />
 </jsp:forward>
 <%
+} else if ("Unfollow".equals(funct)) {
+%>
+<jsp:forward page="ShowController" >
+    <jsp:param name="Process" value="Unfollow" />
+    <jsp:param name="ID_User" value="<%=param_id_user%>" />
+    <jsp:param name="ID_Show" value="<%=param_id_show%>" />
+</jsp:forward>
+<%
     }
 %>
