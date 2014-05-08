@@ -282,34 +282,42 @@
     padding-left: 8px;
 }
 
+//Comments
 #middleLayer #comments
 {
     margin-top: 50px;
     margin-right: 10px;
     margin-left: 10px;
+    min-height: 200px;
 }
 
 #middleLayer #comments h1
 {
+    margin-top: 5px;
     color: white;
 }
 
 #middleLayer #comments #postComment
 {
     margin-top: 10px;
-    height: 100px;
-    width: 70%;
-    float: left;
+    height: 150px;
+    width: 427px;
 }
 
 #middleLayer #comments #postComment textarea
 {
-    height: 100px;
-    width: 100%;
     border: 5px solid #414244;
     border-radius: 3px;
 }
 
+#middleLayer #comments #postComment input {
+    border: 5px solid #414244;
+    border-radius: 2px;
+    padding: 5px;
+    float: right;
+}
+
+//TABS
 #middleLayer #tab h1
 {
     color: white;

@@ -187,13 +187,11 @@
                         <!-- Things will Appear -->
                     </div>
                     <div id="comments">
-                        <h1> Comments: </h1>
+                        <h1>Comments:</h1>
                         <div id="comments-box">
-                            <div id="userF">
-                            </div>
                             <div id="postComment">
-                                <textarea id="textArea">
-                                </textarea>
+                                <textarea id="textArea" rows="6" cols="50" maxlength="254"></textarea>
+                                <input type="button" value="Post Comment"/>
                             </div>   
                         </div>
                     </div>
