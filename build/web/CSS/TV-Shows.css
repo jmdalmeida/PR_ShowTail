@@ -160,6 +160,7 @@
 #result
 {
     margin-left: 10px;
+    z-index: 100;
 }
 
 #result li {
@@ -199,6 +200,7 @@
     position: relative;
     bottom: 40px;
     left: 350px;
+    height: 100px;
 }
 
 
