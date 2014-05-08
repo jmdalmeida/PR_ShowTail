@@ -114,12 +114,12 @@
                             </div>
                             <% }%>
                         </div>
-                    </div>
                         <div id="number_page">
                            <% for(int i = 0; i < (int) (numPages); i++) { %>
                            <a href="TV-Shows.jsp?q=<%=query%>&order=<%=order%>&genre=<%=genre%>&page=<%=i%>"> <%=i+1%> </a>
                            <% } %>
                         </div>
+                    </div>
                 </div>  
             </div>
         </div>    
