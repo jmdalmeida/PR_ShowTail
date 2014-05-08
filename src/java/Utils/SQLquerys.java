@@ -26,6 +26,9 @@ public class SQLquerys {
         querys.put(ShowTemplate_show_seasons, "SELECT * FROM season WHERE ID_Show = ?");
         querys.put(ShowTemplate_show_follow, "INSERT INTO Following(ID_User, ID_Show) VALUES(?,?)");
         querys.put(ShowTemplate_show_unfollow, "DELETE FROM Following WHERE ID_User = ? AND ID_Show = ?");
+        querys.put(ShowTemplate_show_rate_select, "SELECT * FROM Rating WHERE ID_User = ? AND ID_Show = ?");
+        querys.put(ShowTemplate_show_rate_insert, "INSERT INTO Rating(ID_User, ID_Show, Rating) VALUES(?,?,?)");
+        querys.put(ShowTemplate_show_rate_update, "UPDATE Rating SET Rating = ? WHERE ID_User = ? AND ID_SHOW = ?");
         querys.put(Account_UserData, "SELECT * FROM User WHERE Username LIKE ?");
         querys.put(Show_get_season, "SELECT * FROM season where ID_Season = ?");
         querys.put(Show_get_episodes, "SELECT * FROM episode where ID_Season = ?");

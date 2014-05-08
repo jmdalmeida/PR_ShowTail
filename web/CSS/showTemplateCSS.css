@@ -142,6 +142,10 @@
    color: gold;
 }
 
+.starActive {
+    color: gold;
+}
+
 #followButton {
     width: 165px; height: 28px; background-color: #339900; color: #ffffff;
     margin-left: 0px; margin-top: 3px;

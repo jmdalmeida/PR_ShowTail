@@ -8,7 +8,7 @@
 <%@include file="WEB-INF/JSP/validation.jsp" %>
 <%    String param_id = request.getParameter("id");
     if (param_id == null || param_id == "") {
-        response.sendRedirect("index.jsp");
+        //response.sendRedirect("index.jsp");
     }
     if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) {
 %>
@@ -20,9 +20,11 @@
     }
     int id_user = 0;
     boolean following = false;
+    int rate = 0;
     if (loggedin) {
-        id_user = ((UserData)session.getAttribute("user")).getId();
-        following = (Boolean)session.getAttribute("following");
+        id_user = ((UserData) session.getAttribute("user")).getId();
+        following = (Boolean) session.getAttribute("following");
+        rate = (Integer) session.getAttribute("rate");
     }
     Show show = (Show) session.getAttribute("obj_show");
     ArrayList<Season> seasons = (ArrayList<Season>) session.getAttribute("seasons_array");
@@ -41,15 +43,15 @@
 
         <script src="JavaScript/jquery.mousewheel.js"></script>
         <script src="JavaScript/perfect-scrollbar.js"></script>
-        <script>function showHide(shID) {
+        <script type="text/javascript">
+            function showHide(shID) {
                 if (document.getElementById(shID)) {
                     var temp = document.getElementById(shID + '-short').innerHTML;
                     document.getElementById(shID + '-short').innerHTML = document.getElementById(shID + '-complete').innerHTML;
                     document.getElementById(shID + '-complete').innerHTML = temp;
                 }
             }
-        </script>
-        <script type="text/javascript">
+
             $(document).ready(function($) {
                 $('#summariesLi').perfectScrollbar({
                     wheelSpeed: 20,
@@ -68,6 +70,7 @@
                 });
 
                 buttonState(<%=following%>);
+                setRateStars(<%=rate%>);
             });
 
             function buttonState(following) {
@@ -104,6 +107,24 @@
                     });
                 }
             }
+
+            function rateShow(rate) {
+                if (rate < 1 || rate > 10)
+                    return;
+                $.post("showFunctions.jsp",
+                        {funct: "Rate", id_show: <%=show.getId()%>, id_user: <%=id_user%>, rate: rate},
+                function(data, status) {
+                    document.getElementById("ratingPH").innerHTML = data;
+                    setRateStars(rate);
+                });
+            }
+
+            function setRateStars(rate) {
+                for (var i = 1; i <= rate; i++) {
+                    var elem = document.getElementById("star" + i);
+                    elem.className = "starActive";
+                }
+            }
         </script>
         <title>Show Template</title>
     </head>
@@ -129,7 +150,7 @@
                             </div>
                             <div id="ratingBox">
                                 <ul id="rates">
-                                    <li id="one">Rating: <%=show.getRating()%>/10</li>
+                                    <li id="one">Rating: <span id="ratingPH"><%=show.getRating()%></span>/10</li>
                                     <li id="one">Premiered: <%= show.getPremierDate()%></li>
                                     <li id="one">Episodes: <%= show.getEpisodesNumber()%></li>
                                     <li id="one">Status: <%= show.getStatus()%></li>
@@ -144,9 +165,9 @@
                                     <li id="two"> 
                                         <div class="rating">
                                             <span>Rate Show:  &nbsp;</span>
-                                            <div class="star">
-                                                <%for (int i = 10; i > 0; i--) { %>
-                                                <span>☆</span> <%}%>
+                                            <div <% if (loggedin) { %>class="star"<% } %>>
+                                                <%for (int i = 10; i > 0; i--) {%>
+                                                <span id="star<%=i%>" <% if (loggedin) {%>onclick="rateShow(<%=i%>)"<% } %>>☆</span> <%}%>
                                             </div>
                                         </div>
                                     </li>
