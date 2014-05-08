@@ -6,6 +6,7 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
+import Utils.Episode;
 import Utils.SQLcmd;
 import Utils.SQLquerys;
 import Utils.Season;
@@ -38,7 +39,6 @@ public class ShowController extends HttpServlet {
         if ("Show".equals(process)) {
             Show show = null;
             ArrayList<Season> seasons = new ArrayList<Season>();
-            ConnectionFactory.getInstance().init();
             try {
                 int id = Integer.parseInt(request.getParameter("id"));
                 Object[] o = {id};
@@ -90,6 +90,28 @@ public class ShowController extends HttpServlet {
             }
         } else if ("Episodes".equals(process)) {
             int id_season = Integer.parseInt(request.getParameter("ID_Season"));
+            System.out.println("Episodes season: " + id_season);
+            ArrayList<Episode> episodes = new ArrayList<Episode>();
+            try {
+                int season_number = 0;
+                
+                Object[] objs = {id_season};
+                ResultSet rs_season = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_season), objs);
+                while (rs_season.next()) {
+                    season_number = Integer.parseInt(rs_season.getString("Season_Number"));
+                }
+                ResultSet rs_episodes = ConnectionFactory.getInstance().select("select * from episode where ID_Season = ?;", objs);
+                while (rs_episodes.next()) {
+                    episodes.add(new Episode(Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number, 
+                            rs_episodes.getString("Title"), rs_episodes.getString("Overview")));
+                }
+                success = true;
+                session.setAttribute("episodes_array", episodes);
+                
+                rd = request.getRequestDispatcher("/Show.jsp");
+            } catch (SQLException e) {
+                success = false;
+            }
         }
 
         if (!success) {

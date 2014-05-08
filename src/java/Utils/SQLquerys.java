@@ -27,6 +27,8 @@ public class SQLquerys {
         querys.put(ShowTemplate_show_follow, "INSERT INTO Following(ID_User, ID_Show) VALUES(?,?);");
         querys.put(ShowTemplate_show_unfollow, "DELETE FROM Following WHERE ID_User = ? AND ID_Show = ?;");
         querys.put(Account_UserData, "SELECT * FROM User WHERE Username LIKE ?;");
+        querys.put(Show_get_season, "select * from season where ID_Season = ?;");
+        querys.put(Show_get_episodes, "select * from episode where ID_Season = ?;");
     }
     
     public static String getQuery(SQLcmd key){
