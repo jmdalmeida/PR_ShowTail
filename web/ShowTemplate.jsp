@@ -1,6 +1,5 @@
 <%@page import="Utils.UserData"%>
 <%@page import="Utils.Show"%>
-<%@page import="JDBC.ConnectionFactory"%>
 <%@page import="Utils.Season"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.SQLException"%>

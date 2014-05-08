@@ -1,4 +1,3 @@
-<%@page import="JDBC.ConnectionFactory"%>
 <%
     String funct = request.getParameter("funct");
     if (funct == null) {

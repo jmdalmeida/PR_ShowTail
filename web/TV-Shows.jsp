@@ -1,4 +1,3 @@
-<%@page import="JDBC.ConnectionFactory"%>
 <%@page import="Controllers.AccountController"%>
 <%@page import="Utils.*" %>
 <%@page import="java.util.ArrayList"%>
