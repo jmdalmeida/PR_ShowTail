@@ -20,7 +20,7 @@
         }
     }
     if (username != "" && token != "") {
-        if (session.getAttribute("valid_user") != null && session.getAttribute("user") != null) {
+        if (session.getAttribute("user") != null && session.getAttribute("valid_user") != null) {
             loggedin = (Boolean) session.getAttribute("valid_user");
             session.removeAttribute("valid_user");
         } else {

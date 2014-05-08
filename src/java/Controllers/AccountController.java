@@ -104,17 +104,14 @@ public class AccountController extends HttpServlet {
                 toPage = Pages.INDEX;
                 break;
             case "Validation":
-                user = (UserData) session.getAttribute("user");
-                boolean valid;
-                username = user.getUsername();
+                username = (String) request.getParameter("username");
                 String token = (String) request.getParameter("token");
                 fromPage = (String) request.getParameter("fromPage");
-                valid = validateUser(username, token);
+                boolean valid = validateUser(username, token);
                 if (valid) {
                     session.setAttribute("valid_user", true);
                     session.setAttribute("user", getUserObject(username));
                 } else {
-                    session.removeAttribute("user");
                     session.setAttribute("valid_user", false);
                 }
                 toPage = Pages.FROMPAGE;
@@ -226,9 +223,8 @@ public class AccountController extends HttpServlet {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_UserData), objs);
             if (rs.next()) {
                 ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
-                        rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"), 
+                        rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"),
                         rs.getString("Image_Path"), rs.getString("Account_Type"));
-                System.out.println("");
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
