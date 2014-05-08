@@ -90,7 +90,6 @@ public class ShowController extends HttpServlet {
             }
         } else if ("Episodes".equals(process)) {
             int id_season = Integer.parseInt(request.getParameter("ID_Season"));
-            System.out.println("Episodes season: " + id_season);
             ArrayList<Episode> episodes = new ArrayList<Episode>();
             try {
                 int season_number = 0;

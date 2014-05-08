@@ -81,6 +81,7 @@ public class SearchController extends HttpServlet {
             session.setAttribute("genres_array", genres);
             session.setAttribute("shows_array", shows);
             session.setAttribute("number_pages", count);
+            session.setAttribute("results_per_page", limitPerPage);
 
         } catch (SQLException | NumberFormatException ex) {
             ex.printStackTrace();
