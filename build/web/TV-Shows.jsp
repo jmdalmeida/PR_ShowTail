@@ -4,14 +4,13 @@
 <%@page import="java.util.ArrayList"%>
 <%@include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    String query = "";
+<%    String query = "";
     String pageNumber = "";
     String genre = "";
     String order = "";
     if (session.getAttribute("genres_array") == null || session.getAttribute("shows_array") == null) {
         query = request.getParameter("q");
-        pageNumber = request.getParameter("page") != null ? request.getParameter("page") : "0";
+        pageNumber = request.getParameter("page") != null ? request.getParameter("page") : "1";
         genre = request.getParameter("genre");
         order = request.getParameter("order");
 
@@ -51,9 +50,10 @@
     }
     ArrayList<Genre> genres = (ArrayList<Genre>) session.getAttribute("genres_array");
     ArrayList<Show> shows = (ArrayList<Show>) session.getAttribute("shows_array");
-    int count = (Integer)session.getAttribute("number_pages");
-    int resultsPerPage = (Integer)session.getAttribute("results_per_page");
-    double numPages = Math.ceil(count/(double)resultsPerPage);
+    int count = (Integer) session.getAttribute("number_pages");
+    int resultsPerPage = (Integer) session.getAttribute("results_per_page");
+    double numPages = Math.ceil(count / (double) resultsPerPage);
+    SearchFilter filter = (SearchFilter)session.getAttribute("filter_used");
 %>
 <!DOCTYPE html>
 <html>
@@ -115,9 +115,9 @@
                             <% }%>
                         </div>
                         <div id="number_page">
-                           <% for(int i = 0; i < (int) (numPages); i++) { %>
-                           <a href="TV-Shows.jsp?q=<%=query%>&order=<%=order%>&genre=<%=genre%>&page=<%=i%>"> <%=i+1%> </a>
-                           <% } %>
+                            <% for (int i = 0; i < (int) (numPages); i++) {%>
+                            <a href="TV-Shows.jsp?<%=filter.getFilterUsed()%>=<%=filter.getFilterValue()%>&page=<%=(i+1)%>"><%=i + 1%></a>
+                            <% } %>
                         </div>
                     </div>
                 </div>  
@@ -128,10 +128,10 @@
 </html>
 
 <%
-   genres.clear();
-   shows.clear();
-   session.removeAttribute("genres_array");
-   session.removeAttribute("shows_array");
-   session.removeAttribute("number_pages");
-   session.removeAttribute("results_per_page");
+    genres.clear();
+    shows.clear();
+    session.removeAttribute("genres_array");
+    session.removeAttribute("shows_array");
+    session.removeAttribute("number_pages");
+    session.removeAttribute("results_per_page");
 %>

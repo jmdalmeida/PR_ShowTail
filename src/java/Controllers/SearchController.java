@@ -1,6 +1,7 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
+import Utils.SearchFilter;
 import Utils.Genre;
 import Utils.SQLcmd;
 import Utils.SQLquerys;
@@ -35,7 +36,8 @@ public class SearchController extends HttpServlet {
         String searchFor = request.getParameter("SearchFor");
         int page = Integer.parseInt(request.getParameter("Page"));
         int limitPerPage = 9;
-        String limit = " LIMIT " + page*limitPerPage + ", " + limitPerPage + ";";
+        String limit = " LIMIT " + (page-1)*limitPerPage + ", " + limitPerPage + ";";
+        SearchFilter filter = null;
         ArrayList<Genre> genres = new ArrayList<Genre>();
         ArrayList<Show> shows = new ArrayList<Show>();
         try {
@@ -49,6 +51,7 @@ public class SearchController extends HttpServlet {
                 String query = request.getParameter("Query");
                 Object[] objs = {("%" + query + "%")};
                 rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_search) + limit, objs);
+                filter = new SearchFilter("q", query);
             } else if ("Order".equals(searchFor)) {
                 String orderBy = request.getParameter("OrderBy");
                 if("All".equals(orderBy)){
@@ -64,14 +67,17 @@ public class SearchController extends HttpServlet {
                     count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
                     rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all) + limit, null);
                 }
+                filter = new SearchFilter("order", orderBy);
             } else if("Genre".equals(searchFor)){
                 String genre = (String)request.getParameter("Genre");
                 Object[] objs = {Integer.parseInt(genre)};
                 count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_search_by_genre), objs);
                 rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_search_by_genre) + limit, objs);
+                filter = new SearchFilter("genre", genre);
             } else {
                 count = getCount(SQLquerys.getQuery(SQLcmd.TVShows_order_all), null);
                 rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_all) + limit, null);
+                filter = new SearchFilter("", "");
             }
 
             while (rs.next()) {
@@ -82,6 +88,7 @@ public class SearchController extends HttpServlet {
             session.setAttribute("shows_array", shows);
             session.setAttribute("number_pages", count);
             session.setAttribute("results_per_page", limitPerPage);
+            session.setAttribute("filter_used", filter);
 
         } catch (SQLException | NumberFormatException ex) {
             ex.printStackTrace();
