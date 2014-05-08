@@ -59,10 +59,11 @@ public class AccountController extends HttpServlet {
                     c1.setMaxAge(remember ? 12 * 31 * 24 * 60 * 60 : -1);
                     response.addCookie(c1);
                     response.addCookie(c2);
+                    toPage = Pages.NULL;
                 } else {
                     request.getSession().setAttribute("failedlogin", "Invalid username/password.");
+                    toPage = Pages.INDEX;
                 }
-                toPage = Pages.INDEX;
                 break;
             case "signUp":
                 String nameR = request.getParameter("name");
@@ -118,6 +119,8 @@ public class AccountController extends HttpServlet {
                 }
                 toPage = Pages.FROMPAGE;
                 break;
+            case "Profile":
+                break;
             default:
                 break;
         }
@@ -132,6 +135,10 @@ public class AccountController extends HttpServlet {
                 break;
             case FROMPAGE:
                 rd = request.getRequestDispatcher("/" + fromPage);
+                break;
+            case NULL:
+                rd = null;
+                response.sendRedirect("index.jsp");
                 break;
             default:
                 rd = request.getRequestDispatcher("/index.jsp");
@@ -251,6 +258,6 @@ public class AccountController extends HttpServlet {
 
     private enum Pages {
 
-        INDEX, PROFILE, SEARCH, SHOW, FROMPAGE;
+        INDEX, PROFILE, SEARCH, SHOW, FROMPAGE, NULL;
     }
 }
