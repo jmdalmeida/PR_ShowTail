@@ -1,9 +1,18 @@
-<%@page import="JDBC.ConnectionFactory"%>
+<%@page import="Utils.UserData"%>
 <%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
+    UserData ud = null;
+    if(session.getAttribute("user") != null){
+        ud = (UserData)session.getAttribute("user");
+    } else {
+        response.sendRedirect("index.jsp");
+    }
+
+
+/*
     String name = "";
     String email = "";
     String picture = "";
@@ -28,6 +37,7 @@
         e.printStackTrace();
     }
     ConnectionFactory.getInstance().close();
+        */
 %>    
 <!DOCTYPE html>
 <html>
@@ -93,17 +103,17 @@
             <div id="content">
                 <div id="UserData">
                     <h1 id="username"><%= username%> Profile</h1><hr><br>
-                    <img src= "<%= picture%>" id="profile"/>
+                    <img src= "<%=ud.getPathImagem()%>" id="profile"/>
                     <div id="informations">
                         <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="AccountController">
                             <input type="hidden" name="action" value="UpdateUser" />
                             <h1>Nome</h1>
-                            <p id="nome"><%= name%></p>
-                            <input id="nomeEdit" type="text" name="nomeEdit" value="<%= name%>">
+                            <p id="nome"><%=ud.getName()%></p>
+                            <input id="nomeEdit" type="text" name="nomeEdit" value="<%= ud.getName()%>">
                             <br><hr><br>
                             <h1>Email</h1>
-                            <p id="emailU"><%= email%></p>
-                            <input id="emailEdit" type="text" name="emailEdit" value="<%= email%>">
+                            <p id="emailU"><%=ud.getEmail()%></p>
+                            <input id="emailEdit" type="text" name="emailEdit" value="<%= ud.getEmail()%>">
                             <br><hr><br>
                             <a href="#" id="datas" >Outros dados...</a>
                             <input type="submit" id="save" value="Save and Exit" >
@@ -115,9 +125,9 @@
                     </div>
                     <div id="informationsDates">
                         <h1>Data de Nascimento</h1>
-                        <p><%= dataNasc%></p><br><hr><br>
+                        <p><%= ud.getDataNascimento()%></p><br><hr><br>
                         <h1>Data de Registo</h1>
-                        <p><%= dataRegist%></p><br><hr><br>
+                        <p><%= ud.getDataRegisto()%></p><br><hr><br>
 
                     </div>
                     <a href="#" id="edit" >Editar</a>    
@@ -125,7 +135,7 @@
                 <div id="SeriesFollowing">
                     <h1>Followed Shows</h1>
                     <div>
-                        <u1 id="result">
+                        <ul id="result">
                             <% for (int i = 0; i < 6; i++) {%>
                             <li>
                                 <a href="#">
@@ -135,7 +145,7 @@
                                 <p>Followes 100000 | Episodes: ..</p>
                             </li> 
                             <%  }%>
-                        </u1>
+                        </ul>
                     </div>
                 </div>
                 <div id="ConfirmEdit">
@@ -144,7 +154,7 @@
                         <input type="hidden" name="action" value="UpdateUser" />
                         <span>Are you sure do you want to delete this account?</span><br><br>
                         <input id="Yes" type="submit" value="Yes" />
-                        <a href="#" alt="Close">No</a>
+                        <a href="#">No</a>
                     </form>
                 </div>
             </div>

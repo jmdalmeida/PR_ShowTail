@@ -45,7 +45,7 @@ public class ShowController extends HttpServlet {
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"));
+                                    rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"));
 
                     Object[] o2 = {show.getId()};
                     ResultSet rs_seasons = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_seasons), o2);
@@ -88,6 +88,8 @@ public class ShowController extends HttpServlet {
             } catch (SQLException ex) {
                 success = false;
             }
+        } else if ("Episodes".equals(process)) {
+            int id_season = Integer.parseInt(request.getParameter("ID_Season"));
         }
 
         if (!success) {
@@ -101,10 +103,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
+     *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -115,10 +118,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
+     *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -141,7 +145,7 @@ public class ShowController extends HttpServlet {
         try {
             Object[] objs = {id_user, id_show};
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_check_follows), objs);
-            if(rs.next()){
+            if (rs.next()) {
                 follows = "YES".equals(rs.getString("Follows"));
             }
         } catch (SQLException ex) {

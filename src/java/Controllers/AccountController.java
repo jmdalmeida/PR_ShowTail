@@ -226,7 +226,9 @@ public class AccountController extends HttpServlet {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_UserData), objs);
             if (rs.next()) {
                 ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
-                        rs.getString("Name"), "", "", "", "", rs.getString("Account_Type"));
+                        rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"), 
+                        rs.getString("Image_Path"), rs.getString("Account_Type"));
+                System.out.println("");
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);

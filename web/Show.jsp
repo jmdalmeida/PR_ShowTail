@@ -1,8 +1,16 @@
 <%@page import="JDBC.ConnectionFactory"%>
+<%@page import="Utils.Episode"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.ResultSet"%>
 <%
+    if(session.getAttribute("episodes_array") != null){
+        
+    }
+    
+    ArrayList<Episode> episodes;
+    
+    
     String idSeason = request.getParameter("id");
     int season_number = 0;
     String episode_title = "";
@@ -57,7 +65,7 @@
             <div id="summary">
                 <% n = (season_number * 50) + b;%>
                 <div id="short">
-                    <p id="texts<%= n%>-short"> 
+                    <p id="texts<%=n%>-short"> 
                         <%= short_episode_overview%>
                         <%if (!less) {%>
                         <a href="#" id="texts-show" onclick="showHide('texts<%=n%>');
@@ -66,9 +74,9 @@
                         </a>
                         <%}%>    
                     </p>
-                    <div id="texts<%= n%>">
+                    <div id="texts<%=n%>">
                         <div id="open">
-                            <p id="texts<%= n%>-complete">
+                            <p id="texts<%=n%>-complete">
                                 <%= arrayEpisodeOverview.get(b)%>
                                 <a href="#" id="texts-hide" 
                                    onclick="showHide('texts<%= n%>');

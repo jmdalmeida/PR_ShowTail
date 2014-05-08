@@ -1,18 +1,20 @@
 package Utils;
 
+import java.util.Date;
+
 public class UserData {
 
     private final int id;
-    private final String username, email , name, pass, dataNascimento, dataInscricao, pathImagem, tipoConta;
+    private final String username, email , name, pathImagem, tipoConta;
+    private final Date dataNascimento, dataRegisto;
 
-    public UserData(int id, String username, String email, String name, String pass, String dataNascimento, String dataInscricao, String pathImagem, String tipoConta) {
+    public UserData(int id, String username, String email, String name, Date dataNascimento, Date dataRegisto, String pathImagem, String tipoConta) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.name = name;
-        this.pass = pass;
         this.dataNascimento = dataNascimento;
-        this.dataInscricao = dataInscricao;
+        this.dataRegisto = dataRegisto;
         this.pathImagem = pathImagem;
         this.tipoConta = tipoConta;
     }
@@ -33,15 +35,11 @@ public class UserData {
         return name;
     }
 
-    public String getPassword() {
-        return pass;
+    public Date getDataRegisto() {
+        return dataRegisto;
     }
 
-    public String getDataInscricao() {
-        return dataInscricao;
-    }
-
-    public String getDataNascimento() {
+    public Date getDataNascimento() {
         return dataNascimento;
     }
 
