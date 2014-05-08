@@ -23,7 +23,7 @@
     boolean following = false;
     if (loggedin) {
         id_user = ((UserData)session.getAttribute("user")).getId();
-        following = (boolean)session.getAttribute("following");
+        following = (Boolean)session.getAttribute("following");
     }
     Show show = (Show) session.getAttribute("obj_show");
     ArrayList<Season> seasons = (ArrayList<Season>) session.getAttribute("seasons_array");

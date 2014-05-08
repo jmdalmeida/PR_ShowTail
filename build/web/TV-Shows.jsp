@@ -49,6 +49,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href="CSS/myCSS.css" />
         <link rel="stylesheet" type="text/css" href="CSS/TV-Shows.css" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search TV-Show</title>
     </head>
