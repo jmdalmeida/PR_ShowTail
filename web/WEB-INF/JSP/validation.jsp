@@ -1,7 +1,8 @@
+<%@page trimDirectiveWhitespaces="true" %>
 <%@page import="JDBC.ConnectionFactory"%>
 <%@page import="java.sql.ResultSet"%>
 <%
-    String actualPage = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/")+1, request.getRequestURI().length());
+    String actualPage = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/") + 1, request.getRequestURI().length());
     if ("/".equals(actualPage)) {
         actualPage += "index.jsp";
     }
