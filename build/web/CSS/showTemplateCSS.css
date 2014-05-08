@@ -48,6 +48,7 @@
 
 #middleLayer #header-middleC #rating #OverviewBox
 {
+    text-align: left;
     float: left;
     width: 100%;
     margin-left: 10px;
