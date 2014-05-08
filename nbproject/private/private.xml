@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/src/java/Controllers/AdminController.java</file>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/web/ShowTemplate.jsp</file>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/web/Show.jsp</file>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/src/java/Controllers/SearchController.java</file>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/src/java/Utils/UserData.java</file>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/web/TV-Shows.jsp</file>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/src/java/Controllers/ShowController.java</file>
+            <file>file:/Users/joaoalmeida/NetBeansProjects/PR_ShowTail/src/java/Controllers/AccountController.java</file>
+        </group>
     </open-files>
 </project-private>

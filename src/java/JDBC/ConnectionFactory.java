@@ -5,7 +5,7 @@ public class ConnectionFactory {
     private static final JDBCConnection jdbc;
     
     static {
-        jdbc = new JDBCConnection("localhost", "shows", "Andre", "a12345");
+        jdbc = new JDBCConnection("localhost", "db_pr", "user", "user");
     }
     
     private ConnectionFactory(){}
