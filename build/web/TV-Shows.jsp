@@ -52,7 +52,8 @@
     ArrayList<Genre> genres = (ArrayList<Genre>) session.getAttribute("genres_array");
     ArrayList<Show> shows = (ArrayList<Show>) session.getAttribute("shows_array");
     int count = (Integer)session.getAttribute("number_pages");
-    double numPages = Math.ceil(count/9);
+    int resultsPerPage = (Integer)session.getAttribute("results_per_page");
+    double numPages = Math.ceil(count/(double)resultsPerPage);
 %>
 <!DOCTYPE html>
 <html>
@@ -131,4 +132,6 @@
    shows.clear();
    session.removeAttribute("genres_array");
    session.removeAttribute("shows_array");
+   session.removeAttribute("number_pages");
+   session.removeAttribute("results_per_page");
 %>
