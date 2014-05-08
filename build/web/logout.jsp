@@ -6,7 +6,7 @@
     response.addCookie(c1);
     response.addCookie(c2);
     
-    session.setAttribute("username", null);
+    session.setAttribute("user", null);
     session.invalidate();
     response.sendRedirect("index.jsp");
 %>
