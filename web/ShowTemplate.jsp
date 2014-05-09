@@ -119,10 +119,10 @@
 
             function checkSeenStatus(elem, id_season, id_episode) {
                 $.post("showFunctions.jsp",
-                        {funct: "SetSeenStatus", id_show: <%=show.getId()%>, id_user: <%=id_user%>, 
+                        {funct: "SetSeenStatus", id_show: <%=show.getId()%>, id_user: <%=id_user%>,
                             id_season: id_season, id_episode: id_episode, seen: elem.checked},
                 function(data, status) {
-                    
+
                 });
             }
 
@@ -145,6 +145,24 @@
                 for (var i = 1; i <= rate; i++) {
                     var elem = document.getElementById("star" + i);
                     elem.className = "starActive";
+                }
+            }
+
+            function processCombobox(elem, id_season) {
+                var value = elem.value;
+                switch (value) {
+                    case "seasonSeen":
+                    case "seasonUnseen":
+                    case "showSeen":
+                    case "showUnseen":
+                        $.post("showFunctions.jsp",
+                                {funct: "Mark", id_show: <%=show.getId()%>, id_season: id_season, id_user: <%=id_user%>},
+                        function(data, status) {
+                            resetTabs();
+                        });
+                        break;
+                    default:
+                        break;
                 }
             }
         </script>
@@ -199,6 +217,16 @@
                     </div>
                     <div id="middle-middleC">
                         <h1>Seasons:</h1>
+                        <% if (loggedin) { %>
+                        <select onchange="processCombobox(this)">
+                            <option value="title">Mark season or show as seen/unseen</option>
+                            <option value="seasonSeen">Mark season as seen</option>
+                            <option value="seasonUnseen">Mark season as unseen</option>
+                            <option value="separator">---------------------</option>
+                            <option value="showSeen">Mark show as seen</option>
+                            <option value="showUnseen">Mark show as unseen</option>
+                        </select>
+                        <% } %>
                         <div id="tab">
                             <ul id="tabs">
                                 <% for (Season s : seasons) {%>

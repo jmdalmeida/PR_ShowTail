@@ -164,8 +164,6 @@ public class ShowController extends HttpServlet {
             int id_season = Integer.parseInt(request.getParameter("ID_Season"));
             boolean seen = Boolean.parseBoolean(request.getParameter("SeenStatus"));
 
-            System.out.println("Setting episode " + id_episode + " as " + seen);
-
             SQLcmd cmd = seen ? SQLcmd.Show_set_episode_seen : SQLcmd.Show_set_episode_unseen;
             Object[] objs = {id_show, id_season, id_episode, id_user};
             try {
@@ -261,6 +259,7 @@ public class ShowController extends HttpServlet {
             if (rs.next()) {
                 check = true;
             }
+            rs.close();
         } catch (SQLException ex) {
         }
         return check;

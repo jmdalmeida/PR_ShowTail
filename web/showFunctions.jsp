@@ -47,5 +47,14 @@
     <jsp:param name="SeenStatus" value="<%=seenStatus%>" />
 </jsp:forward>
 <%
+} else if ("Mark".equals(funct)) {
+    int param_id_season = Integer.parseInt(request.getParameter("id_season"));
+%>
+<jsp:forward page="ShowController" >
+    <jsp:param name="Process" value="Mark" />
+    <jsp:param name="ID_User" value="<%=param_id_user%>" />
+    <jsp:param name="ID_Show" value="<%=param_id_show%>" />
+</jsp:forward>
+<%
     }
 %>
