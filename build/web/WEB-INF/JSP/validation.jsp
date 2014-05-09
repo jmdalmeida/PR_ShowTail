@@ -1,7 +1,7 @@
-<%@page import="JDBC.ConnectionFactory"%>
+<%@page trimDirectiveWhitespaces="true" %>
 <%@page import="java.sql.ResultSet"%>
 <%
-    String actualPage = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/")+1, request.getRequestURI().length());
+    String actualPage = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/") + 1, request.getRequestURI().length());
     if ("/".equals(actualPage)) {
         actualPage += "index.jsp";
     }
@@ -20,7 +20,7 @@
         }
     }
     if (username != "" && token != "") {
-        if (session.getAttribute("valid_user") != null && session.getAttribute("user") != null) {
+        if (session.getAttribute("user") != null && session.getAttribute("valid_user") != null) {
             loggedin = (Boolean) session.getAttribute("valid_user");
             session.removeAttribute("valid_user");
         } else {
