@@ -3,11 +3,13 @@ package Controllers;
 import JDBC.ConnectionFactory;
 import Utils.SQLcmd;
 import Utils.SQLquerys;
+import Utils.Show;
 import Utils.UserData;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.logging.Level;
@@ -84,8 +86,6 @@ public class AccountController extends HttpServlet {
 
                     toPage = Pages.PROFILE;
                 } else {
-                    //Tratar o caso de erro na criação do user aqui
-
                     toPage = Pages.INDEX;
                 }
                 break;
@@ -117,6 +117,22 @@ public class AccountController extends HttpServlet {
                 toPage = Pages.FROMPAGE;
                 break;
             case "Profile":
+                int id_user = ((UserData) session.getAttribute("user")).getId();
+                ArrayList<Show> shows = new ArrayList<Show>();
+                try {
+                    Object[]objs = {id_user};
+                    ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows), objs);
+                    while(rs.next()) {
+                        shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"), 
+                                rs.getString("Image_Path"), "", "", "", 0.0));
+                    }
+                    
+                    session.setAttribute("array_shows_followed", shows);
+                    
+                    toPage = Pages.PROFILE;
+                } catch (SQLException ex) {
+                    toPage = Pages.NULL;
+                }
                 break;
             default:
                 break;

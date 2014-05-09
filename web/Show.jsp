@@ -36,7 +36,7 @@
                 <div id="short">
                     <p id="texts<%=n%>-short"> 
                         <%= ep.getShortOverview()%>
-                        <%if (ep.getOverviewLength() < 200) {%>
+                        <%if (ep.getOverviewLength() > 199) {%>
                         <a href="#" id="texts-show" onclick="showHide('texts<%=n%>');
                                 return false;">
                             Read More >>

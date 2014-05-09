@@ -1,3 +1,5 @@
+<%@page import="Utils.Show"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="Utils.UserData"%>
 <%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page import="java.sql.SQLException"%>
@@ -5,39 +7,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     UserData ud = null;
-    if(session.getAttribute("user") != null){
-        ud = (UserData)session.getAttribute("user");
+    if (session.getAttribute("user") != null) {
+        ud = (UserData) session.getAttribute("user");
     } else {
         response.sendRedirect("index.jsp");
     }
-
-
-/*
-    String name = "";
-    String email = "";
-    String picture = "";
-    String dataNasc = "";
-    String dataRegist = "";
-
-    ConnectionFactory.getInstance().init();
-    try {
-        Object[] o = {session.getAttribute("username")};
-        ResultSet hi = ConnectionFactory.getInstance().select("select * from user where Username like ?", o);
-        while (hi.next()) {
-            name = hi.getString("Name");
-            email = hi.getString("Email");
-            username = hi.getString("Username");
-            picture = hi.getString("Image_Path");
-            String[] a = hi.getString("Date_of_Birth").split(" ");
-            dataNasc = a[0];
-            String[] b = hi.getString("Date_of_Registration").split(" ");
-            dataRegist = b[0];
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
+    if (session.getAttribute("array_shows_followed") == null) {
+%>
+<jsp:forward page="AccountController" >
+    <jsp:param name="action" value="Profile" />
+</jsp:forward>
+<%
     }
-    ConnectionFactory.getInstance().close();
-        */
+
+    ArrayList<Show> shows = (ArrayList<Show>) session.getAttribute("array_shows_followed");
 %>    
 <!DOCTYPE html>
 <html>
@@ -102,7 +85,7 @@
             <%@ include file="WEB-INF/JSP/header.jsp" %>
             <div id="content">
                 <div id="UserData">
-                    <h1 id="username"><%= username%> Profile</h1><hr><br>
+                    <h1 id="username"><%= username%>'s Profile</h1><hr><br>
                     <img src= "<%=ud.getPathImagem()%>" id="profile"/>
                     <div id="informations">
                         <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="AccountController">
@@ -132,22 +115,24 @@
                     </div>
                     <a href="#" id="edit" >Editar</a>    
                 </div>
+                <% if (shows.size() > 0) { %>
                 <div id="SeriesFollowing">
-                    <h1>Followed Shows</h1>
+                    <h1>Recently Followed Shows:</h1>
                     <div>
                         <ul id="result">
-                            <% for (int i = 0; i < 6; i++) {%>
+                            <% for (Show s : shows) {%>
                             <li>
-                                <a href="#">
-                                    <img alt="pixel" src="https://image.tmdb.org/t/p/original/fXBWu8jEvLQlHxvStyJMJCVP7KO.jpg">
+                                <a href="ShowTemplate.jsp?id=<%=s.getId()%>">
+                                    <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>">
                                 </a>
-                                <a id="serie_name" href="#">Name Example</a>
-                                <p>Followes 100000 | Episodes: ..</p>
+                                <a id="serie_name" href="ShowTemplate.jsp?id=<%=s.getId()%>"><%=s.getTitle()%></a>
+                                <p>Followers <%=s.getFollowers()%> | Episodes <%=s.getEpisodesNumber()%></p>
                             </li> 
                             <%  }%>
                         </ul>
                     </div>
                 </div>
+                <% } %>
                 <div id="ConfirmEdit">
                     <a href="" id="close"><img src="images/buttonClose.png" id="btn_close" title="Close Window" alt="Close" /></a>
                     <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="AccountController">
@@ -162,3 +147,8 @@
         </div>
     </body>
 </html>
+
+<%
+    shows.clear();
+    session.removeAttribute("array_shows_followed");
+%>

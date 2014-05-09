@@ -30,8 +30,10 @@ public class SQLquerys {
         querys.put(ShowTemplate_show_rate_insert, "INSERT INTO Rating(ID_User, ID_Show, Rating) VALUES(?,?,?)");
         querys.put(ShowTemplate_show_rate_update, "UPDATE Rating SET Rating = ? WHERE ID_User = ? AND ID_SHOW = ?");
         querys.put(Account_UserData, "SELECT * FROM User WHERE Username LIKE ?");
+        querys.put(Account_followed_shows, "SELECT sv.* FROM Following f, Searchview sv WHERE f.ID_User = ? AND f.ID_Show = sv.ID_Show ORDER BY f.ID_Show DESC LIMIT 4");
         querys.put(Show_get_season, "SELECT * FROM season where ID_Season = ?");
         querys.put(Show_get_episodes, "SELECT * FROM episode where ID_Season = ?");
+        
     }
     
     public static String getQuery(SQLcmd key){

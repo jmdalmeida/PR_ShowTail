@@ -158,8 +158,8 @@
                                         <input id="followButton" type="submit"/>
                                         <a id="imdbButton" href="http://www.imdb.com/find?q=<%= show.getTitle()%>&s=all" target="_blank" ></a>
                                         <div id="trailer">
-                                            <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer <%= show.getTitle()%>" target="_blank" >Trailer</a>
-                                            <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer <%= show.getTitle()%>" target="_blank"></a>
+                                            <a id="trailerText" href="https://www.youtube.com/results?search_query=Trailer Show <%= show.getTitle()%>" target="_blank" >Trailer</a>
+                                            <a id="trailerImg" href="https://www.youtube.com/results?search_query=Trailer Show <%= show.getTitle()%>" target="_blank"></a>
                                         </div>
                                     </li>
                                     <li id="two"> 
