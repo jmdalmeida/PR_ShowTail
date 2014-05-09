@@ -4,13 +4,15 @@ public class Episode {
 
     private final int id, episodeNumber, seasonNumber;
     private final String title, overview;
+    private final boolean seen;
 
-    public Episode(int id, int episodeNumber, int seasonNumber, String title, String overview) {
+    public Episode(int id, int episodeNumber, int seasonNumber, String title, String overview, boolean seen) {
         this.id = id;
         this.episodeNumber = episodeNumber;
         this.seasonNumber = seasonNumber;
         this.title = title;
         this.overview = overview;
+        this.seen = seen;
     }
 
     public int getId() {
@@ -39,6 +41,10 @@ public class Episode {
 
     public int getOverviewLength() {
         return overview.length();
+    }
+
+    public boolean isSeen() {
+        return seen;
     }
 
 }

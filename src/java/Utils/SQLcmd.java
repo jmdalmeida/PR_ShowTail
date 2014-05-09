@@ -11,5 +11,5 @@ public enum SQLcmd {
     ShowTemplate_show_info, ShowTemplate_show_seasons, ShowTemplate_show_follow, ShowTemplate_show_unfollow, 
     ShowTemplate_show_check_follows, ShowTemplate_show_rate_update, ShowTemplate_show_rate_insert, ShowTemplate_show_rate_select,
     Account_UserData, Account_followed_shows,
-    Show_get_season, Show_get_episodes;
+    Show_get_season, Show_get_episodes, Show_set_episode_seen, Show_set_episode_unseen, Show_get_episode_seen;
 }

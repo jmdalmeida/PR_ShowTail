@@ -111,11 +111,11 @@
                                     I couldn't find a match...
                                 </div>
                             </div>
-                            <% }%>
+                            <% } %>
                         </div>
                         <% if (numPages > 1) { %>
                         <div id="number_page">
-                            <% for (int i = 0; i < (int) (numPages); i++) {%>
+                            <% for (int i = 0; i < (int) (numPages); i++) { %>
                             <a href="TV-Shows.jsp?<%=filter.getFilterUsed()%>=<%=filter.getFilterValue()%>&page=<%=(i + 1)%>"><%=i + 1%></a>
                             <% } %>
                         </div>

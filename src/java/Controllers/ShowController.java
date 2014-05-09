@@ -31,8 +31,8 @@ import javax.servlet.http.HttpSession;
 public class ShowController extends HttpServlet {
 
     /*
-    OBRIGATORIO: passar como parametro sempre pelo menos o Process e o ID_Show
-    */
+     OBRIGATORIO: passar como parametro sempre pelo menos o Process e o ID_Show
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -41,6 +41,7 @@ public class ShowController extends HttpServlet {
         String process = (String) request.getParameter("Process");
         int id_show = Integer.parseInt(request.getParameter("ID_Show"));
         boolean success = false;
+        boolean loggedIn = (UserData) session.getAttribute("user") != null;
         ConnectionFactory.getInstance().init();
         if ("Show".equals(process)) {
             Show show = null;
@@ -50,7 +51,7 @@ public class ShowController extends HttpServlet {
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"));
+                                    rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"));
 
                     Object[] o2 = {show.getId()};
                     ResultSet rs_seasons = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_seasons), o2);
@@ -99,22 +100,27 @@ public class ShowController extends HttpServlet {
             ArrayList<Episode> episodes = new ArrayList<Episode>();
             try {
                 int season_number = 0;
+                int id_user = 0;
+                if (loggedIn) {
+                    id_user = ((UserData) session.getAttribute("user")).getId();
+                }
 
                 Object[] objs = {id_season};
                 ResultSet rs_season = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_season), objs);
                 while (rs_season.next()) {
                     season_number = Integer.parseInt(rs_season.getString("Season_Number"));
                 }
-                ResultSet rs_episodes = ConnectionFactory.getInstance().select("select * from episode where ID_Season = ?;", objs);
+                ResultSet rs_episodes = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_episodes), objs);
                 while (rs_episodes.next()) {
-                    episodes.add(new Episode(Integer.parseInt(rs_episodes.getString("ID_Episode")), Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
-                            rs_episodes.getString("Title"), rs_episodes.getString("Overview")));
+                    int id_episode = Integer.parseInt(rs_episodes.getString("ID_Episode"));
+                    episodes.add(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
+                                             rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
+                                             loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, id_user) : false));
                 }
                 success = true;
-                if ((UserData) session.getAttribute("user") != null) {
-                        int id_user = ((UserData) session.getAttribute("user")).getId();
-                        session.setAttribute("following", checkFollowsShow(id_user, id_show));
-                    }
+                if (loggedIn) {
+                    session.setAttribute("following", checkFollowsShow(id_user, id_show));
+                }
                 session.setAttribute("episodes_array", episodes);
                 rs_episodes.close();
                 rs_season.close();
@@ -129,28 +135,42 @@ public class ShowController extends HttpServlet {
             Object[] params = {id_user, id_show};
             try {
                 ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_rate_select), params);
-                if(rs.next()){
+                if (rs.next()) {
                     Object[] objs = {rate, id_user, id_show};
                     ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_rate_update), objs);
                 } else {
                     Object[] objs = {id_user, id_show, rate};
                     ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_rate_insert), objs);
                 }
-                
+
                 double new_rating = 0.0;
                 Object[] params2 = {id_show};
                 ResultSet rs_new_rating = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), params2);
-                if(rs_new_rating.next()){
+                if (rs_new_rating.next()) {
                     new_rating = rs_new_rating.getDouble("Rating");
                 }
                 out.print(new_rating);
-                
+
                 rs.close();
                 rs_new_rating.close();
-                
+
                 success = true;
             } catch (SQLException ex) {
                 success = false;
+            }
+        } else if ("SeenStatus".equals(process)) {
+            int id_user = Integer.parseInt(request.getParameter("ID_User"));
+            int id_episode = Integer.parseInt(request.getParameter("ID_Episode"));
+            int id_season = Integer.parseInt(request.getParameter("ID_Season"));
+            boolean seen = Boolean.parseBoolean(request.getParameter("SeenStatus"));
+
+            System.out.println("Setting episode " + id_episode + " as " + seen);
+
+            SQLcmd cmd = seen ? SQLcmd.Show_set_episode_seen : SQLcmd.Show_set_episode_unseen;
+            Object[] objs = {id_show, id_season, id_episode, id_user};
+            try {
+                ConnectionFactory.getInstance().update(SQLquerys.getQuery(cmd), objs);
+            } catch (SQLException ex) {
             }
         }
 
@@ -158,19 +178,20 @@ public class ShowController extends HttpServlet {
             rd = request.getRequestDispatcher("/index.jsp");
         }
         ConnectionFactory.getInstance().close();
-        if(rd != null)
+        if (rd != null) {
             rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -181,11 +202,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -227,8 +248,22 @@ public class ShowController extends HttpServlet {
                 rate = rs.getInt("Rating");
             }
             rs.close();
-        } catch (SQLException ex) {}
+        } catch (SQLException ex) {
+        }
         return rate;
+    }
+
+    private boolean checkSeenEpisode(int id_show, int id_season, int id_episode, int id_user) {
+        boolean check = false;
+        Object[] objs = {id_show, id_season, id_episode, id_user};
+        try {
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_episode_seen), objs);
+            if (rs.next()) {
+                check = true;
+            }
+        } catch (SQLException ex) {
+        }
+        return check;
     }
 
 }

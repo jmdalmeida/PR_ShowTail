@@ -117,6 +117,15 @@
                 }
             }
 
+            function checkSeenStatus(elem, id_season, id_episode) {
+                $.post("showFunctions.jsp",
+                        {funct: "SetSeenStatus", id_show: <%=show.getId()%>, id_user: <%=id_user%>, 
+                            id_season: id_season, id_episode: id_episode, seen: elem.checked},
+                function(data, status) {
+                    
+                });
+            }
+
             function rateShow(rate) {
                 if (rate < 1 || rate > 10)
                     return;
@@ -137,10 +146,6 @@
                     var elem = document.getElementById("star" + i);
                     elem.className = "starActive";
                 }
-            }
-
-            function checkSeenStatus(elem, id) {
-                alert("Checking status");
             }
         </script>
         <title>Show Template</title>

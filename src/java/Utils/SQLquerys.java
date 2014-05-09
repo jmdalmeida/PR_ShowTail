@@ -33,7 +33,9 @@ public class SQLquerys {
         querys.put(Account_followed_shows, "SELECT sv.* FROM Following f, Searchview sv WHERE f.ID_User = ? AND f.ID_Show = sv.ID_Show ORDER BY f.ID_Show DESC LIMIT 4");
         querys.put(Show_get_season, "SELECT * FROM season where ID_Season = ?");
         querys.put(Show_get_episodes, "SELECT * FROM episode where ID_Season = ?");
-        
+        querys.put(Show_set_episode_seen, "INSERT INTO Watched_Episode(ID_Show, ID_Season, ID_Episode, ID_User) VALUES(?,?,?,?)");
+        querys.put(Show_set_episode_unseen, "DELETE FROM Watched_Episode WHERE ID_Show = ? AND ID_Season = ? AND ID_Episode = ? AND ID_User = ?");
+        querys.put(Show_get_episode_seen, "SELECT * FROM Watched_Episode WHERE ID_Show = ? AND ID_Season = ? AND ID_Episode = ? AND ID_User = ?");
     }
     
     public static String getQuery(SQLcmd key){

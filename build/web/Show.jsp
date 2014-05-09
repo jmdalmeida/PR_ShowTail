@@ -58,7 +58,9 @@
             </div>
             <div id="separator"></div>
             <div id="checkbox">
-                <input type="checkbox" <% if (session.getAttribute("user") == null || !following) { %>disabled="disabled"<% }%> name="seenEpisode" onclick="checkSeenStatus(this, <%=ep.getId()%>)" value="episode<%=ep.getId()%>"/>
+                <% String chkId = "chkId" + ep.getId(); %>
+                <input id="<%=chkId%>" <% if(ep.isSeen()){ %>checked="true"<% } %> type="checkbox" <% if (session.getAttribute("user") == null || !following) { %>disabled="disabled"<% }%> 
+                       name="seenEpisode" onclick="checkSeenStatus(this, <%=id_season%>, <%=ep.getId()%>)" value="episode<%=ep.getId()%>"/>
             </div>
         </div>
         <% }%>
