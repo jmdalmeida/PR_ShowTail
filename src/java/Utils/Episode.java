@@ -2,14 +2,19 @@ package Utils;
 
 public class Episode {
 
-    private final int episodeNumber, seasonNumber;
+    private final int id, episodeNumber, seasonNumber;
     private final String title, overview;
 
-    public Episode(int episodeNumber, int seasonNumber, String title, String overview) {
+    public Episode(int id, int episodeNumber, int seasonNumber, String title, String overview) {
+        this.id = id;
         this.episodeNumber = episodeNumber;
         this.seasonNumber = seasonNumber;
         this.title = title;
         this.overview = overview;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getEpisodeNumber() {

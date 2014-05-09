@@ -6,15 +6,15 @@
 <%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="WEB-INF/JSP/validation.jsp" %>
-<%    String param_id = request.getParameter("id");
-    if (param_id == null || param_id == "") {
+<%    String id_show = request.getParameter("id");
+    if (id_show == null || id_show == "") {
         //response.sendRedirect("index.jsp");
     }
     if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) {
 %>
 <jsp:forward page="ShowController" >
     <jsp:param name="Process" value="Show" />
-    <jsp:param name="ShowID" value="<%=param_id%>" />
+    <jsp:param name="ID_Show" value="<%=id_show%>" />
 </jsp:forward>
 <%
     }
@@ -58,17 +58,7 @@
                     wheelPropagation: false,
                     suppressScrollX: true
                 });
-                $("#middle-middleC").tabs({
-                    collapsible: true,
-                    selected: -1,
-                    beforeLoad: function(event, ui) {
-                        ui.jqXHR.error(function() {
-                            ui.panel.html(
-                                    "Couldn't load this tab. We'll try to fix this as soon as possible. ");
-                        });
-                    }
-                });
-
+                initTabs();
                 buttonState(<%=following%>);
                 setRateStars(<%=rate%>);
             });
@@ -90,6 +80,25 @@
                 elem.disabled = "disabled";
                 elem.style.backgroundColor = "#CCCCCC";
             <% }%>
+                resetTabs();
+            }
+
+            function initTabs() {
+                $("#middle-middleC").tabs({
+                    collapsible: true,
+                    selected: -1,
+                    beforeLoad: function(event, ui) {
+                        ui.jqXHR.error(function() {
+                            ui.panel.html(
+                                    "Couldn't load this tab. We'll try to fix this as soon as possible. ");
+                        });
+                    }
+                });
+            }
+
+            function resetTabs() {
+                $("#middle-middleC").tabs("destroy");
+                initTabs();
             }
 
             function buttonAction(following) {
@@ -120,10 +129,18 @@
             }
 
             function setRateStars(rate) {
+                for (var i = 1; i <= 10; i++) {
+                    var elem = document.getElementById("star" + i);
+                    elem.className = "star";
+                }
                 for (var i = 1; i <= rate; i++) {
                     var elem = document.getElementById("star" + i);
                     elem.className = "starActive";
                 }
+            }
+
+            function checkSeenStatus(elem, id) {
+                alert("Checking status");
             }
         </script>
         <title>Show Template</title>
@@ -180,7 +197,7 @@
                         <div id="tab">
                             <ul id="tabs">
                                 <% for (Season s : seasons) {%>
-                                <li><a href="Show.jsp?id=<%= s.getId()%>"><%= s.getNumberSeason()%></a></li> 
+                                <li><a href="Show.jsp?id_show=<%=id_show%>&id_season=<%= s.getId()%>&following=<%=following%>"><%= s.getNumberSeason()%></a></li> 
                                     <% }%>
                             </ul>
                         </div>

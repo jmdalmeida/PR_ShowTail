@@ -30,20 +30,23 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "ShowController", urlPatterns = {"/ShowController"})
 public class ShowController extends HttpServlet {
 
+    /*
+    OBRIGATORIO: passar como parametro sempre pelo menos o Process e o ID_Show
+    */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         PrintWriter out = response.getWriter();
         RequestDispatcher rd = null;
         String process = (String) request.getParameter("Process");
+        int id_show = Integer.parseInt(request.getParameter("ID_Show"));
         boolean success = false;
         ConnectionFactory.getInstance().init();
         if ("Show".equals(process)) {
             Show show = null;
             ArrayList<Season> seasons = new ArrayList<Season>();
             try {
-                int id = Integer.parseInt(request.getParameter("id"));
-                Object[] o = {id};
+                Object[] o = {id_show};
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
@@ -55,6 +58,7 @@ public class ShowController extends HttpServlet {
                         seasons.add(new Season(Integer.parseInt(rs_seasons.getString("ID_Season")), Integer.parseInt(rs_seasons.getString("Season_Number"))));
                     }
                     success = true;
+                    rs_seasons.close();
                 }
                 if (success) {
                     session.setAttribute("obj_show", show);
@@ -68,12 +72,12 @@ public class ShowController extends HttpServlet {
 
                     rd = request.getRequestDispatcher("/ShowTemplate.jsp");
                 }
+                rs_show.close();
             } catch (SQLException ex) {
                 success = false;
             }
         } else if ("Follow".equals(process)) {
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
-            int id_show = Integer.parseInt(request.getParameter("ID_Show"));
             Object[] objs = {id_user, id_show};
             try {
                 ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_follow), objs);
@@ -83,7 +87,6 @@ public class ShowController extends HttpServlet {
             }
         } else if ("Unfollow".equals(process)) {
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
-            int id_show = Integer.parseInt(request.getParameter("ID_Show"));
             Object[] objs = {id_user, id_show};
             try {
                 ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_unfollow), objs);
@@ -104,11 +107,17 @@ public class ShowController extends HttpServlet {
                 }
                 ResultSet rs_episodes = ConnectionFactory.getInstance().select("select * from episode where ID_Season = ?;", objs);
                 while (rs_episodes.next()) {
-                    episodes.add(new Episode(Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
+                    episodes.add(new Episode(Integer.parseInt(rs_episodes.getString("ID_Episode")), Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
                             rs_episodes.getString("Title"), rs_episodes.getString("Overview")));
                 }
                 success = true;
+                if ((UserData) session.getAttribute("user") != null) {
+                        int id_user = ((UserData) session.getAttribute("user")).getId();
+                        session.setAttribute("following", checkFollowsShow(id_user, id_show));
+                    }
                 session.setAttribute("episodes_array", episodes);
+                rs_episodes.close();
+                rs_season.close();
 
                 rd = request.getRequestDispatcher("/Show.jsp");
             } catch (SQLException e) {
@@ -116,7 +125,6 @@ public class ShowController extends HttpServlet {
             }
         } else if ("Rate".equals(process)) {
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
-            int id_show = Integer.parseInt(request.getParameter("ID_Show"));
             int rate = Integer.parseInt(request.getParameter("Rate"));
             Object[] params = {id_user, id_show};
             try {
@@ -136,6 +144,9 @@ public class ShowController extends HttpServlet {
                     new_rating = rs_new_rating.getDouble("Rating");
                 }
                 out.print(new_rating);
+                
+                rs.close();
+                rs_new_rating.close();
                 
                 success = true;
             } catch (SQLException ex) {
@@ -200,6 +211,7 @@ public class ShowController extends HttpServlet {
             if (rs.next()) {
                 follows = "YES".equals(rs.getString("Follows"));
             }
+            rs.close();
         } catch (SQLException ex) {
             follows = false;
         }
@@ -214,6 +226,7 @@ public class ShowController extends HttpServlet {
             if (rs.next()) {
                 rate = rs.getInt("Rating");
             }
+            rs.close();
         } catch (SQLException ex) {}
         return rate;
     }

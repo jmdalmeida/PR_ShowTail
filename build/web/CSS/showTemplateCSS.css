@@ -196,12 +196,15 @@
     color: white;
 }
 
+#middleLayer #middle-middleC #episodes > div {
+    overflow: hidden;
+    margin: 0 0 2px 0;
+    border-radius: 5px;
+}
+
 #middleLayer #middle-middleC #episodes #oddepisode
 {
-    overflow: hidden;
-    background-color: #48525f;
-    border-radius: 10px;
-    margin: 5px 0 0 0;
+    background-color: #272727;
 }
 
 #middleLayer #middle-middleC #episodes #oddepisode #name
@@ -224,7 +227,7 @@
 #middleLayer #middle-middleC #episodes #oddepisode #summary
 {
     float: left;
-    width: 750px;
+    width: 720px;
     margin-top: 10px;
 }
 
@@ -241,10 +244,7 @@
 
 #middleLayer #middle-middleC #episodes #evenepisode
 {
-    overflow: hidden;
     background-color: #414244;
-    border-radius: 10px;
-    margin: 5px 0 0 0;
 }
 
 #middleLayer #middle-middleC #episodes #evenepisode #name
@@ -267,7 +267,7 @@
 #middleLayer #middle-middleC #episodes #evenepisode #summary
 {
     float: left;
-    width: 750px;
+    width: 720px;
     margin-top: 10px
 }
 
@@ -327,40 +327,3 @@
 #middleLayer #middle-middleC h1 {
     color: #ffffff;
 }
-
-/*
-#middleLayer #tabs
-{
-    height: 30px;
-    background: #272727;
-    margin-left: 10px;
-    margin-right: 10px;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 22px;
-    border-radius: 10px;
-}
-
-#middleLayer #tabs ul {
-    list-style: none;
-    margin-left: 10px;
-}
-
-#middleLayer #tabs li {
-        display: inline;
-}
-
-#middleLayer #tabs li a {
-    font-size: 24px;
-    text-decoration: none;
-    color: #fff;
-    padding: 5px 20px;
-}
-
-#middleLayer #tabs li a:hover 
-{
-    width: 100%;
-    height: 100%;
-    background:#5d7fd8;
-    color:#ffffff;
-}*/

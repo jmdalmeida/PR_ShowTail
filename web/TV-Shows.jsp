@@ -52,7 +52,7 @@
     int count = (Integer) session.getAttribute("number_pages");
     int resultsPerPage = (Integer) session.getAttribute("results_per_page");
     double numPages = Math.ceil(count / (double) resultsPerPage);
-    SearchFilter filter = (SearchFilter)session.getAttribute("filter_used");
+    SearchFilter filter = (SearchFilter) session.getAttribute("filter_used");
 %>
 <!DOCTYPE html>
 <html>
@@ -113,11 +113,13 @@
                             </div>
                             <% }%>
                         </div>
+                        <% if (numPages > 1) { %>
                         <div id="number_page">
                             <% for (int i = 0; i < (int) (numPages); i++) {%>
-                            <a href="TV-Shows.jsp?<%=filter.getFilterUsed()%>=<%=filter.getFilterValue()%>&page=<%=(i+1)%>"><%=i + 1%></a>
+                            <a href="TV-Shows.jsp?<%=filter.getFilterUsed()%>=<%=filter.getFilterValue()%>&page=<%=(i + 1)%>"><%=i + 1%></a>
                             <% } %>
                         </div>
+                        <% }%>
                     </div>
                 </div>  
             </div>
