@@ -166,7 +166,7 @@ public class AccountController extends HttpServlet {
         boolean success = false;
         try {
             Object[] o = {username, hashedPassword};
-            ResultSet rs = ConnectionFactory.getInstance().select("SELECT * FROM user WHERE Username = ? AND Password =?;", o);
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_check_login), o);
             while (rs.next()) {
                 success = true;
                 break;
@@ -185,7 +185,7 @@ public class AccountController extends HttpServlet {
         String account = "N";
         try {
             Object[] o = {name, username, encryptedPassword, email, account, dataNascimento, dataReg, imagePath};
-            ConnectionFactory.getInstance().update("INSERT INTO user (Name, Username, Password, Email, Account_Type, Date_of_Birth, Date_of_Registration ,Image_Path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", o);
+            ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.Account_create_user), o);
         } catch (SQLException ex) {
             success = false;
         }
@@ -195,7 +195,7 @@ public class AccountController extends HttpServlet {
     private void attemptUserUpdate(String name, String email, String username) {
         try {
             Object[] o = {name, email, username};
-            ConnectionFactory.getInstance().update("UPDATE user SET Name=?, Email=? where Username=?;", o);
+            ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.Account_update_user), o);
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -204,7 +204,7 @@ public class AccountController extends HttpServlet {
     private void attemptDeleteUser(String username) {
         try {
             Object[] o = {username};
-            ConnectionFactory.getInstance().update("DELETE FROM user WHERE Username=?;", o);
+            ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.Account_delete_user), o);
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -238,7 +238,7 @@ public class AccountController extends HttpServlet {
         UserData ud = null;
         try {
             Object[] objs = {username};
-            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_UserData), objs);
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_user_data), objs);
             if (rs.next()) {
                 ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
                         rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"),

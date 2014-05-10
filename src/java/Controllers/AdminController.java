@@ -1,6 +1,8 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
+import Utils.SQLcmd;
+import Utils.SQLquerys;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -99,11 +101,10 @@ public class AdminController extends HttpServlet {
             String episodeTimes = tmp.substring(1, tmp.length() - 1);
             String imagePath = "https://image.tmdb.org/t/p/original" + json.get("poster_path");
             String premierDate = (String) json.get("first_air_date");
+            String backdrop_path = "https://image.tmdb.org/t/p/original" + json.get("backdrop_path");
 
-            String sql = "INSERT INTO tv_show(Title, Overview, MovieDB_ID, Channel, Status, Episode_Running_Time, Image_Path, First_Air_Date) "
-                         + "VALUES (?,?,?,?,?,?,?,?);";
-            Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath, premierDate};
-            generatedID = ConnectionFactory.getInstance().insertAndReturnId(sql, objs);
+            Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath, backdrop_path, premierDate};
+            generatedID = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.Admin_insert_show), objs);
 
             associateGenresWithShow(generatedID, (JSONArray) json.get("genres"));
 
@@ -136,9 +137,8 @@ public class AdminController extends HttpServlet {
         String air_date = (String) json.get("air_date");
         String img_path = "https://image.tmdb.org/t/p/original" + json.get("poster_path");
 
-        String sql = "INSERT INTO Season(ID_Show, Season_Number, Number_Episodes, Air_Date, Image_Path) VALUES (?,?,?,?,?);";
         Object[] objs = {tvshowID, season_number, number_episodes, air_date, img_path};
-        generatedID = ConnectionFactory.getInstance().insertAndReturnId(sql, objs);
+        generatedID = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.Admin_insert_season), objs);
 
         Iterator<JSONObject> it = episodes.iterator();
         while (it.hasNext()) {
@@ -154,9 +154,8 @@ public class AdminController extends HttpServlet {
         String air_date = (String) json.get("air_date");
         String img_path = "https://image.tmdb.org/t/p/original" + json.get("still_path");
 
-        String sql = "INSERT INTO Episode(ID_Show, ID_Season, Title, Overview, Episode_Number, Air_Date, Image_Path) VALUES (?,?,?,?,?,?,?);";
         Object[] objs = {tvshowID, seasonID, title, overview, episode_number, air_date, img_path};
-        ConnectionFactory.getInstance().update(sql, objs);
+        ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.Admin_insert_episode), objs);
     }
 
     private String makeRequest(String targetURL) {
@@ -201,10 +200,8 @@ public class AdminController extends HttpServlet {
 
                 String name = (String) genre.get("name");
 
-                String sql = "INSERT INTO Genre(Genre) VALUES(?);";
                 Object[] objs = {name};
-
-                ConnectionFactory.getInstance().update(sql, objs);
+                ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.Admin_insert_genre), objs);
             }
         } catch (ParseException | SQLException ex) {
             ex.printStackTrace();
@@ -221,17 +218,20 @@ public class AdminController extends HttpServlet {
 
             JSONArray results = (JSONArray) json.get("results");
             Iterator<JSONObject> it = results.iterator();
+            System.out.println("---------- INSERTING POPULAR SHOWS ----------");
             while (it.hasNext()) {
                 JSONObject o = it.next();
-                System.out.println("Attempting to insert: " + o.get("name"));
+                System.out.println("| Inserting " + o.get("name"));
                 if (insertNewTvShow("" + o.get("id"))) {
                     ConnectionFactory.getInstance().commit();
-                    System.out.println("Inserted " + o.get("name") + " successfully");
+                    System.out.println("| Status: success");
                 } else {
-                    System.err.println("Failed to insert show: " + o.get("name"));
+                    System.out.println("| Status: failed");
                     ConnectionFactory.getInstance().rollback();
                 }
+                System.out.println("---------------------------------------------");
             }
+            System.out.println("----------------- FINISHED ------------------\n");
         } catch (ParseException | SQLException ex) {
             ex.printStackTrace();
         }
@@ -242,11 +242,11 @@ public class AdminController extends HttpServlet {
         while (it.hasNext()) {
             JSONObject obj = it.next();
             Object[] objs = {((String) obj.get("name"))};
-            ResultSet rs = ConnectionFactory.getInstance().select("SELECT ID_Genre FROM Genre WHERE Genre LIKE ?;", objs);
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Admin_select_genre), objs);
             if (rs.next()) {
                 int id_genre = rs.getInt("ID_Genre");
                 Object[] objs2 = {id_genre, id};
-                ConnectionFactory.getInstance().update("INSERT INTO Associated_Genre(ID_Genre, ID_Show) VALUES(?,?);", objs2);
+                ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.Admin_associate_genre), objs2);
             }
         }
     }
