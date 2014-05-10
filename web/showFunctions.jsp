@@ -54,6 +54,7 @@
     <jsp:param name="Process" value="Mark" />
     <jsp:param name="ID_User" value="<%=param_id_user%>" />
     <jsp:param name="ID_Show" value="<%=param_id_show%>" />
+    <jsp:param name="ID_Season" value="<%=param_id_season%>" />
 </jsp:forward>
 <%
     }

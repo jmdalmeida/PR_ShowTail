@@ -120,15 +120,15 @@ public class AccountController extends HttpServlet {
                 int id_user = ((UserData) session.getAttribute("user")).getId();
                 ArrayList<Show> shows = new ArrayList<Show>();
                 try {
-                    Object[]objs = {id_user};
+                    Object[] objs = {id_user};
                     ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows), objs);
-                    while(rs.next()) {
-                        shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"), 
+                    while (rs.next()) {
+                        shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"),
                                 rs.getString("Image_Path"), "", "", "", 0.0));
                     }
-                    
+
                     session.setAttribute("array_shows_followed", shows);
-                    
+
                     toPage = Pages.PROFILE;
                 } catch (SQLException ex) {
                     toPage = Pages.NULL;
@@ -218,7 +218,7 @@ public class AccountController extends HttpServlet {
             rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Validation_password), o);
 
             String pw = "";
-            while (rs.next()) {
+            if (rs.next()) {
                 pw = rs.getString("Password");
             }
 
@@ -226,6 +226,8 @@ public class AccountController extends HttpServlet {
                 String chkToken = Controllers.AccountController.encryptPassword(username + "PR" + pw);
                 validate = chkToken.equals(token);
             }
+
+            rs.close();
         } catch (SQLException ex) {
             validate = false;
         }

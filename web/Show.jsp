@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="Utils.Episode"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.ArrayList"%>
@@ -57,11 +58,16 @@
                 </div>
             </div>
             <div id="separator"></div>
+            <% 
+                Date now = new Date(System.currentTimeMillis());
+                if(ep.getAirDate() != null && now.after(ep.getAirDate())){
+            %>
             <div id="checkbox">
                 <% String chkId = "chkId" + ep.getId(); %>
                 <input id="<%=chkId%>" <% if(ep.isSeen()){ %>checked="true"<% } %> type="checkbox" <% if (session.getAttribute("user") == null || !following) { %>disabled="disabled"<% }%> 
                        name="seenEpisode" onclick="checkSeenStatus(this, <%=id_season%>, <%=ep.getId()%>)" value="episode<%=ep.getId()%>"/>
             </div>
+            <% } %>
         </div>
         <% }%>
     </div>

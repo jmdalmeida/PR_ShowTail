@@ -16,7 +16,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -51,7 +55,7 @@ public class ShowController extends HttpServlet {
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                                    rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"));
+                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"));
 
                     Object[] o2 = {show.getId()};
                     ResultSet rs_seasons = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_seasons), o2);
@@ -114,8 +118,9 @@ public class ShowController extends HttpServlet {
                 while (rs_episodes.next()) {
                     int id_episode = Integer.parseInt(rs_episodes.getString("ID_Episode"));
                     episodes.add(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
-                                             rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
-                                             loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, id_user) : false));
+                            rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
+                            getDateObject(rs_episodes.getString("Air_Date")),
+                            loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, id_user) : false));
                 }
                 success = true;
                 if (loggedIn) {
@@ -185,11 +190,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -200,11 +205,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -263,6 +268,15 @@ public class ShowController extends HttpServlet {
         } catch (SQLException ex) {
         }
         return check;
+    }
+
+    private Date getDateObject(String string) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(string);
+            return date;
+        } catch (ParseException ex) {
+            return null;
+        }
     }
 
 }

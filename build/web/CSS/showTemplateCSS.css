@@ -128,6 +128,7 @@
 .star {
     unicode-bidi: bidi-override;
     direction: rtl;
+    cursor: pointer;
 }
 .star > span {
     display: inline-block;
