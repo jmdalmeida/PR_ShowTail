@@ -65,12 +65,15 @@
 
             function buttonState(following) {
                 var elem = document.getElementById("followButton");
+                var comboElem = document.getElementById("comboActions");
                 if (following === true) {
                     elem.value = "- Unfollow";
                     elem.style.backgroundColor = "#FF0000";
+                    comboElem.disabled = false;
                 } else {
                     elem.value = "+ Follow";
                     elem.style.backgroundColor = "#339900";
+                    comboElem.disabled = true;
                 }
             <% if (loggedin) { %>
                 elem.onclick = function() {
@@ -83,6 +86,7 @@
                 resetTabs();
             }
 
+            var currTab = 0;
             function initTabs() {
                 $("#middle-middleC").tabs({
                     collapsible: true,
@@ -92,6 +96,9 @@
                             ui.panel.html(
                                     "Couldn't load this tab. We'll try to fix this as soon as possible. ");
                         });
+                    },
+                    load: function(event, ui) {
+                        currTab = $("#middle-middleC").tabs("option", "active");
                     }
                 });
             }
@@ -156,7 +163,7 @@
                     case "showSeen":
                     case "showUnseen":
                         $.post("showFunctions.jsp",
-                                {funct: "Mark", id_show: <%=show.getId()%>, id_season: id_season, id_user: <%=id_user%>},
+                                {funct: "Mark", id_show: <%=show.getId()%>, id_season: id_season, id_user: <%=id_user%>, action: value},
                         function(data, status) {
                             resetTabs();
                         });
@@ -218,7 +225,7 @@
                     <div id="middle-middleC">
                         <h1>Seasons:</h1>
                         <% if (loggedin) { %>
-                        <select onchange="processCombobox(this)">
+                        <select id="comboActions" <% if(!show.isFollowing()){ %>disabled<% } %> onchange="processCombobox(this)">
                             <option value="title">Mark season or show as seen/unseen</option>
                             <option value="seasonSeen">Mark season as seen</option>
                             <option value="seasonUnseen">Mark season as unseen</option>

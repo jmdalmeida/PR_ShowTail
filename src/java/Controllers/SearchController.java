@@ -82,7 +82,7 @@ public class SearchController extends HttpServlet {
 
             while (rs.next()) {
                 shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"),
-                                   rs.getString("Title"), rs.getString("Image_Path"), "", "", "", 0.0));
+                                   rs.getString("Title"), rs.getString("Image_Path"), "", "", "", 0.0, false));
             }
             session.setAttribute("genres_array", genres);
             session.setAttribute("shows_array", shows);

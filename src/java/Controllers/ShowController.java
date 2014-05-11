@@ -45,7 +45,8 @@ public class ShowController extends HttpServlet {
         String process = (String) request.getParameter("Process");
         int id_show = Integer.parseInt(request.getParameter("ID_Show"));
         boolean success = false;
-        boolean loggedIn = (UserData) session.getAttribute("user") != null;
+        UserData user = (UserData) session.getAttribute("user");
+        boolean loggedIn = user != null;
         ConnectionFactory.getInstance().init();
         if ("Show".equals(process)) {
             Show show = null;
@@ -55,7 +56,8 @@ public class ShowController extends HttpServlet {
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"));
+                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
+                            loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
 
                     Object[] o2 = {show.getId()};
                     ResultSet rs_seasons = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_seasons), o2);
@@ -69,8 +71,8 @@ public class ShowController extends HttpServlet {
                     session.setAttribute("obj_show", show);
                     session.setAttribute("seasons_array", seasons);
 
-                    if ((UserData) session.getAttribute("user") != null) {
-                        int id_user = ((UserData) session.getAttribute("user")).getId();
+                    if (loggedIn) {
+                        int id_user = user.getId();
                         session.setAttribute("following", checkFollowsShow(id_user, show.getId()));
                         session.setAttribute("rate", getRateShow(id_user, show.getId()));
                     }
@@ -104,10 +106,6 @@ public class ShowController extends HttpServlet {
             ArrayList<Episode> episodes = new ArrayList<Episode>();
             try {
                 int season_number = 0;
-                int id_user = 0;
-                if (loggedIn) {
-                    id_user = ((UserData) session.getAttribute("user")).getId();
-                }
 
                 Object[] objs = {id_season};
                 ResultSet rs_season = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_season), objs);
@@ -120,11 +118,11 @@ public class ShowController extends HttpServlet {
                     episodes.add(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
                             rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
                             getDateObject(rs_episodes.getString("Air_Date")),
-                            loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, id_user) : false));
+                            loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
                 }
                 success = true;
                 if (loggedIn) {
-                    session.setAttribute("following", checkFollowsShow(id_user, id_show));
+                    session.setAttribute("following", checkFollowsShow(user.getId(), id_show));
                 }
                 session.setAttribute("episodes_array", episodes);
                 rs_episodes.close();

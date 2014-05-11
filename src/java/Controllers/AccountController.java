@@ -124,7 +124,7 @@ public class AccountController extends HttpServlet {
                     ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows), objs);
                     while (rs.next()) {
                         shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"),
-                                rs.getString("Image_Path"), "", "", "", 0.0));
+                                rs.getString("Image_Path"), "", "", "", 0.0, false));
                     }
 
                     session.setAttribute("array_shows_followed", shows);
