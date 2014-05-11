@@ -274,7 +274,7 @@ public class ShowController extends HttpServlet {
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(string);
             return date;
-        } catch (ParseException ex) {
+        } catch (Exception ex) {
             return null;
         }
     }

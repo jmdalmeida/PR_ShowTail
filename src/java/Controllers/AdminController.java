@@ -211,7 +211,7 @@ public class AdminController extends HttpServlet {
     }
 
     private void insertPopularShows() {
-        String result = makeRequest("https://api.themoviedb.org/3/tv/popular?api_key=" + api_key);
+        String result = makeRequest("https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=" + api_key);
         try {
             Object obj = parser.parse(result);
             JSONObject json = (JSONObject) obj;

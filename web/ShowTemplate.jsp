@@ -204,7 +204,7 @@
                                     </li>
                                     <li id="two"> 
                                         <div class="rating">
-                                            <span>Rate Show:  &nbsp;</span>
+                                            <span>Rate Show:&nbsp;&nbsp;</span>
                                             <div <% if (loggedin) { %>class="star"<% } %>>
                                                 <%for (int i = 10; i > 0; i--) {%>
                                                 <span id="star<%=i%>" <% if (loggedin) {%>onclick="rateShow(<%=i%>)"<% } %>>☆</span> <%}%>
