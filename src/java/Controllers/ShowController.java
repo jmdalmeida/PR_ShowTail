@@ -173,6 +173,33 @@ public class ShowController extends HttpServlet {
                 ConnectionFactory.getInstance().update(SQLquerys.getQuery(cmd), objs);
             } catch (SQLException ex) {
             }
+        } else if ("Mark".equals(process)) {
+            int id_user = Integer.parseInt(request.getParameter("ID_User"));
+            int number_season = Integer.parseInt(request.getParameter("Number_Season"));
+            int id_season = getSeasonID(id_show, number_season);
+            String action = request.getParameter("Action");
+
+            System.out.println("ID Season: " + id_season);
+            switch (action) {
+                case "seasonSeen":
+                    setSeasonStatus(id_user, id_season, false);
+                    setSeasonStatus(id_user, id_season, true);
+                    break;
+                case "seasonUnseen":
+                    setSeasonStatus(id_user, id_season, false);
+                    break;
+                case "showSeen":
+                    setShowStatus(id_user, id_show, false);
+                    setShowStatus(id_user, id_show, true);
+                    break;
+                case "showUnseen":
+                    setShowStatus(id_user, id_show, false);
+                    break;
+                default:
+                    break;
+            }
+            
+            success = true;
         }
 
         if (!success) {
@@ -275,6 +302,38 @@ public class ShowController extends HttpServlet {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    private boolean setSeasonStatus(int id_user, int id_season, boolean seen) {
+        boolean success = true;
+        Object[] objs = {id_season, id_user};
+        try {
+            ConnectionFactory.getInstance().update(SQLquerys.getQuery(seen ? SQLcmd.Show_set_season_seen : SQLcmd.Show_set_season_unseen), objs);
+        } catch (SQLException ex) {
+            success = false;
+        }
+        return success;
+    }
+
+    private boolean setShowStatus(int id_user, int id_show, boolean seen) {
+        boolean success = true;
+        Object[] objs = {id_show, id_user};
+        try {
+            ConnectionFactory.getInstance().update(SQLquerys.getQuery(seen ? SQLcmd.Show_set_show_seen : SQLcmd.Show_set_show_unseen), objs);
+        } catch (SQLException ex) {
+            success = false;
+        }
+        return success;
+    }
+    
+    private int getSeasonID(int id_show, int season_number){
+        int id = 0;
+        Object[] objs = {id_show, season_number};
+        try {
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_season_id), objs);
+            if(rs.next()) id = rs.getInt("ID_Season");
+        } catch (SQLException ex) {}
+        return id;
     }
 
 }

@@ -90,7 +90,6 @@
             function initTabs() {
                 $("#middle-middleC").tabs({
                     collapsible: true,
-                    selected: -1,
                     beforeLoad: function(event, ui) {
                         ui.jqXHR.error(function() {
                             ui.panel.html(
@@ -155,7 +154,9 @@
                 }
             }
 
-            function processCombobox(elem, id_season) {
+            function processCombobox(elem) {
+                var number_season = currTab + 1;
+                var lastTab = currTab;
                 var value = elem.value;
                 switch (value) {
                     case "seasonSeen":
@@ -163,9 +164,10 @@
                     case "showSeen":
                     case "showUnseen":
                         $.post("showFunctions.jsp",
-                                {funct: "Mark", id_show: <%=show.getId()%>, id_season: id_season, id_user: <%=id_user%>, action: value},
+                                {funct: "Mark", id_show: <%=show.getId()%>, number_season: number_season, id_user: <%=id_user%>, action: value},
                         function(data, status) {
                             resetTabs();
+                            elem.value = "title";
                         });
                         break;
                     default:
@@ -225,7 +227,7 @@
                     <div id="middle-middleC">
                         <h1>Seasons:</h1>
                         <% if (loggedin) { %>
-                        <select id="comboActions" <% if(!show.isFollowing()){ %>disabled<% } %> onchange="processCombobox(this)">
+                        <select id="comboActions" <% if (!show.isFollowing()) { %>disabled<% } %> onchange="processCombobox(this)">
                             <option value="title">Mark season or show as seen/unseen</option>
                             <option value="seasonSeen">Mark season as seen</option>
                             <option value="seasonUnseen">Mark season as unseen</option>

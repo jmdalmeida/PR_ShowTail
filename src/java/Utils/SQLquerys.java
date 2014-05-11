@@ -46,6 +46,13 @@ public class SQLquerys {
         querys.put(Admin_insert_genre, "INSERT INTO Genre(Genre) VALUES(?)");
         querys.put(Admin_select_genre, "SELECT ID_Genre FROM Genre WHERE Genre LIKE ?");
         querys.put(Admin_associate_genre, "INSERT INTO Associated_Genre(ID_Genre, ID_Show) VALUES(?,?)");
+        querys.put(Show_get_season_id, "SELECT ID_Season FROM Season WHERE ID_Show = ? AND Season_Number = ?");
+        querys.put(Show_set_season_unseen, "DELETE FROM Watched_Episode WHERE ID_Season = ? AND ID_User = ?");
+        querys.put(Show_set_show_unseen, "DELETE FROM Watched_Episode WHERE ID_Show = ? AND ID_User = ?");
+        querys.put(Show_set_season_seen, "INSERT INTO Watched_Episode(ID_Show, ID_Season, ID_Episode, ID_User) "
+                + "SELECT e.ID_Show, e.ID_Season, e.ID_Episode, u.ID_User FROM episode e, user u WHERE ID_Season = ? AND ID_User = ?");
+        querys.put(Show_set_show_seen, "INSERT INTO Watched_Episode(ID_Show, ID_Season, ID_Episode, ID_User) "
+                + "SELECT e.ID_Show, e.ID_Season, e.ID_Episode, u.ID_User FROM episode e, user u WHERE ID_Show = ? AND ID_User = ?");
     }
     
     public static String getQuery(SQLcmd key){

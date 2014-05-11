@@ -1,7 +1,7 @@
 <%
     String funct = request.getParameter("funct");
     if (funct == null) {
-        response.sendRedirect("ShowTemplate.jsp");
+        response.sendRedirect("index.jsp");
     }
 
     int param_id_user = Integer.parseInt(request.getParameter("id_user"));
@@ -48,13 +48,15 @@
 </jsp:forward>
 <%
 } else if ("Mark".equals(funct)) {
-    int param_id_season = Integer.parseInt(request.getParameter("id_season"));
+    int param_number_season = Integer.parseInt(request.getParameter("number_season"));
+    String action = request.getParameter("action");
 %>
 <jsp:forward page="ShowController" >
     <jsp:param name="Process" value="Mark" />
     <jsp:param name="ID_User" value="<%=param_id_user%>" />
     <jsp:param name="ID_Show" value="<%=param_id_show%>" />
-    <jsp:param name="ID_Season" value="<%=param_id_season%>" />
+    <jsp:param name="Number_Season" value="<%=param_number_season%>" />
+    <jsp:param name="Action" value="<%=action%>" />
 </jsp:forward>
 <%
     }
