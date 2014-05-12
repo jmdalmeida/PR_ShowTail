@@ -231,7 +231,6 @@
                             <option value="title">Mark season or show as seen/unseen</option>
                             <option value="seasonSeen">Mark season as seen</option>
                             <option value="seasonUnseen">Mark season as unseen</option>
-                            <option value="separator">---------------------</option>
                             <option value="showSeen">Mark show as seen</option>
                             <option value="showUnseen">Mark show as unseen</option>
                         </select>
