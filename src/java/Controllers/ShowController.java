@@ -179,7 +179,6 @@ public class ShowController extends HttpServlet {
             int id_season = getSeasonID(id_show, number_season);
             String action = request.getParameter("Action");
 
-            System.out.println("ID Season: " + id_season);
             switch (action) {
                 case "seasonSeen":
                     setSeasonStatus(id_user, id_season, false);

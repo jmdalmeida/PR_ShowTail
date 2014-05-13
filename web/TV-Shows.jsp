@@ -77,6 +77,7 @@
                         <li><a href="TV-Shows.jsp?order=All">All</a></li>
                         <li><a href="TV-Shows.jsp?order=MostFollowed">Most Followed</a></li>
                         <li><a href="TV-Shows.jsp?order=Recommended">Recommended</a></li>
+                        <li style="float: right; margin-right: 20px;"><a href="request.jsp">Request Show</a></li>
                     </ul>
                 </div>
                 <div id="middleLayer">

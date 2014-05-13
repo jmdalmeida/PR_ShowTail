@@ -137,20 +137,20 @@
                     <h1>Series Administration:</h1>
                     <ul>
                         <li>
-                            <form method="POST" action="AdminController">
+                            <form method="POST" action="MovieDBController">
                                 <input id="inputID" name="moviedbID" type="text" placeholder="Input TV Show id"/>
                                 <input type="submit" value="Gather show" />
                                 <input type="hidden" name="action" value="GatherShow" />
                             </form>
                         </li>
                         <li>
-                            <form method="POST" action="AdminController">
+                            <form method="POST" action="MovieDBController">
                                 <input type="submit" value="Gather popular shows" />
                                 <input type="hidden" name="action" value="GatherPopularShows" />
                             </form>
                         </li>
                         <li>
-                            <form method="POST" action="AdminController">
+                            <form method="POST" action="MovieDBController">
                                 <input type="submit" value="Gather genres" />
                                 <input type="hidden" name="action" value="GatherGenres" />
                             </form>

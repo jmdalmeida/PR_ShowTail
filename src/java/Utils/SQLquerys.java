@@ -53,6 +53,7 @@ public class SQLquerys {
                 + "SELECT e.ID_Show, e.ID_Season, e.ID_Episode, u.ID_User FROM episode e, user u WHERE ID_Season = ? AND ID_User = ?");
         querys.put(Show_set_show_seen, "INSERT INTO Watched_Episode(ID_Show, ID_Season, ID_Episode, ID_User) "
                 + "SELECT e.ID_Show, e.ID_Season, e.ID_Episode, u.ID_User FROM episode e, user u WHERE ID_Show = ? AND ID_User = ?");
+        querys.put(Show_exists, "SELECT * FROM TV_Show WHERE MovieDB_ID = ?");
     }
     
     public static String getQuery(SQLcmd key){

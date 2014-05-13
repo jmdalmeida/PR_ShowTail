@@ -1,0 +1,46 @@
+#content .formRequest {
+    float: left;
+    width: 940px;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    margin-right: 40px;
+    border-radius: 4px;
+    padding: 30px 10px 30px 10px;
+    background: #d7d7d7;
+    display: inline;
+}
+
+.formRequest .search {
+    margin-top: 20px;
+}
+
+.formRequest .search form {
+    margin-top: 10px;
+    max-width: 500px;
+    float: left;
+}
+
+.formRequest .search form input[type="text"] {
+    width: 200px;
+}
+
+.formRequest .moviedb {
+    float: right;
+    margin-top: -60px;
+}
+
+.formRequest .moviedb span {
+    position: relative;
+    float: left;
+    margin-top: 60px;
+    margin-right: 4px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.results img 
+{
+    width: 185px;
+    height: 273px;
+}

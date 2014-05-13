@@ -3,14 +3,17 @@ package Controllers;
 import JDBC.ConnectionFactory;
 import Utils.SQLcmd;
 import Utils.SQLquerys;
+import Utils.ShowMovieDB;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,13 +22,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-@WebServlet(urlPatterns = {"/AdminController"})
-public class AdminController extends HttpServlet {
+@WebServlet(urlPatterns = {"/MovieDBController"})
+public class MovieDBController extends HttpServlet {
 
     private static final String api_key = "c862d60174012383b25a24fbf9d62b33";
 
@@ -33,7 +37,7 @@ public class AdminController extends HttpServlet {
 
     protected void addStuff(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
         boolean success = true;
         ConnectionFactory.getInstance().init();
@@ -47,6 +51,10 @@ public class AdminController extends HttpServlet {
             insertPopularShows();
         } else if ("GatherGenres".equals(action)) {
             success = insertGenres();
+        } else if ("GatherUserRequest".equals(action)) {
+            String moviedb_id = request.getParameter("moviedbID");
+            success = insertNewTvShow(moviedb_id);
+            response.sendRedirect("TV-Shows.jsp");
         }
         if (success) {
             try {
@@ -57,11 +65,22 @@ public class AdminController extends HttpServlet {
         } else {
             ConnectionFactory.getInstance().rollback();
         }
+
+        if ("SelectRequest".equals(action)) {
+            String query = (String) request.getParameter("query");
+            ArrayList<ShowMovieDB> shows = getRequestShows(query.replace(" ", "%20"));
+            session.setAttribute("array_request_shows", shows);
+            response.sendRedirect("request.jsp");
+        }
+
         parser = null;
 
         ConnectionFactory.getInstance().setAutoCommit(true);
         ConnectionFactory.getInstance().close();
-        response.sendRedirect("AdminProfile.jsp");
+
+        if (!response.isCommitted()) {
+            response.sendRedirect("AdminProfile.jsp");
+        }
     }
 
     @Override
@@ -82,45 +101,48 @@ public class AdminController extends HttpServlet {
     }
 
     private boolean insertNewTvShow(String moviedbID) {
-        boolean success = true;
+        boolean success = false;
         long generatedID;
 
+        System.out.println("A adicionar " + moviedbID);
         String result = makeRequest("https://api.themoviedb.org/3/tv/" + moviedbID + "?api_key=" + api_key);
 
-        String tmp;
-        try {
-            Object obj = parser.parse(result);
-            JSONObject json = (JSONObject) obj;
+        if (result != null) {
+            String tmp;
+            try {
+                Object obj = parser.parse(result);
+                JSONObject json = (JSONObject) obj;
 
-            String name = (String) json.get("name");
-            String overview = (String) json.get("overview");
-            int id = Integer.parseInt(moviedbID);
-            String networks = arrayToString((JSONArray) json.get("networks"));
-            String status = (String) json.get("status");
-            tmp = (String) json.get("episode_run_time").toString();
-            String episodeTimes = tmp.substring(1, tmp.length() - 1);
-            String imagePath = "https://image.tmdb.org/t/p/original" + json.get("poster_path");
-            String premierDate = (String) json.get("first_air_date");
-            String backdrop_path = "https://image.tmdb.org/t/p/original" + json.get("backdrop_path");
+                String name = (String) json.get("name");
+                String overview = (String) json.get("overview");
+                int id = Integer.parseInt(moviedbID);
+                String networks = arrayToString((JSONArray) json.get("networks"));
+                String status = (String) json.get("status");
+                tmp = (String) json.get("episode_run_time").toString();
+                String episodeTimes = tmp.substring(1, tmp.length() - 1);
+                String imagePath = "https://image.tmdb.org/t/p/original" + json.get("poster_path");
+                String premierDate = (String) json.get("first_air_date");
+                String backdrop_path = "https://image.tmdb.org/t/p/original" + json.get("backdrop_path");
 
-            Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath, backdrop_path, premierDate};
-            generatedID = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.Admin_insert_show), objs);
+                Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath, backdrop_path, premierDate};
+                generatedID = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.Admin_insert_show), objs);
 
-            associateGenresWithShow(generatedID, (JSONArray) json.get("genres"));
+                associateGenresWithShow(generatedID, (JSONArray) json.get("genres"));
 
-            JSONArray seasons = (JSONArray) json.get("seasons");
-            Iterator<JSONObject> it = seasons.iterator();
-            while (it.hasNext()) {
-                JSONObject o = it.next();
-                long season_number = o.get("season_number") != null ? (long) o.get("season_number") : -1;
-                if (season_number > 0) {
-                    insertNewSeason(moviedbID, season_number, generatedID);
+                JSONArray seasons = (JSONArray) json.get("seasons");
+                Iterator<JSONObject> it = seasons.iterator();
+                while (it.hasNext()) {
+                    JSONObject o = it.next();
+                    long season_number = o.get("season_number") != null ? (long) o.get("season_number") : -1;
+                    if (season_number > 0) {
+                        insertNewSeason(moviedbID, season_number, generatedID);
+                    }
                 }
+                success = true;
+            } catch (ParseException | NumberFormatException | SQLException ex) {
+                ex.printStackTrace();
+                success = false;
             }
-
-        } catch (ParseException | NumberFormatException | SQLException ex) {
-            ex.printStackTrace();
-            success = false;
         }
         return success;
     }
@@ -161,7 +183,8 @@ public class AdminController extends HttpServlet {
     private String makeRequest(String targetURL) {
         String result = "";
         try {
-            URL url = new URL(targetURL);
+            URI uri = URI.create(targetURL).normalize();
+            URL url = uri.toURL();
             URLConnection mdb = url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(mdb.getInputStream()));
             String inputLine;
@@ -170,10 +193,8 @@ public class AdminController extends HttpServlet {
                 result += inputLine;
             }
             in.close();
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            return null;
         }
         return result;
     }
@@ -238,6 +259,45 @@ public class AdminController extends HttpServlet {
         } catch (ParseException | SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private ArrayList<ShowMovieDB> getRequestShows(String query) {
+        ArrayList<ShowMovieDB> shows = new ArrayList<ShowMovieDB>();
+        String result = makeRequest("https://api.themoviedb.org/3/search/tv?query=" + query + "&api_key=" + api_key);
+
+        try {
+            Object obj = parser.parse(result);
+            JSONObject json = (JSONObject) obj;
+
+            JSONArray results = (JSONArray) json.get("results");
+            Iterator<JSONObject> it = results.iterator();
+            while (it.hasNext()) {
+                JSONObject o = it.next();
+                long id = (long) o.get("id");
+                String name = (String) o.get("name");
+                boolean exists = showExists(id);
+                String img = o.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + o.get("poster_path") : "";
+                shows.add(new ShowMovieDB(name, id, exists, img));
+            }
+        } catch (ParseException ex) {
+
+        }
+
+        return shows;
+    }
+
+    private boolean showExists(long id) {
+        boolean exists;
+
+        Object[] objs = {id};
+        try {
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_exists), objs);
+            exists = rs.next();
+        } catch (SQLException ex) {
+            exists = false;
+        }
+
+        return exists;
     }
 
     private void associateGenresWithShow(long id, JSONArray genres) throws SQLException {
