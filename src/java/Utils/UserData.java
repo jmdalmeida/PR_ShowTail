@@ -50,5 +50,9 @@ public class UserData {
     public String getPathImagem() {
         return pathImagem;
     }
+    
+    public boolean isAdmin(){
+        return "A".equals(tipoConta);
+    }
 
 }

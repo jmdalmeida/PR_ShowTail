@@ -105,7 +105,6 @@ public class MovieDBController extends HttpServlet {
         boolean success = false;
         long generatedID;
 
-        System.out.println("A adicionar " + moviedbID);
         String result = makeRequest("https://api.themoviedb.org/3/tv/" + moviedbID + "?api_key=" + API_KEY);
 
         if (result != null) {
@@ -123,7 +122,7 @@ public class MovieDBController extends HttpServlet {
                 String episodeTimes = tmp.substring(1, tmp.length() - 1);
                 String imagePath = json.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("poster_path") : IMAGE_NOT_AVAILABLE;
                 String premierDate = (String) json.get("first_air_date");
-                String backdrop_path =  json.get("backdrop_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("backdrop_path") : "";
+                String backdrop_path = json.get("backdrop_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("backdrop_path") : "";
 
                 Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath, backdrop_path, premierDate};
                 generatedID = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.Admin_insert_show), objs);
@@ -281,9 +280,7 @@ public class MovieDBController extends HttpServlet {
                 shows.add(new ShowMovieDB(name, id, exists, img));
             }
         } catch (ParseException ex) {
-
         }
-
         return shows;
     }
 

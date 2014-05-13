@@ -133,8 +133,9 @@
                     </div>
                 </div>
                 <% } %>
+                <% if (ud.isAdmin()) { %>
                 <div id="formAdmin">
-                    <h1>Series Administration:</h1>
+                    <h1>Administration Panel:</h1>
                     <ul>
                         <li>
                             <form method="POST" action="MovieDBController">
@@ -157,6 +158,7 @@
                         </li>
                     </ul>
                 </div>
+                <% } %>
                 <div id="ConfirmEdit">
                     <a href="" id="close"><img src="images/buttonClose.png" id="btn_close" title="Close Window" alt="Close" /></a>
                     <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="AccountController">
