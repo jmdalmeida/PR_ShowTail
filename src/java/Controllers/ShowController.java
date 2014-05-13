@@ -167,11 +167,13 @@ public class ShowController extends HttpServlet {
             int id_season = Integer.parseInt(request.getParameter("ID_Season"));
             boolean seen = Boolean.parseBoolean(request.getParameter("SeenStatus"));
 
-            SQLcmd cmd = seen ? SQLcmd.Show_set_episode_seen : SQLcmd.Show_set_episode_unseen;
-            Object[] objs = {id_show, id_season, id_episode, id_user};
-            try {
-                ConnectionFactory.getInstance().update(SQLquerys.getQuery(cmd), objs);
-            } catch (SQLException ex) {
+            if (checkFollowsShow(id_user, id_show)) {
+                SQLcmd cmd = seen ? SQLcmd.Show_set_episode_seen : SQLcmd.Show_set_episode_unseen;
+                Object[] objs = {id_show, id_season, id_episode, id_user};
+                try {
+                    ConnectionFactory.getInstance().update(SQLquerys.getQuery(cmd), objs);
+                } catch (SQLException ex) {
+                }
             }
         } else if ("Mark".equals(process)) {
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
@@ -179,25 +181,26 @@ public class ShowController extends HttpServlet {
             int id_season = getSeasonID(id_show, number_season);
             String action = request.getParameter("Action");
 
-            switch (action) {
-                case "seasonSeen":
-                    setSeasonStatus(id_user, id_season, false);
-                    setSeasonStatus(id_user, id_season, true);
-                    break;
-                case "seasonUnseen":
-                    setSeasonStatus(id_user, id_season, false);
-                    break;
-                case "showSeen":
-                    setShowStatus(id_user, id_show, false);
-                    setShowStatus(id_user, id_show, true);
-                    break;
-                case "showUnseen":
-                    setShowStatus(id_user, id_show, false);
-                    break;
-                default:
-                    break;
+            if (checkFollowsShow(id_user, id_show)) {
+                switch (action) {
+                    case "seasonSeen":
+                        setSeasonStatus(id_user, id_season, false);
+                        setSeasonStatus(id_user, id_season, true);
+                        break;
+                    case "seasonUnseen":
+                        setSeasonStatus(id_user, id_season, false);
+                        break;
+                    case "showSeen":
+                        setShowStatus(id_user, id_show, false);
+                        setShowStatus(id_user, id_show, true);
+                        break;
+                    case "showUnseen":
+                        setShowStatus(id_user, id_show, false);
+                        break;
+                    default:
+                        break;
+                }
             }
-            
             success = true;
         }
 
@@ -285,9 +288,7 @@ public class ShowController extends HttpServlet {
         Object[] objs = {id_show, id_season, id_episode, id_user};
         try {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_episode_seen), objs);
-            if (rs.next()) {
-                check = true;
-            }
+            check = rs.next();
             rs.close();
         } catch (SQLException ex) {
         }
@@ -324,14 +325,17 @@ public class ShowController extends HttpServlet {
         }
         return success;
     }
-    
-    private int getSeasonID(int id_show, int season_number){
+
+    private int getSeasonID(int id_show, int season_number) {
         int id = 0;
         Object[] objs = {id_show, season_number};
         try {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Show_get_season_id), objs);
-            if(rs.next()) id = rs.getInt("ID_Season");
-        } catch (SQLException ex) {}
+            if (rs.next()) {
+                id = rs.getInt("ID_Season");
+            }
+        } catch (SQLException ex) {
+        }
         return id;
     }
 

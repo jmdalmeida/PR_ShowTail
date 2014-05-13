@@ -67,11 +67,11 @@
                 var elem = document.getElementById("followButton");
                 var comboElem = document.getElementById("comboActions");
                 if (following === true) {
-                    elem.value = "- Unfollow";
+                    elem.value = "- Untail this show";
                     elem.style.backgroundColor = "#FF0000";
                     comboElem.disabled = false;
                 } else {
-                    elem.value = "+ Follow";
+                    elem.value = "+ Tail this show";
                     elem.style.backgroundColor = "#339900";
                     comboElem.disabled = true;
                 }

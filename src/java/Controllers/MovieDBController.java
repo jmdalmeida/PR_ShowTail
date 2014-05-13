@@ -31,7 +31,8 @@ import org.json.simple.parser.ParseException;
 @WebServlet(urlPatterns = {"/MovieDBController"})
 public class MovieDBController extends HttpServlet {
 
-    private static final String api_key = "c862d60174012383b25a24fbf9d62b33";
+    private static final String API_KEY = "c862d60174012383b25a24fbf9d62b33";
+    private static final String IMAGE_NOT_AVAILABLE = "images/img_not_available.png";
 
     private JSONParser parser;
 
@@ -105,7 +106,7 @@ public class MovieDBController extends HttpServlet {
         long generatedID;
 
         System.out.println("A adicionar " + moviedbID);
-        String result = makeRequest("https://api.themoviedb.org/3/tv/" + moviedbID + "?api_key=" + api_key);
+        String result = makeRequest("https://api.themoviedb.org/3/tv/" + moviedbID + "?api_key=" + API_KEY);
 
         if (result != null) {
             String tmp;
@@ -120,9 +121,9 @@ public class MovieDBController extends HttpServlet {
                 String status = (String) json.get("status");
                 tmp = (String) json.get("episode_run_time").toString();
                 String episodeTimes = tmp.substring(1, tmp.length() - 1);
-                String imagePath = "https://image.tmdb.org/t/p/original" + json.get("poster_path");
+                String imagePath = json.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("poster_path") : IMAGE_NOT_AVAILABLE;
                 String premierDate = (String) json.get("first_air_date");
-                String backdrop_path = "https://image.tmdb.org/t/p/original" + json.get("backdrop_path");
+                String backdrop_path =  json.get("backdrop_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("backdrop_path") : "";
 
                 Object[] objs = {name, overview, id, networks, status, episodeTimes, imagePath, backdrop_path, premierDate};
                 generatedID = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.Admin_insert_show), objs);
@@ -150,14 +151,14 @@ public class MovieDBController extends HttpServlet {
     private void insertNewSeason(String moviedbID, long season_number, long tvshowID) throws SQLException, ParseException {
         long generatedID;
 
-        String result = makeRequest("https://api.themoviedb.org/3/tv/" + moviedbID + "/season/" + season_number + "?api_key=" + api_key);
+        String result = makeRequest("https://api.themoviedb.org/3/tv/" + moviedbID + "/season/" + season_number + "?api_key=" + API_KEY);
         Object obj = parser.parse(result);
         JSONObject json = (JSONObject) obj;
 
         JSONArray episodes = (JSONArray) json.get("episodes");
         int number_episodes = episodes.size();
         String air_date = (String) json.get("air_date");
-        String img_path = "https://image.tmdb.org/t/p/original" + json.get("poster_path");
+        String img_path = json.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("poster_path") : IMAGE_NOT_AVAILABLE;
 
         Object[] objs = {tvshowID, season_number, number_episodes, air_date, img_path};
         generatedID = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.Admin_insert_season), objs);
@@ -174,7 +175,7 @@ public class MovieDBController extends HttpServlet {
         String overview = (String) json.get("overview");
         long episode_number = json.get("episode_number") != null ? (Long) json.get("episode_number") : -1;
         String air_date = (String) json.get("air_date");
-        String img_path = "https://image.tmdb.org/t/p/original" + json.get("still_path");
+        String img_path = json.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("poster_path") : IMAGE_NOT_AVAILABLE;
 
         Object[] objs = {tvshowID, seasonID, title, overview, episode_number, air_date, img_path};
         ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.Admin_insert_episode), objs);
@@ -212,7 +213,7 @@ public class MovieDBController extends HttpServlet {
 
     private boolean insertGenres() {
         boolean success = true;
-        String result = makeRequest("https://api.themoviedb.org/3/genre/list?api_key=" + api_key);
+        String result = makeRequest("https://api.themoviedb.org/3/genre/list?api_key=" + API_KEY);
         try {
             Object obj = parser.parse(result);
             JSONObject json = (JSONObject) obj;
@@ -235,7 +236,7 @@ public class MovieDBController extends HttpServlet {
     }
 
     private void insertPopularShows() {
-        String result = makeRequest("https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=" + api_key);
+        String result = makeRequest("https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&api_key=" + API_KEY);
         try {
             Object obj = parser.parse(result);
             JSONObject json = (JSONObject) obj;
@@ -263,7 +264,7 @@ public class MovieDBController extends HttpServlet {
 
     private ArrayList<ShowMovieDB> getRequestShows(String query) {
         ArrayList<ShowMovieDB> shows = new ArrayList<ShowMovieDB>();
-        String result = makeRequest("https://api.themoviedb.org/3/search/tv?query=" + query + "&api_key=" + api_key);
+        String result = makeRequest("https://api.themoviedb.org/3/search/tv?query=" + query + "&api_key=" + API_KEY);
 
         try {
             Object obj = parser.parse(result);
@@ -276,7 +277,7 @@ public class MovieDBController extends HttpServlet {
                 long id = (long) o.get("id");
                 String name = (String) o.get("name");
                 boolean exists = showExists(id);
-                String img = o.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + o.get("poster_path") : "";
+                String img = o.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + o.get("poster_path") : IMAGE_NOT_AVAILABLE;
                 shows.add(new ShowMovieDB(name, id, exists, img));
             }
         } catch (ParseException ex) {
