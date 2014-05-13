@@ -183,6 +183,9 @@ public class AdminController extends HttpServlet {
         for (Object obj : array) {
             tmp += ((JSONObject) obj).get("name") + "; ";
         }
+        if (tmp.length() < 2) {
+            return tmp;
+        }
         return tmp.substring(0, tmp.length() - 2);
     }
 
