@@ -133,6 +133,30 @@
                     </div>
                 </div>
                 <% } %>
+                <div id="formAdmin">
+                    <h1>Series Administration:</h1>
+                    <ul>
+                        <li>
+                            <form method="POST" action="AdminController">
+                                <input id="inputID" name="moviedbID" type="text" placeholder="Input TV Show id"/>
+                                <input type="submit" value="Gather show" />
+                                <input type="hidden" name="action" value="GatherShow" />
+                            </form>
+                        </li>
+                        <li>
+                            <form method="POST" action="AdminController">
+                                <input type="submit" value="Gather popular shows" />
+                                <input type="hidden" name="action" value="GatherPopularShows" />
+                            </form>
+                        </li>
+                        <li>
+                            <form method="POST" action="AdminController">
+                                <input type="submit" value="Gather genres" />
+                                <input type="hidden" name="action" value="GatherGenres" />
+                            </form>
+                        </li>
+                    </ul>
+                </div>
                 <div id="ConfirmEdit">
                     <a href="" id="close"><img src="images/buttonClose.png" id="btn_close" title="Close Window" alt="Close" /></a>
                     <form name="ConfirmEditForm" method="POST" id="editConfirmForm" action="AccountController">

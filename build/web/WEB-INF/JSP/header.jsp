@@ -47,7 +47,7 @@
         <div id="header_user">
             <ul id="user_menu">
                 <li><a href="profile.jsp">Profile</a></li>
-                <li><a href="AdminProfile.jsp">My Shows</a></li>
+                <li><a href="">My Shows</a></li>
                 <li><a href="logout.jsp">Logout</a></li>
             </ul>
         </div>
