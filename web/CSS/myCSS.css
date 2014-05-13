@@ -57,7 +57,7 @@ input[type="submit"]:hover {
     padding-bottom: 30px;
     position: relative;
     width: 960px;
-    min-height: 1500px;
+    min-height: 600px;
 }
 
 #content #formR
