@@ -29,7 +29,8 @@ public class SQLquerys {
         querys.put(ShowTemplate_show_rate_select, "SELECT * FROM Rating WHERE ID_User = ? AND ID_Show = ?");
         querys.put(ShowTemplate_show_rate_insert, "INSERT INTO Rating(ID_User, ID_Show, Rating) VALUES(?,?,?)");
         querys.put(ShowTemplate_show_rate_update, "UPDATE Rating SET Rating = ? WHERE ID_User = ? AND ID_SHOW = ?");
-        querys.put(ShowTemplate_get_comments, "SELECT *");
+        querys.put(ShowTemplate_get_comments, "SELECT c.ID_Comment, u.ID_User, u.Username, c.Comment, c.Timestamp FROM Comment c, User u "
+                + "WHERE c.ID_User = u.ID_User AND c.ID_Show = ? ORDER BY c.ID_Comment DESC");
         querys.put(Account_user_data, "SELECT * FROM User WHERE Username LIKE ?");
         querys.put(Account_followed_shows, "SELECT sv.* FROM Following f, Searchview sv WHERE f.ID_User = ? AND f.ID_Show = sv.ID_Show ORDER BY f.ID_Show DESC LIMIT 4");
         querys.put(Account_check_login, "SELECT * FROM user WHERE Username = ? AND Password = ?");

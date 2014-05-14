@@ -11,7 +11,7 @@
     if (id_show == null || id_show == "") {
         //response.sendRedirect("index.jsp");
     }
-    if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null || session.getAttribute("comments_array") == null) {
+    if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) { //|| session.getAttribute("comments_array") == null) {
 %>
 <jsp:forward page="ShowController" >
     <jsp:param name="Process" value="Show" />
@@ -252,11 +252,18 @@
                     </div>
                     <div id="comments">
                         <h1>Comments:</h1>
+                        <div id="postComment">
+                            <textarea id="textArea" rows="6" cols="50" maxlength="254"></textarea>
+                            <input type="button" value="Post Comment"/>
+                        </div>
                         <div id="comments-box">
-                            <div id="postComment">
-                                <textarea id="textArea" rows="6" cols="50" maxlength="254"></textarea>
-                                <input type="button" value="Post Comment"/>
-                            </div>   
+                            <% for (int i = 0; i < comments.size(); i++) {
+                                    Comment c = comments.get(i);
+                            %>
+                            <div id="comment<%=c.getIdComment()%>" class="comment">
+                                <span><%=c.getComment()%></span>
+                            </div>
+                            <% } %>
                         </div>
                     </div>
                 </div>

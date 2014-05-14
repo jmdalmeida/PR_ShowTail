@@ -60,8 +60,8 @@ public class ShowController extends HttpServlet {
                 if (rs_show.next()) {
                     //Gather show info
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
-                            loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
+                                    rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
+                                    loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
 
                     //Gather seasons
                     Object[] o2 = {show.getId()};
@@ -69,11 +69,18 @@ public class ShowController extends HttpServlet {
                     while (rs_seasons.next()) {
                         seasons.add(new Season(Integer.parseInt(rs_seasons.getString("ID_Season")), Integer.parseInt(rs_seasons.getString("Season_Number"))));
                     }
-                    success = true;
                     rs_seasons.close();
-                    
+
                     //Gather comments
+                    ResultSet rs_comments = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_get_comments), o2);
+                    while (rs_comments.next()) {
+                        Comment c = new Comment(rs_comments.getInt("ID_Comment"), rs_comments.getInt("ID_User"), 
+                                rs_comments.getString("Username"), rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
+                        comments.add(c);
+                    }
+                    rs_comments.close();
                     
+                    success = true;
                 }
                 if (success) {
                     session.setAttribute("obj_show", show);
@@ -125,9 +132,9 @@ public class ShowController extends HttpServlet {
                 while (rs_episodes.next()) {
                     int id_episode = Integer.parseInt(rs_episodes.getString("ID_Episode"));
                     episodes.add(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
-                            rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
-                            getDateObject(rs_episodes.getString("Air_Date")),
-                            loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
+                                             rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
+                                             getDateObject(rs_episodes.getString("Air_Date")),
+                                             loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
                 }
                 success = true;
                 if (loggedIn) {
@@ -240,11 +247,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -255,11 +262,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

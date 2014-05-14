@@ -4,27 +4,32 @@ import java.util.Date;
 
 public class Comment {
     
-    private final int id;
-    private final String comment, user;
+    private final int id_comment, id_user;
+    private final String comment, username;
     private final Date timestamp;
 
-    public Comment(int id, String comment, String user, Date timestamp) {
-        this.id = id;
+    public Comment(int id_comment, int id_user, String username, String comment, Date timestamp) {
+        this.id_comment = id_comment;
+        this.id_user = id_user;
+        this.username = username;
         this.comment = comment;
-        this.user = user;
         this.timestamp = timestamp;
     }
 
-    public int getId() {
-        return id;
+    public int getIdComment() {
+        return id_comment;
     }
 
     public String getComment() {
         return comment;
     }
 
+    public int getIdUser() {
+        return id_user;
+    }
+
     public String getUser() {
-        return user;
+        return username;
     }
 
     public Date getTimestamp() {
