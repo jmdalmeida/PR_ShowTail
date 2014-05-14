@@ -35,36 +35,26 @@
                     <ul id="slides">
                         <% for (int i = 0; i < shows.size(); i++) {
                                 IndexShow show = shows.get(i);
-                                int id = i + 1;
                                 int indexBefore = ((i - 1) < 0) ? shows.size() - 1 : i - 1;
-                                int indexAfter = ((i + 1) > (shows.size() - 1)) ? 0 : i + 1;
+                                int indexAfter = ((i + 1) >= shows.size()) ? 0 : i + 1;
                         %>
-                        <input type="radio" name="RButton" id="img<%=id%>" <% if(id == 1) { %>checked<% } %> />
+                        <input type="radio" name="RButton" id="img<%=i + 1%>" <% if (i == 0) { %>checked<% }%> />
                         <li id="slideImage">
                             <div id="slide">
                                 <img src="<%=show.getBackdropImg()%>" />
+                                <div id="showName<%=i + 1%>" class="showNames"><span><%=show.getName()%></span></div>
                             </div>
                             <div id="navButtons">
-                                <label for="img<%=indexBefore%>" id="prev">&#x2039;</label>
-                                <label for="img<%=indexAfter%>" id="next">&#x203a;</label>
+                                <label for="img<%=indexBefore + 1%>" id="prev">&#x2039;</label>
+                                <label for="img<%=indexAfter + 1%>" id="next">&#x203a;</label>
                             </div>
                         </li>
-<!--                        
-                        <input type="radio" name="RButton" id="img1" checked />
-                        <li id="slideImage">
-                            <div id="slide">
-                                <img src="http://ib.huluim.com/show_key_art/11430?size=1600x600&region=US" />
-                            </div>
-                            <div id="navButtons">
-                                <label for="img6" id="prev">&#x2039;</label>
-                                <label for="img2" id="next">&#x203a;</label>
-                            </div>
-                        </li>-->
-                        
                         <% } %>
                         <li id="navDots">
-                            <% for (int i = 1; i <= shows.size(); i++) {%>
-                            <label for="img<%=i%>" id="navDot"></label>
+                            <% for (int i = 0; i < shows.size(); i++) {
+                                    IndexShow is = shows.get(i);
+                            %>
+                            <label for="img<%=i + 1%>" title="<%=is.getName()%>" id="navDot"></label>
                             <% } %>
                         </li>
                     </ul>
