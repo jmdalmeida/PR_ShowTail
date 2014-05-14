@@ -1,3 +1,4 @@
+<%@page import="Utils.Data.Comment"%>
 <%@page import="Utils.Data.UserData"%>
 <%@page import="Utils.Data.Show"%>
 <%@page import="Utils.Data.Season"%>
@@ -10,7 +11,7 @@
     if (id_show == null || id_show == "") {
         //response.sendRedirect("index.jsp");
     }
-    if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) {
+    if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null || session.getAttribute("comments_array") == null) {
 %>
 <jsp:forward page="ShowController" >
     <jsp:param name="Process" value="Show" />
@@ -28,6 +29,7 @@
     }
     Show show = (Show) session.getAttribute("obj_show");
     ArrayList<Season> seasons = (ArrayList<Season>) session.getAttribute("seasons_array");
+    ArrayList<Comment> comments = (ArrayList<Comment>) session.getAttribute("comments_array");
 %>
 <!DOCTYPE html>
 <html>

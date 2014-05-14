@@ -6,13 +6,14 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
+import Utils.Data.Comment;
 import Utils.Data.Episode;
 import Utils.Data.IndexShow;
-import Utils.SQL.SQLcmd;
-import Utils.SQL.SQLquerys;
 import Utils.Data.Season;
 import Utils.Data.Show;
 import Utils.Data.UserData;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -52,14 +53,17 @@ public class ShowController extends HttpServlet {
         if ("Show".equals(process)) {
             Show show = null;
             ArrayList<Season> seasons = new ArrayList<Season>();
+            ArrayList<Comment> comments = new ArrayList<Comment>();
             try {
                 Object[] o = {id_show};
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
+                    //Gather show info
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
                             rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
                             loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
 
+                    //Gather seasons
                     Object[] o2 = {show.getId()};
                     ResultSet rs_seasons = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_seasons), o2);
                     while (rs_seasons.next()) {
@@ -68,11 +72,13 @@ public class ShowController extends HttpServlet {
                     success = true;
                     rs_seasons.close();
                     
+                    //Gather comments
                     
                 }
                 if (success) {
                     session.setAttribute("obj_show", show);
                     session.setAttribute("seasons_array", seasons);
+                    session.setAttribute("comments_array", comments);
 
                     if (loggedIn) {
                         int id_user = user.getId();
