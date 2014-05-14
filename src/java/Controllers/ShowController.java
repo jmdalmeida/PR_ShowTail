@@ -7,6 +7,7 @@ package Controllers;
 
 import JDBC.ConnectionFactory;
 import Utils.Episode;
+import Utils.IndexShow;
 import Utils.SQLcmd;
 import Utils.SQLquerys;
 import Utils.Season;
@@ -43,7 +44,7 @@ public class ShowController extends HttpServlet {
         PrintWriter out = response.getWriter();
         RequestDispatcher rd = null;
         String process = (String) request.getParameter("Process");
-        int id_show = Integer.parseInt(request.getParameter("ID_Show"));
+        int id_show = request.getParameter("ID_Show") != null ? Integer.parseInt(request.getParameter("ID_Show")) : 0;
         boolean success = false;
         UserData user = (UserData) session.getAttribute("user");
         boolean loggedIn = user != null;
@@ -56,8 +57,8 @@ public class ShowController extends HttpServlet {
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
-                            loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
+                                    rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
+                                    loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
 
                     Object[] o2 = {show.getId()};
                     ResultSet rs_seasons = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_seasons), o2);
@@ -116,9 +117,9 @@ public class ShowController extends HttpServlet {
                 while (rs_episodes.next()) {
                     int id_episode = Integer.parseInt(rs_episodes.getString("ID_Episode"));
                     episodes.add(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
-                            rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
-                            getDateObject(rs_episodes.getString("Air_Date")),
-                            loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
+                                             rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
+                                             getDateObject(rs_episodes.getString("Air_Date")),
+                                             loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
                 }
                 success = true;
                 if (loggedIn) {
@@ -202,6 +203,19 @@ public class ShowController extends HttpServlet {
                 }
             }
             success = true;
+        } else if ("PopularShows".equals(process)) {
+            ArrayList<IndexShow> shows = new ArrayList<IndexShow>();
+            try {
+                ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_followed) + " LIMIT 6", null);
+                while (rs.next()) {
+                    System.out.println("Adding to popular shows: " + rs.getString("Title"));
+                    shows.add(new IndexShow(rs.getInt("ID_Show"), rs.getString("Backdrop_Image_Path"), rs.getString("Title")));
+                }
+            } catch (SQLException ex) {
+
+            }
+            session.setAttribute("array_popular_shows", shows);
+            rd = request.getRequestDispatcher("/index.jsp");
         }
 
         if (!success) {
@@ -217,11 +231,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -232,11 +246,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
