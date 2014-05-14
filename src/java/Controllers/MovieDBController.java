@@ -172,6 +172,7 @@ public class MovieDBController extends HttpServlet {
     private void insertNewEpisode(long seasonID, long tvshowID, JSONObject json) throws SQLException {
         String title = (String) json.get("name");
         String overview = (String) json.get("overview");
+        if(overview != null && overview.length() > 4000) overview = overview.substring(0, 3997) + "...";
         long episode_number = json.get("episode_number") != null ? (Long) json.get("episode_number") : -1;
         String air_date = (String) json.get("air_date");
         String img_path = json.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("poster_path") : IMAGE_NOT_AVAILABLE;
