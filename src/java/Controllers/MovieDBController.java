@@ -1,9 +1,9 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
-import Utils.SQLcmd;
-import Utils.SQLquerys;
-import Utils.ShowMovieDB;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
+import Utils.Data.ShowMovieDB;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

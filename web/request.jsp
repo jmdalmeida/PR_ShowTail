@@ -1,4 +1,4 @@
-<%@page import="Utils.ShowMovieDB"%>
+<%@page import="Utils.Data.ShowMovieDB"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.ArrayList"%>
 <%@include file="WEB-INF/JSP/validation.jsp" %>

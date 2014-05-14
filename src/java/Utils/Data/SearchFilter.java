@@ -1,4 +1,4 @@
-package Utils;
+package Utils.Data;
 
 public class SearchFilter {
     

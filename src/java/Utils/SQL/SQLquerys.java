@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package Utils;
+package Utils.SQL;
 
-import static Utils.SQLcmd.*;
+import static Utils.SQL.SQLcmd.*;
 import java.util.HashMap;
 
 public class SQLquerys {

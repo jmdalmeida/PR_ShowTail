@@ -1,4 +1,4 @@
-package Utils;
+package Utils.Data;
 
 import java.util.Date;
 

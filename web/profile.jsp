@@ -1,9 +1,9 @@
-<%@page import="Utils.Show"%>
+<%@page import="Utils.Data.Show"%>
+<%@page import="Utils.Data.UserData"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="Utils.UserData"%>
-<%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
+<%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     UserData ud = null;

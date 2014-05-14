@@ -1,6 +1,6 @@
-<%@page import="Utils.UserData"%>
-<%@page import="Utils.Show"%>
-<%@page import="Utils.Season"%>
+<%@page import="Utils.Data.UserData"%>
+<%@page import="Utils.Data.Show"%>
+<%@page import="Utils.Data.Season"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>

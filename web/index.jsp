@@ -1,4 +1,4 @@
-<%@page import="Utils.IndexShow"%>
+<%@page import="Utils.Data.IndexShow"%>
 <%@page import="java.util.ArrayList"%>
 <%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

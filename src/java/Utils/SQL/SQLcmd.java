@@ -1,4 +1,4 @@
-package Utils;
+package Utils.SQL;
 
 public enum SQLcmd {
     TVShows_genres, TVShows_search, TVShows_order_all, TVShows_order_followed, TVShows_order_recommended, TVShows_search_by_genre,

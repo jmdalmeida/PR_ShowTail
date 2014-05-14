@@ -6,13 +6,13 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
-import Utils.Episode;
-import Utils.IndexShow;
-import Utils.SQLcmd;
-import Utils.SQLquerys;
-import Utils.Season;
-import Utils.Show;
-import Utils.UserData;
+import Utils.Data.Episode;
+import Utils.Data.IndexShow;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
+import Utils.Data.Season;
+import Utils.Data.Show;
+import Utils.Data.UserData;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -67,6 +67,8 @@ public class ShowController extends HttpServlet {
                     }
                     success = true;
                     rs_seasons.close();
+                    
+                    
                 }
                 if (success) {
                     session.setAttribute("obj_show", show);
