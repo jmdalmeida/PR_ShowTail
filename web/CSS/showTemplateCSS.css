@@ -192,9 +192,9 @@
 
 #middleLayer #middle-middleC select {
     float:right;
-    position: absolute;
-    right: 10px;
-    top: 5px;
+    position: relative;
+    margin-right: 10px;
+    bottom: 20px;
 }
 
 #middleLayer #middle-middleC #episodes
@@ -327,6 +327,10 @@
 }
 
 //TABS
+#middleLayer #middle-middleC #tab {
+    display: none;
+}
+
 #middleLayer #tab h1
 {
     color: white;

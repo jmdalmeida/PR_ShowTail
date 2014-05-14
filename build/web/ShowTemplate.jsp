@@ -88,22 +88,25 @@
 
             var currTab = 0;
             function initTabs() {
-                $("#middle-middleC").tabs({
+                $("#tab").tabs({
                     collapsible: true,
                     beforeLoad: function(event, ui) {
+                        loadingState(true);
                         ui.jqXHR.error(function() {
                             ui.panel.html(
                                     "Couldn't load this tab. We'll try to fix this as soon as possible. ");
                         });
                     },
                     load: function(event, ui) {
-                        currTab = $("#middle-middleC").tabs("option", "active");
+                        currTab = $("#tab").tabs("option", "active");
+                        loadingState(false);
                     }
                 });
+                $("#tab").show();
             }
 
             function resetTabs() {
-                $("#middle-middleC").tabs("destroy");
+                $("#tab").tabs("destroy");
                 initTabs();
             }
 
@@ -178,7 +181,8 @@
         <title>Show Template</title>
     </head>
     <body>
-        <%@ include file="WEB-INF/JSP/header.jsp" %>
+        <%@include file="WEB-INF/JSP/loading.jsp" %>
+        <%@include file="WEB-INF/JSP/header.jsp" %>
         <div id="wrapper">
             <div id="content">
                 <%-- SEARCH --%>
