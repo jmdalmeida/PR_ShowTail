@@ -230,6 +230,7 @@ public class AccountController extends HttpServlet {
             rs.close();
         } catch (SQLException ex) {
             validate = false;
+            ex.printStackTrace();
         }
         return validate;
     }

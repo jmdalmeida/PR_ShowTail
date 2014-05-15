@@ -248,7 +248,6 @@
                                     <% }%>
                             </ul>
                         </div>
-                        <!-- Things will Appear -->
                     </div>
                     <div id="comments">
                         <h1>Comments:</h1>

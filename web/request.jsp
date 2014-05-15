@@ -38,19 +38,23 @@
                 </div>
                 <% if (hasToShow) { %>
                 <div class="results">
-                    <% for (ShowMovieDB s : shows) {%>
-                    <img src="<%=s.getImgPath()%>" alt="<%=s.getTitle()%>" />
-                    <span><%=s.getTitle()%></span>
-                    <% if (!s.exists()) {%>
-                    <form action="MovieDBController" method="POST">
-                        <input type="hidden" name="action" value="GatherUserRequest" />
-                        <input type="hidden" name="moviedbID" value="<%=s.getId()%>" />
-                        <input type="submit" value="Add this show" />
-                    </form>
-                    <% } else { %>
-                    <span>Show already added to SHOWTAIL</span>
-                    <% }
-                            } %>
+                    <ul id="ul1">
+                        <% for (ShowMovieDB s : shows) {%>
+                        <li>
+                            <img src="<%=s.getImgPath()%>" alt="<%=s.getTitle()%>" />
+                            <p><%=s.getTitle()%></p>
+                            <% if (!s.exists()) {%>
+                            <form action="MovieDBController" method="POST">
+                                <input type="hidden" name="action" value="GatherUserRequest" />
+                                <input type="hidden" name="moviedbID" value="<%=s.getId()%>" />
+                                <input type="submit" value="Request this show" />
+                            </form>
+                            <% } else { %>
+                            <p id="alreadyAdded">Show already added to SHOWTAIL</p>
+                            <% } %>
+                        </li>
+                        <% } %>
+                    </
                 </div>
                 <% }%>
             </div>

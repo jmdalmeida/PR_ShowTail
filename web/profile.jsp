@@ -156,6 +156,13 @@
                                 <input type="hidden" name="action" value="GatherGenres" />
                             </form>
                         </li>
+                        <li>
+                            <form method="POST" action="MovieDBController">
+                                <input id="deleteUser" name="moviedbID" type="text" placeholder="Delete User"/>
+                                <input type="submit" value="Delete" />
+                                <input type="hidden" name="action" value="DeleteUser" />
+                            </form>
+                        </li>
                     </ul>
                 </div>
                 <% } %>

@@ -80,7 +80,7 @@ public class MovieDBController extends HttpServlet {
         ConnectionFactory.getInstance().close();
 
         if (!response.isCommitted()) {
-            response.sendRedirect("AdminProfile.jsp");
+            response.sendRedirect("profile.jsp");
         }
     }
 

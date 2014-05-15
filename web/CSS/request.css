@@ -2,7 +2,6 @@
     float: left;
     width: 940px;
     margin-top: 10px;
-    margin-bottom: 50px;
     margin-right: 40px;
     border-radius: 4px;
     padding: 30px 10px 30px 10px;
@@ -36,6 +35,38 @@
     margin-right: 4px;
     text-decoration: none;
     color: black;
+    font-size: 14px;
+}
+
+.results li {
+    float:left;
+    margin: 15px;
+    padding: 10px;
+    padding-bottom: 20px;
+    width: 185px;
+    height: 320px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    list-style: none;
+    text-align: center;
+}
+
+.results li:hover 
+{
+    border-radius: 5px;
+    background: #5d7fd8;
+}
+
+.results p{
+    color: white;
+    font-size: 16px;
+    
+}
+
+.results #alreadyAdded {
+    color: red;
     font-size: 14px;
 }
 
