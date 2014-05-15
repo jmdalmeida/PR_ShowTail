@@ -117,7 +117,7 @@
                 </div>
                 <% if (shows.size() > 0) { %>
                 <div id="SeriesFollowing">
-                    <h1>Recently Followed Shows:</h1>
+                    <h1>Recently Tailed Shows:</h1>
                     <div>
                         <ul id="result">
                             <% for (Show s : shows) {%>

@@ -18,14 +18,14 @@
         <div id="menu">
             <ul id="menus">
                 <li><a href="TV-Shows.jsp">TV-Shows</a></li>
-                    <% if(loggedin == false){ %>
+                    <% if(!loggedin){ %>
                     <li>
                     <a id="Reg" href="#signUp-box">Sign Up</a>
                     </li>
                     <% } %>
             </ul>
         </div>
-        <% if(loggedin == false){ %>
+        <% if(!loggedin){ %>
         <div id="header_login">
             <form name="LoginForm" method="POST" action="AccountController">
                 <input type="hidden" name="action" value="login" />

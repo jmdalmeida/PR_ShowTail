@@ -389,7 +389,7 @@ input[type="submit"]:hover {
     opacity: 1; 
 }
 
-#navButtons #next 
+#navButtons .next 
 { 
     right: 0; 
 }

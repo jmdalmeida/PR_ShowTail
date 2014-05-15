@@ -24,19 +24,21 @@
             $(document).ready(function() {
                 timer();
             });
-                
+
+            var len = <%=shows.size()%>
             var flag = false;
-            
+            var currI = 0;
+
             function timer() {
-                if(flag) {
-                    $("#next").click();
-                }
+                if (flag)
+                    $("#next" + currI).click();
+                if(currI === len) currI = 0;
                 setTimeout(function() {
+                    flag = true;
                     timer();
                 }, 3000);
-                flag = true;
             }
-            
+
         </script>
     </head>
     <body>
@@ -64,7 +66,7 @@
                             </div>
                             <div id="navButtons">
                                 <label for="img<%=indexBefore + 1%>" id="prev">&#x2039;</label>
-                                <label for="img<%=indexAfter + 1%>" id="next">&#x203a;</label>
+                                <label for="img<%=indexAfter + 1%>" class="next" id="next<%=i%>" onclick="currI = <%=i + 1%>;">&#x203a;</label>
                             </div>
                         </li>
                         <% } %>
