@@ -20,6 +20,24 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <title>Showtail - Manage Your TV Shows</title>
+        <script>
+            $(document).ready(function() {
+                timer();
+            });
+                
+            var flag = false;
+            
+            function timer() {
+                if(flag) {
+                    $("#next").click();
+                }
+                setTimeout(function() {
+                    timer();
+                }, 3000);
+                flag = true;
+            }
+            
+        </script>
     </head>
     <body>
         <div id="wrapper">
