@@ -56,24 +56,24 @@
 </div>
 <div id="signUp-box">
     <a href="" id="close"><img src="images/buttonClose.png" id="btn_close" title="Close Window" alt="Close" /></a>
-    <form name="SignUpForm" method="POST" id="signInForm" action="AccountController">
+    <form name="SignUpForm" method="POST" id="signInForm" action="AccountController" autocomplete="off">
         <input type="hidden" name="action" value="signUp" />
         <fieldset id="textbox">
             <label id="NameL">
                 <span>Name</span>
-                <input id="name" name="name" value="" type="text" autocomplete="on" placeholder="Name" required>
+                <input id="name" name="name" value="" type="text" autocomplete="off" placeholder="Name" required>
             </label>
             <label id="UsernameL">
                 <span>Username</span>
-                <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username" required>
+                <input id="username" name="username" value="" type="text" autocomplete="off" placeholder="Username" required>
             </label>
             <label id="PasswordL">
                 <span>Password</span>
-                <input id="password" name="password" value="" type="password" placeholder="Password" required>
+                <input id="password" name="password" value="" type="password" autocomplete="off" placeholder="Password" required>
             </label>
             <label id="EmailL">
                 <span>Email</span>
-                <input id="email" name="email" value="" type="text" autocomplete="on" placeholder="Email">
+                <input id="email" name="email" value="" type="text" autocomplete="off" placeholder="Email">
             </label>
             <label id="DataNascL">
                 <span>Date Of Birth</span>

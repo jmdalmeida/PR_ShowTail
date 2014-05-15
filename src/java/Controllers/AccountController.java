@@ -84,7 +84,7 @@ public class AccountController extends HttpServlet {
                     response.addCookie(c1);
                     response.addCookie(c2);
 
-                    toPage = Pages.PROFILE;
+                    response.sendRedirect("index.jsp");
                 } else {
                     toPage = Pages.INDEX;
                 }
@@ -121,10 +121,10 @@ public class AccountController extends HttpServlet {
                 ArrayList<Show> shows = new ArrayList<Show>();
                 try {
                     Object[] objs = {id_user};
-                    ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows), objs);
+                    ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows) + " LIMIT 4", objs);
                     while (rs.next()) {
                         shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"),
-                                rs.getString("Image_Path"), "", "", "", 0.0, false));
+                                           rs.getString("Image_Path"), "", "", "", 0.0, false));
                     }
 
                     session.setAttribute("array_shows_followed", shows);
@@ -142,7 +142,7 @@ public class AccountController extends HttpServlet {
                     ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows), objs);
                     while (rs.next()) {
                         shows1.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"),
-                                rs.getString("Image_Path"), "", "", "", 0.0, false));
+                                            rs.getString("Image_Path"), "", "", "", 0.0, false));
                     }
 
                     session.setAttribute("array_shows_followed", shows1);
@@ -157,29 +157,31 @@ public class AccountController extends HttpServlet {
         }
         ConnectionFactory.getInstance().close();
 
-        switch (toPage) {
-            case INDEX:
-                rd = request.getRequestDispatcher("/index.jsp");
-                break;
-            case PROFILE:
-                rd = request.getRequestDispatcher("/profile.jsp");
-                break;
-            case MYSHOWS:
-                rd = request.getRequestDispatcher("/MyShows.jsp");
-                break;    
-            case FROMPAGE:
-                rd = request.getRequestDispatcher("/" + fromPage);
-                break;
-            case NULL:
-                rd = null;
-                response.sendRedirect("index.jsp");
-                break;
-            default:
-                rd = request.getRequestDispatcher("/index.jsp");
-                break;
-        }
-        if (rd != null) {
-            rd.forward(request, response);
+        if (!response.isCommitted()) {
+            switch (toPage) {
+                case INDEX:
+                    rd = request.getRequestDispatcher("/index.jsp");
+                    break;
+                case PROFILE:
+                    rd = request.getRequestDispatcher("/profile.jsp");
+                    break;
+                case MYSHOWS:
+                    rd = request.getRequestDispatcher("/MyShows.jsp");
+                    break;
+                case FROMPAGE:
+                    rd = request.getRequestDispatcher("/" + fromPage);
+                    break;
+                case NULL:
+                    rd = null;
+                    response.sendRedirect("index.jsp");
+                    break;
+                default:
+                    rd = request.getRequestDispatcher("/index.jsp");
+                    break;
+            }
+            if (rd != null) {
+                rd.forward(request, response);
+            }
         }
     }
 
@@ -263,8 +265,8 @@ public class AccountController extends HttpServlet {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_user_data), objs);
             if (rs.next()) {
                 ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
-                        rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"),
-                        rs.getString("Image_Path"), rs.getString("Account_Type"));
+                                  rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"),
+                                  rs.getString("Image_Path"), rs.getString("Account_Type"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
@@ -296,6 +298,6 @@ public class AccountController extends HttpServlet {
 
     private enum Pages {
 
-        INDEX, PROFILE, SEARCH, SHOW, FROMPAGE,MYSHOWS, NULL;
+        INDEX, PROFILE, SEARCH, SHOW, FROMPAGE, MYSHOWS, NULL;
     }
 }
