@@ -128,6 +128,17 @@
                 }
             }
 
+            function comment() {
+                var elem = document.getElementById("textArea");
+                var commentsBox = document.getElementById("comments-box");
+                $.post("showFunctions.jsp",
+                        {funct: "Comment", id_show: <%=show.getId()%>, id_user: <%=id_user%>, comment: elem.value},
+                function(data, status) {
+                    elem.value = "";
+                    commentsBox.innerHTML = data + commentsBox.innerHTML;
+                });
+            }
+
             function checkSeenStatus(elem, id_season, id_episode) {
                 $.post("showFunctions.jsp",
                         {funct: "SetSeenStatus", id_show: <%=show.getId()%>, id_user: <%=id_user%>,
@@ -253,14 +264,15 @@
                         <h1>Comments:</h1>
                         <div id="postComment">
                             <textarea id="textArea" rows="6" cols="50" maxlength="254"></textarea>
-                            <input type="button" value="Post Comment"/>
+                            <input type="button" value="Post Comment" onclick="comment();"/>
                         </div>
                         <div id="comments-box">
                             <% for (int i = 0; i < comments.size(); i++) {
                                     Comment c = comments.get(i);
                             %>
                             <div id="comment<%=c.getIdComment()%>" class="comment">
-                                <span><%=c.getComment()%></span>
+                                <span class="user_span"><%=c.getUser()%></span>
+                                <span class="comment_span"><%=c.getComment()%></span>
                             </div>
                             <% } %>
                         </div>
@@ -275,6 +287,8 @@
 <%
     show = null;
     seasons.clear();
+    comments.clear();
     session.removeAttribute("obj_show");
     session.removeAttribute("seasons_array");
+    session.removeAttribute("comments_array");
 %>

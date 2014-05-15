@@ -59,5 +59,15 @@
     <jsp:param name="Action" value="<%=action%>" />
 </jsp:forward>
 <%
+} else if ("Comment".equals(funct)) {
+    String comment = request.getParameter("comment");
+%>
+<jsp:forward page="ShowController" >
+    <jsp:param name="Process" value="Comment" />
+    <jsp:param name="ID_User" value="<%=param_id_user%>" />
+    <jsp:param name="ID_Show" value="<%=param_id_show%>" />
+    <jsp:param name="Comment" value="<%=comment%>" />
+</jsp:forward>
+<%
     }
 %>

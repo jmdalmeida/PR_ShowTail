@@ -326,6 +326,23 @@
     float: right;
 }
 
+#middleLayer #comments #comments-box {
+    position: relative;
+    width: 520px;
+    height: auto;
+    float: right;
+    top: -150px;
+}
+
+#middleLayer #comments #comments-box .comment {
+    width: 100%;
+    height: 50px;
+    background-color: #272727;
+    color: #fff;
+    margin-bottom: 5px;
+    
+}
+
 //TABS
 #middleLayer #middle-middleC #tab {
     display: none;
