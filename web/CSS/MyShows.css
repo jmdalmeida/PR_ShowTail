@@ -17,6 +17,7 @@
     float:left;
     margin-left: 15px;
     padding: 10px;
+    padding-left: 15px;
     width: 93px;
     height: 175px;
     margin-bottom: 5px;
@@ -47,6 +48,7 @@
 #show li a{
     text-decoration: none;
     display: inline-block;
+    height: 140px;
 }
 
 #nomeSerie {

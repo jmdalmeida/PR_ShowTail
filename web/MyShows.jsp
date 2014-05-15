@@ -9,7 +9,7 @@
     <jsp:param name="action" value="MyShows" />
 </jsp:forward>
 <% }
-    ArrayList<Show> shows = (ArrayList<Show>) session.getAttribute("array_shows_followed");
+    ArrayList<MyShow> shows = (ArrayList<MyShow>) session.getAttribute("array_shows_followed");
 %>
 <html>
     <head>
@@ -22,22 +22,28 @@
     <body>
         <div id="wrapper">
             <%@ include file="WEB-INF/JSP/header.jsp" %>
-            <div id="content">                    
-                <%@include file="WEB-INF/JSP/searchBar.jsp" %>  
+            <div id="content">
                 <div id="SeriesFollowing">
                     <h1>Tailed Shows:</h1>
                     <div id="myShow">
-                        <% for (Show s : shows) {
+                        <% for (MyShow s : shows) {
                                 int limit = 20;
                                 String title = s.getTitle().length() < limit ? s.getTitle() : s.getTitle().substring(0, limit - 3) + "...";
+                                int tpx = 140;
+                                int episodesWatched = s.getTotalEpisodes() - s.getEpisodesUnwatched();
+                                double watchedPercent = episodesWatched/(double)s.getTotalEpisodes();
+                                int npx = (int)Math.ceil(tpx * watchedPercent);
                         %>
                         <ul id="show">
                             <li>
                                 <a href="#">
                                     <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>" />
+                                    <div style="width: 5px; height: <%=tpx%>px; position: relative; left: -6px; background-color: black;"></div>
+                                    <div style="width: 5px; height: <%=npx%>px; position: relative; left: -6px; bottom: <%=npx%>; background-color: green;"></div>
                                 </a><br>
                             </li>
-                            <a id="nomeSerie" href="ShowTemplate.jsp?id=<%=s.getId()%>" title="<%=s.getTitle()%>"><%=title%></a>                               
+                            <a id="nomeSerie" href="ShowTemplate.jsp?id=<%=s.getId()%>" title="<%=s.getTitle()%>"><%=title%></a>
+                            <span><%=s.getEpisodesUnwatched()%></span>
                         </ul>
                         <% }%>
                     </div>

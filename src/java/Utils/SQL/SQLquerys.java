@@ -57,6 +57,9 @@ public class SQLquerys {
         querys.put(Show_set_show_seen, "INSERT INTO Watched_Episode(ID_Show, ID_Season, ID_Episode, ID_User) "
                 + "SELECT e.ID_Show, e.ID_Season, e.ID_Episode, u.ID_User FROM episode e, user u WHERE ID_Show = ? AND ID_User = ?");
         querys.put(Show_exists, "SELECT * FROM TV_Show WHERE MovieDB_ID = ?");
+        
+        querys.put(MyShows_get_unwatched, "SELECT * FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ?");
+        querys.put(MyShows_count_unwatched, "SELECT COUNT(*) AS Unwatched FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ?");
     }
     
     public static String getQuery(SQLcmd key){

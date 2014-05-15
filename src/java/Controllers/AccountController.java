@@ -1,10 +1,11 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
-import Utils.SQL.SQLcmd;
-import Utils.SQL.SQLquerys;
+import Utils.Data.MyShow;
 import Utils.Data.Show;
 import Utils.Data.UserData;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
@@ -124,7 +125,7 @@ public class AccountController extends HttpServlet {
                     ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows) + " LIMIT 4", objs);
                     while (rs.next()) {
                         shows.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"),
-                                           rs.getString("Image_Path"), "", "", "", 0.0, false));
+                                rs.getString("Image_Path"), "", "", "", 0.0, false));
                     }
 
                     session.setAttribute("array_shows_followed", shows);
@@ -135,14 +136,15 @@ public class AccountController extends HttpServlet {
                 }
                 break;
             case "MyShows":
-                int id_user1 = ((UserData) session.getAttribute("user")).getId();
-                ArrayList<Show> shows1 = new ArrayList<Show>();
+                user = (UserData) session.getAttribute("user");
+                ArrayList<MyShow> shows1 = new ArrayList<MyShow>();
                 try {
-                    Object[] objs = {id_user1};
+                    Object[] objs = {user.getId()};
                     ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows), objs);
                     while (rs.next()) {
-                        shows1.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"),
-                                            rs.getString("Image_Path"), "", "", "", 0.0, false));
+                        int id = rs.getInt("ID_Show");
+                        int count = getUnwatchedCount(id, user.getId());
+                        shows1.add(new MyShow(id, count, rs.getInt("Episodes"), rs.getString("Title"), rs.getString("Image_Path")));
                     }
 
                     session.setAttribute("array_shows_followed", shows1);
@@ -265,8 +267,8 @@ public class AccountController extends HttpServlet {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_user_data), objs);
             if (rs.next()) {
                 ud = new UserData(rs.getInt("ID_User"), rs.getString("Username"), rs.getString("Email"),
-                                  rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"),
-                                  rs.getString("Image_Path"), rs.getString("Account_Type"));
+                        rs.getString("Name"), rs.getDate("Date_of_Birth"), rs.getDate("Date_of_Registration"),
+                        rs.getString("Image_Path"), rs.getString("Account_Type"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
@@ -296,8 +298,20 @@ public class AccountController extends HttpServlet {
         return result;
     }
 
-    private enum Pages {
+    private int getUnwatchedCount(int id_show, int id_user) {
+        int count = 0;
+        Object[] objs = {id_show, id_user};
+        try {
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.MyShows_count_unwatched), objs);
+            if(rs.next())
+                count = rs.getInt("Unwatched");
+            rs.close();
+        } catch (SQLException ex) {
+        }
+        return count;
+    }
 
+    private enum Pages {
         INDEX, PROFILE, SEARCH, SHOW, FROMPAGE, MYSHOWS, NULL;
     }
 }

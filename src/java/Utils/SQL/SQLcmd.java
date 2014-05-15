@@ -9,5 +9,7 @@ public enum SQLcmd {
     Show_set_season_seen, Show_set_season_unseen, Show_set_show_seen, Show_set_show_unseen, Show_get_season_id, Show_exists,
     Account_user_data, Account_followed_shows, Account_check_login, Account_create_user, Account_update_user, Account_delete_user,
     Show_get_season, Show_get_episodes, Show_set_episode_seen, Show_set_episode_unseen, Show_get_episode_seen,
-    Admin_insert_show, Admin_insert_season, Admin_insert_episode, Admin_insert_genre, Admin_select_genre, Admin_associate_genre;
+    Admin_insert_show, Admin_insert_season, Admin_insert_episode, Admin_insert_genre, Admin_select_genre, Admin_associate_genre,
+    
+    MyShows_count_unwatched, MyShows_get_unwatched;
 }
