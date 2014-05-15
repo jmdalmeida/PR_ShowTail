@@ -345,6 +345,21 @@ input[type="submit"]:hover {
     height: 100%;
 }
 
+#slide .showNames {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background:rgba(0,0,0,0.5);
+    top: -53px;
+}
+
+#slide .showNames span {
+    position: absolute;
+    color: white;
+    left: 130px;
+    bottom: 15px;
+}
+
 #navButtons label 
 {
     width: 100px;
@@ -410,13 +425,13 @@ input:checked + #slideImage #navButtons label
     position: relative;
     border-radius: 100%;
     display: inline-block;
-    background-color: rgba(0, 0, 0, 0.6);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 #navDots #navDot:hover 
 {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.8);
+    background: rgba(255, 255, 255, 0.8);
 }
 
 input #img1:checked ~ #navDots label #ID1,

@@ -1,11 +1,11 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
-import Utils.SearchFilter;
-import Utils.Genre;
-import Utils.SQLcmd;
-import Utils.SQLquerys;
-import Utils.Show;
+import Utils.Data.SearchFilter;
+import Utils.Data.Genre;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
+import Utils.Data.Show;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package Utils;
+package Utils.Data;
 
 public class Show {
     private final int id, followers, episodesNumber;

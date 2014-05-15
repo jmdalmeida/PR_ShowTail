@@ -1,9 +1,9 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
-import Utils.SQLcmd;
-import Utils.SQLquerys;
-import Utils.ShowMovieDB;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
+import Utils.Data.ShowMovieDB;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -80,7 +80,7 @@ public class MovieDBController extends HttpServlet {
         ConnectionFactory.getInstance().close();
 
         if (!response.isCommitted()) {
-            response.sendRedirect("AdminProfile.jsp");
+            response.sendRedirect("profile.jsp");
         }
     }
 
@@ -172,6 +172,7 @@ public class MovieDBController extends HttpServlet {
     private void insertNewEpisode(long seasonID, long tvshowID, JSONObject json) throws SQLException {
         String title = (String) json.get("name");
         String overview = (String) json.get("overview");
+        if(overview != null && overview.length() > 4000) overview = overview.substring(0, 3997) + "...";
         long episode_number = json.get("episode_number") != null ? (Long) json.get("episode_number") : -1;
         String air_date = (String) json.get("air_date");
         String img_path = json.get("poster_path") != null ? "https://image.tmdb.org/t/p/original" + json.get("poster_path") : IMAGE_NOT_AVAILABLE;

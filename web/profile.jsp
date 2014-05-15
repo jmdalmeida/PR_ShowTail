@@ -1,9 +1,9 @@
-<%@page import="Utils.Show"%>
+<%@page import="Utils.Data.Show"%>
+<%@page import="Utils.Data.UserData"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="Utils.UserData"%>
-<%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
+<%@ include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     UserData ud = null;
@@ -154,6 +154,13 @@
                             <form method="POST" action="MovieDBController">
                                 <input type="submit" value="Gather genres" />
                                 <input type="hidden" name="action" value="GatherGenres" />
+                            </form>
+                        </li>
+                        <li>
+                            <form method="POST" action="MovieDBController">
+                                <input id="deleteUser" name="moviedbID" type="text" placeholder="Delete User"/>
+                                <input type="submit" value="Delete" />
+                                <input type="hidden" name="action" value="DeleteUser" />
                             </form>
                         </li>
                     </ul>

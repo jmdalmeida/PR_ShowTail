@@ -6,12 +6,14 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
-import Utils.Episode;
-import Utils.SQLcmd;
-import Utils.SQLquerys;
-import Utils.Season;
-import Utils.Show;
-import Utils.UserData;
+import Utils.Data.Comment;
+import Utils.Data.Episode;
+import Utils.Data.IndexShow;
+import Utils.Data.Season;
+import Utils.Data.Show;
+import Utils.Data.UserData;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -43,7 +45,7 @@ public class ShowController extends HttpServlet {
         PrintWriter out = response.getWriter();
         RequestDispatcher rd = null;
         String process = (String) request.getParameter("Process");
-        int id_show = Integer.parseInt(request.getParameter("ID_Show"));
+        int id_show = request.getParameter("ID_Show") != null ? Integer.parseInt(request.getParameter("ID_Show")) : 0;
         boolean success = false;
         UserData user = (UserData) session.getAttribute("user");
         boolean loggedIn = user != null;
@@ -51,25 +53,39 @@ public class ShowController extends HttpServlet {
         if ("Show".equals(process)) {
             Show show = null;
             ArrayList<Season> seasons = new ArrayList<Season>();
+            ArrayList<Comment> comments = new ArrayList<Comment>();
             try {
                 Object[] o = {id_show};
                 ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_info), o);
                 if (rs_show.next()) {
+                    //Gather show info
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
                             rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
                             loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
 
+                    //Gather seasons
                     Object[] o2 = {show.getId()};
                     ResultSet rs_seasons = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_seasons), o2);
                     while (rs_seasons.next()) {
                         seasons.add(new Season(Integer.parseInt(rs_seasons.getString("ID_Season")), Integer.parseInt(rs_seasons.getString("Season_Number"))));
                     }
-                    success = true;
                     rs_seasons.close();
+
+                    //Gather comments
+                    ResultSet rs_comments = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_get_comments), o2);
+                    while (rs_comments.next()) {
+                        Comment c = new Comment(rs_comments.getInt("ID_Comment"), rs_comments.getInt("ID_User"),
+                                rs_comments.getString("Username"), rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
+                        comments.add(c);
+                    }
+                    rs_comments.close();
+
+                    success = true;
                 }
                 if (success) {
                     session.setAttribute("obj_show", show);
                     session.setAttribute("seasons_array", seasons);
+                    session.setAttribute("comments_array", comments);
 
                     if (loggedIn) {
                         int id_user = user.getId();
@@ -152,7 +168,9 @@ public class ShowController extends HttpServlet {
                 if (rs_new_rating.next()) {
                     new_rating = rs_new_rating.getDouble("Rating");
                 }
+                
                 out.print(new_rating);
+                out.flush();
 
                 rs.close();
                 rs_new_rating.close();
@@ -202,13 +220,45 @@ public class ShowController extends HttpServlet {
                 }
             }
             success = true;
+        } else if ("PopularShows".equals(process)) {
+            ArrayList<IndexShow> shows = new ArrayList<IndexShow>();
+            try {
+                ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.TVShows_order_followed) + " LIMIT 6", null);
+                while (rs.next()) {
+                    IndexShow is = new IndexShow(rs.getInt("ID_Show"), rs.getString("Backdrop_Image_Path"), rs.getString("Title"));
+                    shows.add(is);
+                }
+            } catch (SQLException ex) {
+            }
+            session.setAttribute("array_popular_shows", shows);
+            rd = request.getRequestDispatcher("/index.jsp");
+        } else if ("Comment".equals(process)) {
+            if (loggedIn) {
+                String comment = (String) request.getParameter("Comment");
+                Object[] objs = {id_show, user.getId(), comment};
+                try {
+                    long id = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.ShowTemplate_new_comment), objs);
+                    String newCommentDiv = "<div id=\"comment" + id + "\" class=\"comment\">"
+                            + "<span class=\"user_span\">" + user.getUsername() + " </span>"
+                            + "<span class=\"comment_span\">" + comment + "</span>"
+                            + "</div>";
+                    out.print(newCommentDiv);
+                    out.flush();
+                    success = true;
+                } catch (SQLException ex) {
+                    success = false;
+                }
+            }
         }
 
+        ConnectionFactory.getInstance().close();
         if (!success) {
+            response.sendRedirect("index.jsp");
+        }
+        if (!response.isCommitted() && rd == null) {
             rd = request.getRequestDispatcher("/index.jsp");
         }
-        ConnectionFactory.getInstance().close();
-        if (rd != null) {
+        if (!response.isCommitted() && rd != null) {
             rd.forward(request, response);
         }
     }

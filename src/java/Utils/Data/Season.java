@@ -1,5 +1,5 @@
 
-package Utils;
+package Utils.Data;
 
 public class Season {
     private final int id;

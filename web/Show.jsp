@@ -1,5 +1,5 @@
+<%@page import="Utils.Data.Episode"%>
 <%@page import="java.util.Date"%>
-<%@page import="Utils.Episode"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.ResultSet"%>

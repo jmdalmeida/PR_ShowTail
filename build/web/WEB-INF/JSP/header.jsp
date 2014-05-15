@@ -61,15 +61,15 @@
         <fieldset id="textbox">
             <label id="NameL">
                 <span>Name</span>
-                <input id="name" name="name" value="" type="text" autocomplete="on" placeholder="Name">
+                <input id="name" name="name" value="" type="text" autocomplete="on" placeholder="Name" required>
             </label>
             <label id="UsernameL">
                 <span>Username</span>
-                <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username">
+                <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username" required>
             </label>
             <label id="PasswordL">
                 <span>Password</span>
-                <input id="password" name="password" value="" type="password" placeholder="Password">
+                <input id="password" name="password" value="" type="password" placeholder="Password" required>
             </label>
             <label id="EmailL">
                 <span>Email</span>
@@ -77,7 +77,7 @@
             </label>
             <label id="DataNascL">
                 <span>Date Of Birth</span>
-                <input id="dtaNascimento" name="dataNascimento" value="" type="date" autocomplete="on" placeholder="Data Nascimento">
+                <input id="dtaNascimento" name="dataNascimento" type="date" required>
             </label>
             <input type="submit" value="Sign In" id="button" />     
         </fieldset>

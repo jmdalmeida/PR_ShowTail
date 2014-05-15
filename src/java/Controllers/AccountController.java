@@ -1,10 +1,10 @@
 package Controllers;
 
 import JDBC.ConnectionFactory;
-import Utils.SQLcmd;
-import Utils.SQLquerys;
-import Utils.Show;
-import Utils.UserData;
+import Utils.SQL.SQLcmd;
+import Utils.SQL.SQLquerys;
+import Utils.Data.Show;
+import Utils.Data.UserData;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
@@ -251,6 +251,7 @@ public class AccountController extends HttpServlet {
             rs.close();
         } catch (SQLException ex) {
             validate = false;
+            ex.printStackTrace();
         }
         return validate;
     }

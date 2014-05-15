@@ -1,6 +1,7 @@
-<%@page import="Utils.UserData"%>
-<%@page import="Utils.Show"%>
-<%@page import="Utils.Season"%>
+<%@page import="Utils.Data.Comment"%>
+<%@page import="Utils.Data.UserData"%>
+<%@page import="Utils.Data.Show"%>
+<%@page import="Utils.Data.Season"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
@@ -10,7 +11,7 @@
     if (id_show == null || id_show == "") {
         //response.sendRedirect("index.jsp");
     }
-    if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) {
+    if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) { //|| session.getAttribute("comments_array") == null) {
 %>
 <jsp:forward page="ShowController" >
     <jsp:param name="Process" value="Show" />
@@ -28,6 +29,7 @@
     }
     Show show = (Show) session.getAttribute("obj_show");
     ArrayList<Season> seasons = (ArrayList<Season>) session.getAttribute("seasons_array");
+    ArrayList<Comment> comments = (ArrayList<Comment>) session.getAttribute("comments_array");
 %>
 <!DOCTYPE html>
 <html>
@@ -246,15 +248,21 @@
                                     <% }%>
                             </ul>
                         </div>
-                        <!-- Things will Appear -->
                     </div>
                     <div id="comments">
                         <h1>Comments:</h1>
+                        <div id="postComment">
+                            <textarea id="textArea" rows="6" cols="50" maxlength="254"></textarea>
+                            <input type="button" value="Post Comment"/>
+                        </div>
                         <div id="comments-box">
-                            <div id="postComment">
-                                <textarea id="textArea" rows="6" cols="50" maxlength="254"></textarea>
-                                <input type="button" value="Post Comment"/>
-                            </div>   
+                            <% for (int i = 0; i < comments.size(); i++) {
+                                    Comment c = comments.get(i);
+                            %>
+                            <div id="comment<%=c.getIdComment()%>" class="comment">
+                                <span><%=c.getComment()%></span>
+                            </div>
+                            <% } %>
                         </div>
                     </div>
                 </div>
