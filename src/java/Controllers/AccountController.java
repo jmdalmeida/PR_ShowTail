@@ -134,6 +134,24 @@ public class AccountController extends HttpServlet {
                     toPage = Pages.NULL;
                 }
                 break;
+            case "MyShows":
+                int id_user1 = ((UserData) session.getAttribute("user")).getId();
+                ArrayList<Show> shows1 = new ArrayList<Show>();
+                try {
+                    Object[] objs = {id_user1};
+                    ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_followed_shows), objs);
+                    while (rs.next()) {
+                        shows1.add(new Show(rs.getInt("ID_Show"), rs.getInt("Followers"), rs.getInt("Episodes"), rs.getString("Title"),
+                                rs.getString("Image_Path"), "", "", "", 0.0, false));
+                    }
+
+                    session.setAttribute("array_shows_followed", shows1);
+
+                    toPage = Pages.MYSHOWS;
+                } catch (SQLException ex) {
+                    toPage = Pages.NULL;
+                }
+                break;
             default:
                 break;
         }
@@ -146,6 +164,9 @@ public class AccountController extends HttpServlet {
             case PROFILE:
                 rd = request.getRequestDispatcher("/profile.jsp");
                 break;
+            case MYSHOWS:
+                rd = request.getRequestDispatcher("/MyShows.jsp");
+                break;    
             case FROMPAGE:
                 rd = request.getRequestDispatcher("/" + fromPage);
                 break;
@@ -274,6 +295,6 @@ public class AccountController extends HttpServlet {
 
     private enum Pages {
 
-        INDEX, PROFILE, SEARCH, SHOW, FROMPAGE, NULL;
+        INDEX, PROFILE, SEARCH, SHOW, FROMPAGE,MYSHOWS, NULL;
     }
 }
