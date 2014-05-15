@@ -1,22 +1,37 @@
 
 
-#myShow{
+/*#myShow{
     background: #ffcccc;
     margin-left: 55px;
 }
 
-#tit {
+#titulo {
     margin-top:20px;
     background: #666666;
     width: 100%;
     height: 60px;
     border-radius: 8px;
     border: 3px solid #fff;
+}*/
+
+#SeriesFollowing {
+    float: left;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 40px; 
+    border-radius: 4px;
+    background: #6c6c6c;
+}
+
+#SeriesFollowing h1 {
+    text-align: center;
+    margin-top: 15px;
+    color: white;
 }
 
 #show {
     float:left;
-    margin: 15px;
+    margin-left: 50px;
     padding: 10px;
     width: 230px;
     height: 180px;

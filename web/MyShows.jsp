@@ -1,16 +1,16 @@
-<%@page import="Utils.*" %>
+<%@page import="Utils.Data.*" %>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Controllers.AccountController"%>
 <%@include file="WEB-INF/JSP/validation.jsp" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% 
-    if (session.getAttribute("array_shows_followed") == null) {
-%>
+if (session.getAttribute("array_shows_followed") == null) {
+    %>
 <jsp:forward page="AccountController" >
     <jsp:param name="action" value="MyShows" />
 </jsp:forward>
 <% }
-    ArrayList<Show> shows = (ArrayList<Show>) session.getAttribute("array_shows_followed");
+ArrayList<Show> shows = (ArrayList<Show>) session.getAttribute("array_shows_followed");
 %>
 <html>
     <head>
@@ -25,30 +25,30 @@
             <%@ include file="WEB-INF/JSP/header.jsp" %>
             <div id="content">                    
                 <%@include file="WEB-INF/JSP/searchBar.jsp" %>  
-                <div id="myShows">
-                    <div id="tit"> <h1 style="text-align: center; padding: 20px; color: #ff00cc;">LOL</h1> 
+                    <div id="SeriesFollowing">
+                        <h1>Followed Shows:</h1>
+                        <div id="myShow">
+                            <% for (Show s : shows) {%>
+                            <ul id="show">
+                                <li>
+                                    <a href="#">
+                                        <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>" />
+                                    </a><br>
+                                </li>
+                                <a id="nomeSerie" href="ShowTemplate.jsp?id=<%=s.getId()%>"><%=s.getTitle()%></a>
+                                <li id="moreInfo">
+                                    <h2>Last Episode</h2><hr>
+                                    <p> Nome ep. </p><br>
+                                    <h2>Next Episode</h2><hr>
+                                    <p> Nome ep. </p><br>
+                                    <input id="followButton" type="submit" value="UnTail Show"/>
+                                </li>                                    
+                            </ul>
+                            <% }%>
+                        </div>
                     </div>
-                    <div id="myShow">
-                        <% for (Show s : shows) {%>
-                        <ul id="show">
-                            <li>
-                            <a href="#">
-                                <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>" />
-                            </a><br>
-                            </li>
-                            <a id="nomeSerie" href="ShowTemplate.jsp?id=<%=s.getId()%>"><%=s.getTitle()%></a>
-                            <li id="moreInfo">
-                                <h2>Last Episode</h2><hr>
-                                <p> Nome ep. </p><br>
-                                <h2>Next Episode</h2><hr>
-                                <p> Nome ep. </p><br>
-                                <input id="followButton" type="submit" value="UnTail Show"/>
-                            </li>                                    
-                        </ul>
-                        <% }%>
-                    </div>
+                </div>
             </div>
-        </div>
-         <%@ include file="WEB-INF/JSP/footer.jsp" %>
+            <%@ include file="WEB-INF/JSP/footer.jsp" %>
     </body>
 </html>
