@@ -48,7 +48,11 @@
                         <% }%>
                     </div>
                     <div id="unwatchedEpisodes">
-                        
+                        <div class="season">
+                            <div class="episode">
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

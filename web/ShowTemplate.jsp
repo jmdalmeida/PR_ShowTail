@@ -278,7 +278,7 @@
                             %>
                             <div id="comment<%=c.getIdComment()%>" class="comment">
                                 <div id="image">
-                                    <img src="" />
+                                    <img src="<%=c.getImgPath()%>"/>
                                 </div>
                                 <div id="userC">
                                     <p class="user_span"><%=c.getUser()%></p>

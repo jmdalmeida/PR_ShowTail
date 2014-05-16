@@ -29,7 +29,7 @@ public class SQLquerys {
         querys.put(ShowTemplate_show_rate_select, "SELECT * FROM Rating WHERE ID_User = ? AND ID_Show = ?");
         querys.put(ShowTemplate_show_rate_insert, "INSERT INTO Rating(ID_User, ID_Show, Rating) VALUES(?,?,?)");
         querys.put(ShowTemplate_show_rate_update, "UPDATE Rating SET Rating = ? WHERE ID_User = ? AND ID_SHOW = ?");
-        querys.put(ShowTemplate_get_comments, "SELECT c.ID_Comment, u.ID_User, u.Username, c.Comment, c.Timestamp FROM Comment c, User u "
+        querys.put(ShowTemplate_get_comments, "SELECT c.ID_Comment, u.ID_User, u.Username, u.Image_Path, c.Comment, c.Timestamp FROM Comment c, User u "
                 + "WHERE c.ID_User = u.ID_User AND c.ID_Show = ? ORDER BY c.ID_Comment DESC");
         querys.put(ShowTemplate_new_comment, "INSERT INTO Comment(ID_Show, ID_User, Comment) VALUES(?,?,?)");
         querys.put(Account_user_data, "SELECT * FROM User WHERE Username LIKE ?");

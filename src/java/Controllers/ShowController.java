@@ -76,7 +76,8 @@ public class ShowController extends HttpServlet {
                     ResultSet rs_comments = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_get_comments), o2);
                     while (rs_comments.next()) {
                         Comment c = new Comment(rs_comments.getInt("ID_Comment"), rs_comments.getInt("ID_User"),
-                                                rs_comments.getString("Username"), rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
+                                                rs_comments.getString("Username"), rs_comments.getString("Image_Path"),
+                                                rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
                         comments.add(c);
                     }
                     rs_comments.close();
@@ -243,6 +244,9 @@ public class ShowController extends HttpServlet {
                 try {
                     long id = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.ShowTemplate_new_comment), objs);
                     String newCommentDiv = "<div id=\"comment" + id + "\" class=\"comment\">"
+                                           + "<div id=\"image\">"
+                                           + "<img src=\"" + user.getPathImagem() + "\" />"
+                                           + "</div>"
                                            + "<span class=\"user_span\">" + user.getUsername() + " </span>"
                                            + "<span class=\"comment_span\">" + comment + "</span>"
                                            + "</div>";
