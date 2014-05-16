@@ -63,6 +63,11 @@
                 initTabs();
                 buttonState(<%=following%>);
                 setRateStars(<%=rate%>);
+                $('#commentsScroll').perfectScrollbar({
+                    wheelSpeed: 20,
+                    wheelPropagation: false,
+                    suppressScrollX: true
+                });
             });
 
             function buttonState(following) {
@@ -266,15 +271,22 @@
                             <textarea id="textArea" rows="6" cols="50" maxlength="254" <% if(!loggedin) { %>disabled<% } %>></textarea>
                             <input type="button" value="Post Comment" onclick="comment();" <% if(!loggedin) { %>disabled<% } %>/>
                         </div>
+                        <div id="commentsScroll">
                         <div id="comments-box">
                             <% for (int i = 0; i < comments.size(); i++) {
                                     Comment c = comments.get(i);
                             %>
                             <div id="comment<%=c.getIdComment()%>" class="comment">
-                                <span class="user_span"><%=c.getUser()%></span>
-                                <span class="comment_span"><%=c.getComment()%></span>
+                                <div id="image">
+                                    <img src="" />
+                                </div>
+                                <div id="userC">
+                                    <p class="user_span"><%=c.getUser()%></p>
+                                    <p class="comment_span"><%=c.getComment()%></p>
+                                </div>
                             </div>
                             <% } %>
+                        </div>
                         </div>
                     </div>
                 </div>
