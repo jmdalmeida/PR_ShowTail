@@ -107,7 +107,7 @@ p {
 .percentPlacing {
     position: relative;
     float: right;
-    top: -370px;
+    top: 7px;
     margin-right: 5px;
 }
 
