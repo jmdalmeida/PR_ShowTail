@@ -263,8 +263,8 @@
                     <div id="comments">
                         <h1>Comments:</h1>
                         <div id="postComment">
-                            <textarea id="textArea" rows="6" cols="50" maxlength="254"></textarea>
-                            <input type="button" value="Post Comment" onclick="comment();"/>
+                            <textarea id="textArea" rows="6" cols="50" maxlength="254" <% if(!loggedin) { %>disabled<% } %>></textarea>
+                            <input type="button" value="Post Comment" onclick="comment();" <% if(!loggedin) { %>disabled<% } %>/>
                         </div>
                         <div id="comments-box">
                             <% for (int i = 0; i < comments.size(); i++) {

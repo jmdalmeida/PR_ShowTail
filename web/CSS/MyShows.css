@@ -18,6 +18,7 @@
     margin-left: 15px;
     padding: 10px;
     padding-left: 15px;
+    padding-bottom: 15px;
     width: 93px;
     height: 175px;
     margin-bottom: 5px;
@@ -29,6 +30,7 @@
 
 #show li {
     display: inline-block;
+    height: 140px;
     float: left;
     text-align: center;
 }
@@ -45,10 +47,9 @@
     height: 140px;
 }
 
-#show li a{
+#show a{
     text-decoration: none;
     display: inline-block;
-    height: 140px;
 }
 
 #nomeSerie {
@@ -68,4 +69,9 @@ h2 {
 
 p {
     font-size: 12px;
+}
+
+.unwatched {
+    font-size: 12px;
+    opacity: 0.7;
 }

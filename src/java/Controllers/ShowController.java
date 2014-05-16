@@ -47,6 +47,7 @@ public class ShowController extends HttpServlet {
         String process = (String) request.getParameter("Process");
         int id_show = request.getParameter("ID_Show") != null ? Integer.parseInt(request.getParameter("ID_Show")) : 0;
         boolean success = false;
+        boolean isAJAX = false;
         UserData user = (UserData) session.getAttribute("user");
         boolean loggedIn = user != null;
         ConnectionFactory.getInstance().init();
@@ -60,8 +61,8 @@ public class ShowController extends HttpServlet {
                 if (rs_show.next()) {
                     //Gather show info
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
-                            loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
+                                    rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
+                                    loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
 
                     //Gather seasons
                     Object[] o2 = {show.getId()};
@@ -75,7 +76,7 @@ public class ShowController extends HttpServlet {
                     ResultSet rs_comments = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_get_comments), o2);
                     while (rs_comments.next()) {
                         Comment c = new Comment(rs_comments.getInt("ID_Comment"), rs_comments.getInt("ID_User"),
-                                rs_comments.getString("Username"), rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
+                                                rs_comments.getString("Username"), rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
                         comments.add(c);
                     }
                     rs_comments.close();
@@ -100,20 +101,20 @@ public class ShowController extends HttpServlet {
                 success = false;
             }
         } else if ("Follow".equals(process)) {
+            isAJAX = true;
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
             Object[] objs = {id_user, id_show};
             try {
                 ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_follow), objs);
-                rd = request.getRequestDispatcher("/ShowTemplate.jsp");
             } catch (SQLException ex) {
                 success = false;
             }
         } else if ("Unfollow".equals(process)) {
+            isAJAX = true;
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
             Object[] objs = {id_user, id_show};
             try {
                 ConnectionFactory.getInstance().update(SQLquerys.getQuery(SQLcmd.ShowTemplate_show_unfollow), objs);
-                rd = request.getRequestDispatcher("/ShowTemplate.jsp");
             } catch (SQLException ex) {
                 success = false;
             }
@@ -132,9 +133,9 @@ public class ShowController extends HttpServlet {
                 while (rs_episodes.next()) {
                     int id_episode = Integer.parseInt(rs_episodes.getString("ID_Episode"));
                     episodes.add(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
-                            rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
-                            getDateObject(rs_episodes.getString("Air_Date")),
-                            loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
+                                             rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
+                                             getDateObject(rs_episodes.getString("Air_Date")),
+                                             loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
                 }
                 success = true;
                 if (loggedIn) {
@@ -149,6 +150,7 @@ public class ShowController extends HttpServlet {
                 success = false;
             }
         } else if ("Rate".equals(process)) {
+            isAJAX = true;
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
             int rate = Integer.parseInt(request.getParameter("Rate"));
             Object[] params = {id_user, id_show};
@@ -168,7 +170,7 @@ public class ShowController extends HttpServlet {
                 if (rs_new_rating.next()) {
                     new_rating = rs_new_rating.getDouble("Rating");
                 }
-                
+
                 out.print(new_rating);
                 out.flush();
 
@@ -194,6 +196,7 @@ public class ShowController extends HttpServlet {
                 }
             }
         } else if ("Mark".equals(process)) {
+            isAJAX = true;
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
             int number_season = Integer.parseInt(request.getParameter("Number_Season"));
             int id_season = getSeasonID(id_show, number_season);
@@ -233,15 +236,16 @@ public class ShowController extends HttpServlet {
             session.setAttribute("array_popular_shows", shows);
             rd = request.getRequestDispatcher("/index.jsp");
         } else if ("Comment".equals(process)) {
+            isAJAX = true;
             if (loggedIn) {
                 String comment = (String) request.getParameter("Comment");
                 Object[] objs = {id_show, user.getId(), comment};
                 try {
                     long id = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.ShowTemplate_new_comment), objs);
                     String newCommentDiv = "<div id=\"comment" + id + "\" class=\"comment\">"
-                            + "<span class=\"user_span\">" + user.getUsername() + " </span>"
-                            + "<span class=\"comment_span\">" + comment + "</span>"
-                            + "</div>";
+                                           + "<span class=\"user_span\">" + user.getUsername() + " </span>"
+                                           + "<span class=\"comment_span\">" + comment + "</span>"
+                                           + "</div>";
                     out.print(newCommentDiv);
                     out.flush();
                     success = true;
@@ -252,14 +256,16 @@ public class ShowController extends HttpServlet {
         }
 
         ConnectionFactory.getInstance().close();
-        if (!success) {
-            response.sendRedirect("index.jsp");
-        }
-        if (!response.isCommitted() && rd == null) {
-            rd = request.getRequestDispatcher("/index.jsp");
-        }
-        if (!response.isCommitted() && rd != null) {
-            rd.forward(request, response);
+        if (!isAJAX) {
+            if (!success) {
+                response.sendRedirect("index.jsp");
+            }
+            if (!response.isCommitted() && rd == null) {
+                rd = request.getRequestDispatcher("/index.jsp");
+            }
+            if (!response.isCommitted() && rd != null) {
+                rd.forward(request, response);
+            }
         }
     }
 
@@ -267,11 +273,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -282,11 +288,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

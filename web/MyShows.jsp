@@ -29,21 +29,21 @@
                         <% for (MyShow s : shows) {
                                 int limit = 20;
                                 String title = s.getTitle().length() < limit ? s.getTitle() : s.getTitle().substring(0, limit - 3) + "...";
-                                int tpx = 140;
+                                int tpx = 138;
                                 int episodesWatched = s.getTotalEpisodes() - s.getEpisodesUnwatched();
                                 double watchedPercent = episodesWatched/(double)s.getTotalEpisodes();
                                 int npx = (int)Math.ceil(tpx * watchedPercent);
                         %>
                         <ul id="show">
                             <li>
-                                <a href="#">
-                                    <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>" />
-                                    <div style="width: 5px; height: <%=tpx%>px; position: relative; left: -6px; background-color: black;"></div>
-                                    <div style="width: 5px; height: <%=npx%>px; position: relative; left: -6px; bottom: <%=npx%>; background-color: green;"></div>
+                                <a href="#" title="<%=(int)(watchedPercent*100)%>% watched">
+                                    <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>" style="border: 1px white solid;" />
+                                    <div style="width: 5px; height: <%=tpx%>px; position: relative; left: -6px; background-color: black; border: 1px white solid;"></div>
+                                    <div style="width: 5px; height: <%=npx%>px; position: relative; left: -6px; bottom: <%=npx%>; background-color: green; border: 1px white solid;"></div>
                                 </a><br>
                             </li>
-                            <a id="nomeSerie" href="ShowTemplate.jsp?id=<%=s.getId()%>" title="<%=s.getTitle()%>"><%=title%></a>
-                            <span><%=s.getEpisodesUnwatched()%></span>
+                            <a id="nomeSerie" href="ShowTemplate.jsp?id=<%=s.getId()%>" title="<%=s.getTitle()%>"><%=title%></a><br/>
+                            <span class="unwatched"><%=s.getEpisodesUnwatched()%> unwatched</span>
                         </ul>
                         <% }%>
                     </div>
