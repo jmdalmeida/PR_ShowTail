@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controllers;
 
 import JDBC.ConnectionFactory;
@@ -247,8 +243,10 @@ public class ShowController extends HttpServlet {
                                            + "<div id=\"image\">"
                                            + "<img src=\"" + user.getPathImagem() + "\" />"
                                            + "</div>"
-                                           + "<span class=\"user_span\">" + user.getUsername() + " </span>"
-                                           + "<span class=\"comment_span\">" + comment + "</span>"
+                                           + "<div id=\"userC\">"
+                                           + "<p class=\"user_span\">" + user.getUsername() + " </p>"
+                                           + "<p class=\"comment_span\">" + comment + "</p>"
+                                           + "</div>"
                                            + "</div>";
                     out.print(newCommentDiv);
                     out.flush();
