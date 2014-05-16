@@ -1,4 +1,3 @@
-
 package Controllers;
 
 import JDBC.ConnectionFactory;
@@ -179,6 +178,7 @@ public class ShowController extends HttpServlet {
                 success = false;
             }
         } else if ("SeenStatus".equals(process)) {
+            isAJAX = true;
             int id_user = Integer.parseInt(request.getParameter("ID_User"));
             int id_episode = Integer.parseInt(request.getParameter("ID_Episode"));
             int id_season = Integer.parseInt(request.getParameter("ID_Season"));
@@ -244,7 +244,7 @@ public class ShowController extends HttpServlet {
                                            + "<img src=\"" + user.getPathImagem() + "\" />"
                                            + "</div>"
                                            + "<div id=\"userC\">"
-                                           + "<p class=\"user_span\">" + user.getUsername() + " </p>"
+                                           + "<p class=\"user_span\">" + user.getUsername() + "<span class=\"since\">(" + getTimeElapsed(new Date(System.currentTimeMillis())) + ")</span></p>"
                                            + "<p class=\"comment_span\">" + comment + "</p>"
                                            + "</div>"
                                            + "</div>";
@@ -395,6 +395,27 @@ public class ShowController extends HttpServlet {
         } catch (SQLException ex) {
         }
         return id;
+    }
+
+    public static String getTimeElapsed(Date date) {
+        String since = "";
+        Date now = new Date(System.currentTimeMillis());
+        long diff = now.getTime() - date.getTime();
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000);
+        int diffInDays = (int) (diff / (1000 * 60 * 60 * 24));
+        if (diffMinutes < 1) {
+            since = diffSeconds + " seconds ago";
+        } else if (diffHours < 1) {
+            since = diffMinutes + " minutes ago";
+        } else if (diffInDays < 1) {
+            since = diffHours + " hours ago";
+        } else {
+            SimpleDateFormat dt = new SimpleDateFormat("dd MMMM yyyy");
+            since = dt.format(date);
+        }
+        return since;
     }
 
 }

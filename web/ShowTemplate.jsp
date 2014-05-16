@@ -1,3 +1,6 @@
+<%@page import="Controllers.ShowController"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="Utils.Data.Comment"%>
 <%@page import="Utils.Data.UserData"%>
 <%@page import="Utils.Data.Show"%>
@@ -102,6 +105,7 @@
                         ui.jqXHR.error(function() {
                             ui.panel.html(
                                     "Couldn't load this tab. We'll try to fix this as soon as possible. ");
+                            loadingState(false);
                         });
                     },
                     load: function(event, ui) {
@@ -261,32 +265,33 @@
                             <ul id="tabs">
                                 <% for (Season s : seasons) {%>
                                 <li><a href="Show.jsp?id_show=<%=id_show%>&id_season=<%= s.getId()%>&following=<%=following%>"><%= s.getNumberSeason()%></a></li> 
-                                    <% }%>
+                                    <% } %>
                             </ul>
                         </div>
                     </div>
                     <div id="comments">
                         <h1>Comments:</h1>
                         <div id="postComment">
-                            <textarea id="textArea" rows="6" cols="50" maxlength="254" <% if(!loggedin) { %>disabled<% } %>></textarea>
-                            <input type="button" value="Post Comment" onclick="comment();" <% if(!loggedin) { %>disabled<% } %>/>
+                            <textarea id="textArea" rows="6" cols="57" maxlength="254" <% if (!loggedin) { %>disabled<% } %>></textarea>
+                            <input type="button" value="Post Comment" onclick="comment();" <% if (!loggedin) { %>disabled<% } %>/>
                         </div>
                         <div id="commentsScroll">
-                        <div id="comments-box">
-                            <% for (int i = 0; i < comments.size(); i++) {
-                                    Comment c = comments.get(i);
-                            %>
-                            <div id="comment<%=c.getIdComment()%>" class="comment">
-                                <div id="image">
-                                    <img src="<%=c.getImgPath()%>"/>
+                            <div id="comments-box">
+                                <% for (int i = 0; i < comments.size(); i++) {
+                                        Comment c = comments.get(i);
+                                        String since = ShowController.getTimeElapsed(c.getTimestamp());
+                                %>
+                                <div id="comment<%=c.getIdComment()%>" class="comment">
+                                    <div id="image">
+                                        <img src="<%=c.getImgPath()%>"/>
+                                    </div>
+                                    <div id="userC">
+                                        <p class="user_span"><%=c.getUser()%> <span class="since">(<%=since%>)</span></p>
+                                        <p class="comment_span"><%=c.getComment()%></p>
+                                    </div>
                                 </div>
-                                <div id="userC">
-                                    <p class="user_span"><%=c.getUser()%></p>
-                                    <p class="comment_span"><%=c.getComment()%></p>
-                                </div>
+                                <% } %>
                             </div>
-                            <% } %>
-                        </div>
                         </div>
                     </div>
                 </div>
