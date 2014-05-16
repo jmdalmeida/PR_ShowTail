@@ -1,5 +1,4 @@
 #SeriesFollowing {
-    float: left;
     width: 100%;
     margin-top: 40px;
     margin-bottom: 40px; 
@@ -74,4 +73,44 @@ p {
 .unwatched {
     font-size: 12px;
     opacity: 0.7;
+}
+
+.totalPercentage {
+    left: 75px;
+    top: -60px;
+    position: relative;
+    width: 800px;
+    height: 30px;
+    border: 1px solid white;
+}
+
+#myShow {
+    margin-top: 80px;
+    height: 100%;
+}
+
+.italicText {
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+.whiteText {
+    color: white;
+}
+
+.totalsPlacing {
+    position: absolute;
+    top: 35px;
+    left: 0;
+}
+
+.percentPlacing {
+    position: relative;
+    float: right;
+    top: -370px;
+    margin-right: 5px;
+}
+
+.unwatchedEps {
+    
 }

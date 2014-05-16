@@ -26,31 +26,49 @@
                 <div id="SeriesFollowing">
                     <h1>Tailed Shows:</h1>
                     <div id="myShow">
-                        <% for (MyShow s : shows) {
+                        <%
+                            int totalWatched = 0;
+                            int totalToWatch = 0;
+                            for (MyShow s : shows) {
                                 int limit = 20;
                                 String title = s.getTitle().length() < limit ? s.getTitle() : s.getTitle().substring(0, limit - 3) + "...";
                                 int tpx = 138;
                                 int episodesWatched = s.getTotalEpisodes() - s.getEpisodesUnwatched();
-                                double watchedPercent = episodesWatched/(double)s.getTotalEpisodes();
-                                int npx = (int)Math.ceil(tpx * watchedPercent);
+                                double watchedPercent = episodesWatched / (double) s.getTotalEpisodes();
+                                int npx = (int) Math.ceil(tpx * watchedPercent);
+
+                                totalWatched += s.getTotalEpisodes() - s.getEpisodesUnwatched();
+                                totalToWatch += s.getTotalEpisodes();
                         %>
                         <ul id="show">
                             <li>
-                                <a href="#" title="<%=(int)(watchedPercent*100)%>% watched">
+                                <a href="#" title="<%=(int) (watchedPercent * 100)%>% watched">
                                     <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>" style="border: 1px white solid;" />
                                     <div style="width: 5px; height: <%=tpx%>px; position: relative; left: -6px; background-color: black; border: 1px white solid;"></div>
-                                    <div style="width: 5px; height: <%=npx%>px; position: relative; left: -6px; bottom: <%=npx%>; background-color: green; border: 1px white solid;"></div>
+                                    <div style="width: 5px; height: <%=npx%>px; position: relative; left: -6px; bottom: <%=npx%>; background-color: #345d79; border: 1px white solid;"></div>
                                 </a><br>
                             </li>
                             <a id="nomeSerie" href="ShowTemplate.jsp?id=<%=s.getId()%>" title="<%=s.getTitle()%>"><%=title%></a><br/>
                             <span class="unwatched"><%=s.getEpisodesUnwatched()%> unwatched</span>
                         </ul>
-                        <% }%>
+                        <% }
+                            double watchedPercent = totalWatched / (double) totalToWatch;
+                            int npx = (int) Math.ceil(800 * watchedPercent);
+                        %>
+                        <div class="totalPercentage">
+                            <div class="totalP" style="position: relative; width: 100%; height: 100%; background-color: black; opacity: 0.7;"></div>
+                            <div class="parcP" style="position: relative; width: <%=npx%>px; height: 100%; background-color: #345d79; top: -31px; left:-1px; border: 1px solid white;">
+                                <% if (watchedPercent > 0.05) {%>
+                                <span class="percentPlacing italicText whiteText"><%=Math.round(watchedPercent * 100)%>%</span>
+                                <% }%>
+                            </div>
+                            <span class="italicText totalsPlacing whiteText"><%=totalWatched%> out of <%=totalToWatch%> episodes watched</span>
+                        </div>
                     </div>
-                    <div id="unwatchedEpisodes">
+                    <div id="unwatchedEpisodes" class="unwatchedEps">
                         <div class="season">
                             <div class="episode">
-                                
+
                             </div>
                         </div>
                     </div>
