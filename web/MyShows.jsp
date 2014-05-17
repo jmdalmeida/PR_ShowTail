@@ -36,6 +36,9 @@
                                 int episodesWatched = s.getTotalEpisodes() - s.getEpisodesUnwatched();
                                 double watchedPercent = episodesWatched / (double) s.getTotalEpisodes();
                                 int npx = (int) Math.ceil(tpx * watchedPercent);
+                                if (npx != 0) {
+                                    npx += 2;
+                                }
 
                                 totalWatched += s.getTotalEpisodes() - s.getEpisodesUnwatched();
                                 totalToWatch += s.getTotalEpisodes();

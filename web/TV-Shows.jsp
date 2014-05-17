@@ -41,7 +41,7 @@
 %>
 <jsp:forward page="SearchController" >
     <jsp:param name="SearchFor" value="Order" />
-    <jsp:param name="OrderBy" value="All" />
+    <jsp:param name="OrderBy" value="Recommended" />
     <jsp:param name="Page" value="<%=pageNumber%>" />
 </jsp:forward>
 <%

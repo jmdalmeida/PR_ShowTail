@@ -1,14 +1,14 @@
 #SeriesFollowing {
     width: 100%;
-    margin-top: 40px;
-    margin-bottom: 40px; 
+    margin-top: 10px;
+    margin-bottom: 10px; 
     border-radius: 4px;
     background: #6c6c6c;
 }
 
 #SeriesFollowing h1 {
     text-align: center;
-    margin-top: 15px;
+    padding-top: 15px;
     color: white;
 }
 
@@ -105,10 +105,9 @@ p {
 }
 
 .percentPlacing {
-    position: relative;
-    float: right;
-    top: 7px;
-    margin-right: 5px;
+    position: absolute;
+    right: 5px;
+    top: 8px;
 }
 
 .unwatchedEps {
