@@ -32,11 +32,12 @@
             function timer() {
                 if (flag)
                     $("#next" + currI).click();
-                if(currI === len) currI = 0;
+                if (currI === len)
+                    currI = 0;
                 setTimeout(function() {
                     flag = true;
                     timer();
-                }, 3000);
+                }, 5000);
             }
 
         </script>
@@ -65,8 +66,8 @@
                                 <div id="showName<%=i + 1%>" class="showNames"><span><%=show.getName()%></span></div>
                             </div>
                             <div id="navButtons">
-                                <label for="img<%=indexBefore + 1%>" id="prev">&#x2039;</label>
-                                <label for="img<%=indexAfter + 1%>" class="next" id="next<%=i%>" onclick="currI = <%=i + 1%>;">&#x203a;</label>
+                                <label for="img<%=indexBefore + 1%>" id="prev" onclick="currI = <%=indexBefore%>;">&#x2039;</label>
+                                <label for="img<%=indexAfter + 1%>" class="next" id="next<%=i%>" onclick="currI = <%=indexAfter%>;">&#x203a;</label>
                             </div>
                         </li>
                         <% } %>
@@ -74,7 +75,7 @@
                             <% for (int i = 0; i < shows.size(); i++) {
                                     IndexShow is = shows.get(i);
                             %>
-                            <label for="img<%=i + 1%>" title="<%=is.getName()%>" id="navDot"></label>
+                            <label for="img<%=i + 1%>" title="<%=is.getName()%>" id="navDot" onclick="currI = <%=i%>;"></label>
                             <% } %>
                         </li>
                     </ul>
