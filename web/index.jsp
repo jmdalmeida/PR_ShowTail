@@ -43,8 +43,8 @@
         </script>
     </head>
     <body>
+        <%@ include file="WEB-INF/JSP/header.jsp" %>
         <div id="wrapper">
-            <%@ include file="WEB-INF/JSP/header.jsp" %>
             <div id="content">
                 <%-- SEARCH --%>
                 <%@include file="WEB-INF/JSP/searchBar.jsp" %>
@@ -82,8 +82,8 @@
                 </div>
                 <% } %>
             </div>
-            <%@ include file="WEB-INF/JSP/footer.jsp" %>
         </div>
+        <%@ include file="WEB-INF/JSP/footer.jsp" %>
     </body>
 </html>
 <%

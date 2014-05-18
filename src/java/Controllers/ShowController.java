@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,8 +57,8 @@ public class ShowController extends HttpServlet {
                 if (rs_show.next()) {
                     //Gather show info
                     show = new Show(Integer.parseInt(rs_show.getString("ID_Show")), 0, rs_show.getInt("Episodes"), rs_show.getString("Title"),
-                                    rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
-                                    loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
+                            rs_show.getString("Image_Path"), rs_show.getString("Overview"), rs_show.getString("Status"), rs_show.getString("First_Air_Date"), rs_show.getDouble("Rating"),
+                            loggedIn ? checkFollowsShow(user.getId(), id_show) : false);
 
                     //Gather seasons
                     Object[] o2 = {show.getId()};
@@ -71,8 +72,8 @@ public class ShowController extends HttpServlet {
                     ResultSet rs_comments = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.ShowTemplate_get_comments), o2);
                     while (rs_comments.next()) {
                         Comment c = new Comment(rs_comments.getInt("ID_Comment"), rs_comments.getInt("ID_User"),
-                                                rs_comments.getString("Username"), rs_comments.getString("Image_Path"),
-                                                rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
+                                rs_comments.getString("Username"), rs_comments.getString("Image_Path"),
+                                rs_comments.getString("Comment"), rs_comments.getTimestamp("Timestamp"));
                         comments.add(c);
                     }
                     rs_comments.close();
@@ -129,9 +130,9 @@ public class ShowController extends HttpServlet {
                 while (rs_episodes.next()) {
                     int id_episode = Integer.parseInt(rs_episodes.getString("ID_Episode"));
                     episodes.add(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")), season_number,
-                                             rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
-                                             getDateObject(rs_episodes.getString("Air_Date")),
-                                             loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
+                            rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
+                            getDateObject(rs_episodes.getString("Air_Date")),
+                            loggedIn ? checkSeenEpisode(id_show, id_season, id_episode, user.getId()) : false));
                 }
                 success = true;
                 if (loggedIn) {
@@ -240,19 +241,52 @@ public class ShowController extends HttpServlet {
                 try {
                     long id = ConnectionFactory.getInstance().insertAndReturnId(SQLquerys.getQuery(SQLcmd.ShowTemplate_new_comment), objs);
                     String newCommentDiv = "<div id=\"comment" + id + "\" class=\"comment\">"
-                                           + "<div id=\"image\">"
-                                           + "<img src=\"" + user.getPathImagem() + "\" />"
-                                           + "</div>"
-                                           + "<div id=\"userC\">"
-                                           + "<p class=\"user_span\">" + user.getUsername() + "<span class=\"since\">(" + getTimeElapsed(new Date(System.currentTimeMillis())) + ")</span></p>"
-                                           + "<p class=\"comment_span\">" + comment + "</p>"
-                                           + "</div>"
-                                           + "</div>";
+                            + "<div id=\"image\">"
+                            + "<img src=\"" + user.getPathImagem() + "\" />"
+                            + "</div>"
+                            + "<div id=\"userC\">"
+                            + "<p class=\"user_span\">" + user.getUsername() + "<span class=\"since\">(" + getTimeElapsed(new Date(System.currentTimeMillis())) + ")</span></p>"
+                            + "<p class=\"comment_span\">" + comment + "</p>"
+                            + "</div>"
+                            + "</div>";
                     out.print(newCommentDiv);
                     out.flush();
                     success = true;
                 } catch (SQLException ex) {
                     success = false;
+                }
+            }
+        } else if ("UnwatchedEpisodes".equals(process)) {
+            isAJAX = true;
+            if (loggedIn) {
+                List<Season> seasons = new ArrayList<Season>();
+                Object[] objs = {id_show, user.getId()};
+                try {
+                    ResultSet rs_show = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.MyShows_get_seasons_unwatched), objs);
+                    while (rs_show.next()) {
+                        Season s = new Season(rs_show.getInt("ID_Season"), rs_show.getInt("Season_Number"));
+
+                        Object[] objs2 = {id_show, s.getId(), user.getId()};
+                        ResultSet rs_episodes = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.MyShows_get_episodes_unwatched), objs2);
+                        while (rs_episodes.next()) {
+                            int id_episode = Integer.parseInt(rs_episodes.getString("ID_Episode"));
+                            s.addEpisode(new Episode(id_episode, Integer.parseInt(rs_episodes.getString("Episode_Number")),
+                                    s.getNumberSeason(), rs_episodes.getString("Title"), rs_episodes.getString("Overview"),
+                                    getDateObject(rs_episodes.getString("Air_Date")), false));
+                        }
+                        rs_episodes.close();
+                        seasons.add(s);
+                    }
+                    rs_show.close();
+                    String html = getUnwatchedHTML(seasons);
+                    out.print(html);
+                    out.flush();
+                    
+                    seasons.clear();
+                    seasons = null;
+                } catch (SQLException ex) {
+                    out.print("Error gathering show episodes.");
+                    out.flush();
                 }
             }
         }
@@ -275,11 +309,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -290,11 +324,11 @@ public class ShowController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      *
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -416,6 +450,24 @@ public class ShowController extends HttpServlet {
             since = dt.format(date);
         }
         return since;
+    }
+
+    private String getUnwatchedHTML(List<Season> seasons) {
+        String html = "";
+        for (Season s : seasons) {
+            html += "<div class=\"season\">\n";
+            html += "<span>Season " + s.getNumberSeason() + "</span>\n";
+            for (int i = 0; i < s.getEpisodes().size(); i++) {
+                Episode e = s.getEpisodes().get(i);
+                html += "<div class=\"episode epdef " + ((i % 2 == 0) ? "evenep" : "oddep") + "\">\n";
+                html += "<div class=\"title epdef\"><span>" + e.getTitle() + "</span></div>\n"
+                        + "<div class=\"separator epdef\"></div>\n"
+                        + "<div class=\"overview epdef\"><span>" + e.getOverview() + "</span></div>\n";
+                html += "</div>\n";
+            }
+            html += "</div>\n";
+        }
+        return html;
     }
 
 }

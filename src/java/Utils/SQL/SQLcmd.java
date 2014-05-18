@@ -10,6 +10,5 @@ public enum SQLcmd {
     Account_user_data, Account_followed_shows, Account_check_login, Account_create_user, Account_update_user, Account_delete_user,
     Show_get_season, Show_get_episodes, Show_set_episode_seen, Show_set_episode_unseen, Show_get_episode_seen,
     Admin_insert_show, Admin_insert_season, Admin_insert_episode, Admin_insert_genre, Admin_select_genre, Admin_associate_genre,
-    
-    MyShows_count_unwatched, MyShows_get_unwatched;
+    MyShows_count_unwatched, MyShows_get_unwatched, MyShows_count_watchable, MyShows_get_seasons_unwatched, MyShows_get_episodes_unwatched;
 }

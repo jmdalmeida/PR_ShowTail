@@ -144,7 +144,8 @@ public class AccountController extends HttpServlet {
                     while (rs.next()) {
                         int id = rs.getInt("ID_Show");
                         int count = getUnwatchedCount(id, user.getId());
-                        shows1.add(new MyShow(id, count, rs.getInt("Episodes"), rs.getString("Title"), rs.getString("Image_Path")));
+                        int watchableEpisodes = getWatchableCount(id);
+                        shows1.add(new MyShow(id, count, watchableEpisodes, rs.getString("Title"), rs.getString("Image_Path")));
                     }
 
                     session.setAttribute("array_shows_followed", shows1);
@@ -305,6 +306,19 @@ public class AccountController extends HttpServlet {
             ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.MyShows_count_unwatched), objs);
             if(rs.next())
                 count = rs.getInt("Unwatched");
+            rs.close();
+        } catch (SQLException ex) {
+        }
+        return count;
+    }
+    
+    private int getWatchableCount(int id_show){
+        int count = 0;
+        Object[] objs = {id_show};
+        try {
+            ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.MyShows_count_watchable), objs);
+            if(rs.next())
+                count = rs.getInt("Watchable");
             rs.close();
         } catch (SQLException ex) {
         }

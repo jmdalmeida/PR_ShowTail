@@ -10,6 +10,7 @@
 </jsp:forward>
 <% }
     ArrayList<MyShow> shows = (ArrayList<MyShow>) session.getAttribute("array_shows_followed");
+    int id_user = ((UserData)session.getAttribute("user")).getId();
 %>
 <html>
     <head>
@@ -18,14 +19,30 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <title>My Shows</title>   
+
+        <script type="text/javascript">
+
+            function loadUnwatched(id) {
+                var elem = document.getElementById("unwatchedEpisodes");
+                loadingState(true);
+                $.post("showFunctions.jsp",
+                        {funct: "UnwatchedEpisodes", id_show: id, id_user: <%=id_user%>},
+                function(data, status) {
+                    elem.innerHTML = data;
+                    loadingState(false);
+                });
+            }
+
+        </script>
     </head>
     <body>
+        <%@ include file="WEB-INF/JSP/loading.jsp" %>
+        <%@ include file="WEB-INF/JSP/header.jsp" %>
         <div id="wrapper">
-            <%@ include file="WEB-INF/JSP/header.jsp" %>
             <div id="content">
                 <div id="SeriesFollowing">
                     <h1>Tailed Shows:</h1>
-                    <div id="myShow">
+                    <div id="myShow" class="clearfix">
                         <%
                             int totalWatched = 0;
                             int totalToWatch = 0;
@@ -45,7 +62,7 @@
                         %>
                         <ul id="show">
                             <li>
-                                <a href="#" title="<%=(int) (watchedPercent * 100)%>% watched">
+                                <a href="#" title="<%=(int) (watchedPercent * 100)%>% watched" onclick="loadUnwatched(<%=s.getId()%>)">
                                     <img alt="<%=s.getTitle()%>" src="<%=s.getImgPath()%>" style="border: 1px white solid;" />
                                     <div style="width: 5px; height: <%=tpx%>px; position: relative; left: -6px; background-color: black; border: 1px white solid;"></div>
                                     <div style="width: 5px; height: <%=npx%>px; position: relative; left: -6px; bottom: <%=npx%>; background-color: #345d79; border: 1px white solid;"></div>
@@ -68,14 +85,8 @@
                             <span class="italicText totalsPlacing whiteText"><%=totalWatched%> out of <%=totalToWatch%> episodes watched</span>
                         </div>
                     </div>
-                    <div id="unwatchedEpisodes" class="unwatchedEps">
-                        <div class="season">
-                            <div class="episode">
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
+                <div id="unwatchedEpisodes" class="unwatchedEpisodes"></div>
             </div>
         </div>
         <%@ include file="WEB-INF/JSP/footer.jsp" %>

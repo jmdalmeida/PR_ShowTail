@@ -57,9 +57,13 @@ public class SQLquerys {
         querys.put(Show_set_show_seen, "INSERT INTO Watched_Episode(ID_Show, ID_Season, ID_Episode, ID_User) "
                 + "SELECT ID_Show, ID_Season, ID_Episode, ID_User FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ?");
         querys.put(Show_exists, "SELECT * FROM TV_Show WHERE MovieDB_ID = ?");
-        
-        querys.put(MyShows_get_unwatched, "SELECT * FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ?");
+        querys.put(MyShows_get_unwatched, "SELECT * FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ? ORDER BY ID_");
         querys.put(MyShows_count_unwatched, "SELECT COUNT(*) AS Unwatched FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ?");
+        querys.put(MyShows_count_watchable, "SELECT COUNT(*) AS Watchable FROM Episode WHERE ID_Show = ? AND DATE(Air_Date) <= DATE(NOW())");
+        
+        querys.put(MyShows_get_seasons_unwatched, "SELECT uu.ID_Season, s.Season_Number FROM UserUnwatched uu, Season s "
+                + "WHERE uu.ID_Season = s.ID_Season and uu.ID_Show = ? AND uu.ID_User = ? GROUP BY uu.id_season ORDER BY ID_Season, ID_Episode");
+        querys.put(MyShows_get_episodes_unwatched, "SELECT * FROM UserUnwatched WHERE ID_Show = ? AND ID_Season = ? AND ID_User = ? ORDER BY ID_Episode");
     }
     
     public static String getQuery(SQLcmd key){

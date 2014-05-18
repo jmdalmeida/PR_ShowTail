@@ -69,5 +69,13 @@
     <jsp:param name="Comment" value="<%=comment%>" />
 </jsp:forward>
 <%
+} else if ("UnwatchedEpisodes".equals(funct)) {
+%>
+<jsp:forward page="ShowController" >
+    <jsp:param name="Process" value="UnwatchedEpisodes" />
+    <jsp:param name="ID_User" value="<%=param_id_user%>" />
+    <jsp:param name="ID_Show" value="<%=param_id_show%>" />
+</jsp:forward>
+<%
     }
 %>
