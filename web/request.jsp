@@ -18,7 +18,7 @@
     </head>
     <body>
         <div id="wrapper">
-            <%@ include file="WEB-INF/JSP/header.jsp" %>
+            <%@ include file="header.jsp" %>
             <div id="content">
                 <div class="formRequest">
                     <div class="search">

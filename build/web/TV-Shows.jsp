@@ -41,7 +41,7 @@
 %>
 <jsp:forward page="SearchController" >
     <jsp:param name="SearchFor" value="Order" />
-    <jsp:param name="OrderBy" value="All" />
+    <jsp:param name="OrderBy" value="Recommended" />
     <jsp:param name="Page" value="<%=pageNumber%>" />
 </jsp:forward>
 <%
@@ -66,8 +66,8 @@
         </script>
     </head>
     <body>
+        <%@ include file="header.jsp" %>
         <div id="wrapper">
-            <%@ include file="WEB-INF/JSP/header.jsp" %>
             <div id="content">                    
                 <%@include file="WEB-INF/JSP/searchBar.jsp" %>  
                 <div id="middleLayer-Title">

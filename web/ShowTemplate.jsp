@@ -11,9 +11,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="WEB-INF/JSP/validation.jsp" %>
 <%    String id_show = request.getParameter("id");
-    if (id_show == null || id_show == "") {
-        //response.sendRedirect("index.jsp");
-    }
     if (session.getAttribute("obj_show") == null || session.getAttribute("seasons_array") == null) { //|| session.getAttribute("comments_array") == null) {
 %>
 <jsp:forward page="ShowController" >
@@ -204,7 +201,7 @@
     </head>
     <body>
         <%@include file="WEB-INF/JSP/loading.jsp" %>
-        <%@include file="WEB-INF/JSP/header.jsp" %>
+        <%@include file="header.jsp" %>
         <div id="wrapper">
             <div id="content">
                 <%-- SEARCH --%>
@@ -272,7 +269,7 @@
                     <div id="comments">
                         <h1>Comments:</h1>
                         <div id="postComment">
-                            <textarea id="textArea" rows="6" cols="57" maxlength="254" <% if (!loggedin) { %>disabled<% } %>></textarea>
+                            <textarea id="textArea" rows="6" cols="50" maxlength="254" <% if (!loggedin) { %>disabled<% } %>></textarea>
                             <input type="button" value="Post Comment" onclick="comment();" <% if (!loggedin) { %>disabled<% } %>/>
                         </div>
                         <div id="commentsScroll">

@@ -33,6 +33,8 @@ public class SQLquerys {
                 + "WHERE c.ID_User = u.ID_User AND c.ID_Show = ? ORDER BY c.ID_Comment DESC");
         querys.put(ShowTemplate_new_comment, "INSERT INTO Comment(ID_Show, ID_User, Comment) VALUES(?,?,?)");
         querys.put(Account_user_data, "SELECT * FROM User WHERE Username LIKE ?");
+        querys.put(Account_validate_username, "SELECT Username FROM user WHERE Username=?");
+        querys.put(Account_validate_email, "SELECT Email FROM user WHERE Email=?");
         querys.put(Account_followed_shows, "SELECT sv.* FROM Following f, Searchview sv WHERE f.ID_User = ? AND f.ID_Show = sv.ID_Show ORDER BY f.ID_Show DESC");
         querys.put(Account_check_login, "SELECT * FROM user WHERE Username = ? AND Password = ?");
         querys.put(Account_create_user, "INSERT INTO user (Name, Username, Password, Email, Account_Type, Date_of_Birth, Date_of_Registration ,Image_Path) VALUES (?,?,?,?,?,?,?,?)");

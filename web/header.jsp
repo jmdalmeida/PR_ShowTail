@@ -4,7 +4,26 @@
         session.removeAttribute("failedlogin");
     else
         failedlogin = "";
-    %>
+%>
+<script>
+    function checkValidation() {
+        var username = document.getElementById("username").value;
+        var email = document.getElementById("email").value;
+        $.post("accountFunctions.jsp",
+        {funct: "Validate", username:username, email:email},
+        function(data, status) {
+            var res = data.split(";");
+            if(res[0]==="true") {
+                alert("username ja existe");
+            }
+            else if(res[1]==="true") {
+                alert("email ja existe");
+            }else {
+                document.forms["SignUpForm"].submit();
+            }
+        });
+    }
+</script>
 <div id="header">
     <div id="header_wrap">
         <div id="header_title">
@@ -56,7 +75,7 @@
 </div>
 <div id="signUp-box">
     <a href="" id="close"><img src="images/buttonClose.png" id="btn_close" title="Close Window" alt="Close" /></a>
-    <form name="SignUpForm" method="POST" id="signInForm" action="AccountController" autocomplete="off">
+    <form name="SignUpForm" onsubmit="checkValidation(); return false;" method="POST" id="signInForm" action="AccountController" autocomplete="off">
         <input type="hidden" name="action" value="signUp" />
         <fieldset id="textbox">
             <label id="NameL">
@@ -73,7 +92,7 @@
             </label>
             <label id="EmailL">
                 <span>Email</span>
-                <input id="email" name="email" value="" type="text" autocomplete="off" placeholder="Email">
+                <input id="email" name="email" value="" type="email" autocomplete="off" placeholder="Email">
             </label>
             <label id="DataNascL">
                 <span>Date Of Birth</span>

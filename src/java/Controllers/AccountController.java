@@ -7,6 +7,7 @@ import Utils.Data.UserData;
 import Utils.SQL.SQLcmd;
 import Utils.SQL.SQLquerys;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,7 +41,7 @@ public class AccountController extends HttpServlet {
         Pages toPage = Pages.INDEX;
         RequestDispatcher rd = null;
         UserData user = null;
-
+        PrintWriter out = response.getWriter();
         ConnectionFactory.getInstance().init();
         String action = request.getParameter("action");
         String fromPage = "";
@@ -153,6 +154,30 @@ public class AccountController extends HttpServlet {
                     toPage = Pages.MYSHOWS;
                 } catch (SQLException ex) {
                     toPage = Pages.NULL;
+                }
+                break;
+            case "Validate":
+                String validateUsername = request.getParameter("usernameV");
+                String validateEmail = request.getParameter("emailV");
+                boolean checkValidationUsername =false;
+                boolean checkValidationEmail = false;
+                try {
+                    Object[] objs = {validateUsername};
+                    ResultSet rs = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_validate_username), objs);
+                    if(rs.next()) {
+                        checkValidationUsername= true;
+                    }
+                    Object[] objs2 = {validateEmail};
+                    ResultSet rs2 = ConnectionFactory.getInstance().select(SQLquerys.getQuery(SQLcmd.Account_validate_email), objs2);
+                    if(rs2.next()) {
+                        checkValidationEmail= true;
+                    }
+                    String checked = checkValidationUsername + ";" + checkValidationEmail;
+                    out.print(checked);
+                    out.flush();
+                    System.out.println(checked);
+                }catch(SQLException ex) {
+                    ex.printStackTrace();
                 }
                 break;
             default:

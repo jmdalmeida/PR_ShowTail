@@ -82,7 +82,7 @@
     </head>
     <body>
         <div id="wrapper">
-            <%@ include file="WEB-INF/JSP/header.jsp" %>
+            <%@ include file="header.jsp" %>
             <div id="content">
                 <div id="UserData">
                     <h1 id="username"><%= username%>'s Profile</h1><hr><br>

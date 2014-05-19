@@ -66,7 +66,7 @@
         </script>
     </head>
     <body>
-        <%@ include file="WEB-INF/JSP/header.jsp" %>
+        <%@ include file="header.jsp" %>
         <div id="wrapper">
             <div id="content">                    
                 <%@include file="WEB-INF/JSP/searchBar.jsp" %>  

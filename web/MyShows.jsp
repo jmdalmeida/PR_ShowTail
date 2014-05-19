@@ -37,7 +37,7 @@
     </head>
     <body>
         <%@ include file="WEB-INF/JSP/loading.jsp" %>
-        <%@ include file="WEB-INF/JSP/header.jsp" %>
+        <%@ include file="header.jsp" %>
         <div id="wrapper">
             <div id="content">
                 <div id="SeriesFollowing">
