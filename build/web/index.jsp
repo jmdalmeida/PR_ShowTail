@@ -81,6 +81,28 @@
                     </ul>
                 </div>
                 <% } %>
+                <div id="about">
+                    <h1>About Us:</h1>
+                    <p>Welcome to ShowTail, a free content website provider that allows the users to
+                    search, manage, follow and most of all check the overviews of all the episodes/Shows
+                    that we host in our database. Users can register, follow the Shows they most like and
+                    request for Shows that we haven´t thought about.<br>
+                    All of the content we provide is free gathered from the public database themoviedb.org.<br>
+                    I hope you check everything that you can and most of all have fun in doing it, also be
+                    sure to share with your friends.</p>
+                </div>
+                <div id="contacts">
+                    <h1>Contacts:</h1>
+                    <p>The administration of ShowTail can be reached through one of the following emails:<br>
+                        Advertising:<br>
+                    Email: admin@showtail.com<br>
+                    Copyright Complaints<br>
+                    Email: dmca@showtail.com<br>
+                    For suggestions, recommendations, cheating and/or login problems:<br>
+                    Email: pr@showtail.com or contact user The_Boss.<br>
+                    Please make sure everything you've said is true and relevant before sending your letter!<br>
+                    (Note that all emails are fictional being this a school project... for now ;) )</p>
+                </div>
             </div>
         </div>
         <%@ include file="WEB-INF/JSP/footer.jsp" %>

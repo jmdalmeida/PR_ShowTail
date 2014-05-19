@@ -539,3 +539,42 @@ form#signInForm #textbox input {
 #button:hover {
     background: #6a99c7;
 }
+
+#about
+{
+    margin-top: 20px;
+    background-color: #414141;
+    color: white;
+    float: left;
+    margin-bottom: 50px;
+    min-height: 215px;
+    width: 45%;
+    margin-left: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: justify;
+}
+
+#about h1{
+    text-align: center;
+}
+
+#contacts h1{
+    text-align: center;
+}
+
+#contacts
+{
+    border-radius: 5px;
+    min-height: 215px;
+    width: 45%;
+    margin-top: 20px;
+    background-color: #414141;
+    color: white;
+    float: right;
+    margin-bottom: 50px;
+    margin-right: 10px;
+    padding: 10px;
+    text-align: justify;
+}
+
