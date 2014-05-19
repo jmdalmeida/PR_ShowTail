@@ -39,10 +39,12 @@
                 <% if (hasToShow) { %>
                 <div class="results">
                     <ul id="ul1">
-                        <% for (ShowMovieDB s : shows) {%>
+                        <% for (ShowMovieDB s : shows) {
+                        String title = s.getTitle().length() > 20 ? s.getTitle().substring(0, 18) + "..." : s.getTitle();
+                        %>
                         <li>
                             <img src="<%=s.getImgPath()%>" alt="<%=s.getTitle()%>" />
-                            <p><%=s.getTitle()%></p>
+                            <p title="<%=s.getTitle()%>"><%=title%></p>
                             <% if (!s.exists()) {%>
                             <form action="MovieDBController" method="POST">
                                 <input type="hidden" name="action" value="GatherUserRequest" />
