@@ -70,8 +70,7 @@
 
             });
             function deleteUser() {
-                var answer = confirm("Are you sure you want to delete this account?");
-                alert(answer);
+                var answer = confirm("Are you sure you want to delete this account?");           
                 if (answer) {
                     return true;
                 } else {
