@@ -97,7 +97,7 @@ public class AccountController extends HttpServlet {
                 String nameU = request.getParameter("nomeEdit");
                 String emailU = request.getParameter("emailEdit");
                 attemptUserUpdate(nameU, emailU, username);
-                toPage = Pages.PROFILE;
+                response.sendRedirect("profile.jsp");
                 break;
             case "DeleteUser":
                 user = (UserData) session.getAttribute("user");

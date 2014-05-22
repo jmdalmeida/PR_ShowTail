@@ -62,7 +62,6 @@ public class SQLquerys {
         querys.put(MyShows_get_unwatched, "SELECT * FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ? ORDER BY ID_");
         querys.put(MyShows_count_unwatched, "SELECT COUNT(*) AS Unwatched FROM UserUnwatched WHERE ID_Show = ? AND ID_User = ?");
         querys.put(MyShows_count_watchable, "SELECT COUNT(*) AS Watchable FROM Episode WHERE ID_Show = ? AND DATE(Air_Date) <= DATE(NOW())");
-        
         querys.put(MyShows_get_seasons_unwatched, "SELECT uu.ID_Season, s.Season_Number FROM UserUnwatched uu, Season s "
                 + "WHERE uu.ID_Season = s.ID_Season and uu.ID_Show = ? AND uu.ID_User = ? GROUP BY uu.id_season ORDER BY ID_Season, ID_Episode");
         querys.put(MyShows_get_episodes_unwatched, "SELECT * FROM UserUnwatched WHERE ID_Show = ? AND ID_Season = ? AND ID_User = ? ORDER BY ID_Episode");
